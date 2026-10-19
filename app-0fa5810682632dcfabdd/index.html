@@ -197,6 +197,11 @@ function render() {
 addEventListener("hashchange", render);
 render();
 
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator) {
+  // when a new version has been saved, reload once so the new cards and sounds are used right away
+  const hadOld = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadOld) location.reload(); });
+  navigator.serviceWorker.register("sw.js", {updateViaCache: "none"}).catch(() => {});
+}
 </script>
 </body></html>
