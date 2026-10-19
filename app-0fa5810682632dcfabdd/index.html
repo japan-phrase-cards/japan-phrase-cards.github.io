@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F3A5F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Japan Phrases">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Japan Travel Phrase Cards</title>
+<style>
+:root { --navy:#1F3A5F; --cream:#FBF8F2; --ink:#1d1d1f;
+  --ja:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic UI","Meiryo",sans-serif;
+  --en:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--cream); color:var(--ink); font-family:var(--en); }
+body { padding-bottom:env(safe-area-inset-bottom); }
+button { font:inherit; border:0; cursor:pointer; color:inherit; background:none; }
+.ja { font-family:var(--ja); }
+.wrap { max-width:640px; margin:0 auto; }
+
+header { position:sticky; top:0; z-index:5; background:var(--navy); color:var(--cream);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px; display:flex; align-items:center; gap:12px; min-height:56px; }
+header h1 { font-size:18px; font-weight:700; flex:1; line-height:1.2; }
+header h1 small { display:block; font-family:var(--ja); font-weight:400; font-size:12px; opacity:.8; }
+.back { font-size:16px; font-weight:600; padding:8px 12px; margin:-8px 0 -8px -8px; border-radius:20px; }
+.back:active { background:rgba(255,255,255,.15); }
+
+.home { padding:16px; }
+.hero { text-align:center; padding:12px 0 18px; }
+.hero .sun { width:72px; height:72px; border-radius:50%; background:#C0392B; margin:0 auto 12px; }
+.hero p { font-size:15px; line-height:1.5; color:#444; }
+.cat { display:flex; align-items:center; justify-content:space-between; width:100%; padding:18px 18px; margin-bottom:10px;
+  border-radius:14px; color:#fff; font-size:19px; font-weight:700; text-align:left; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.cat .ja { font-size:14px; font-weight:400; opacity:.9; }
+.cat:active { transform:scale(.98); }
+.note { font-size:13px; line-height:1.5; color:#666; margin:18px 4px 8px; }
+.tip { background:#fff; border:1px solid #e6e0d4; border-radius:12px; padding:12px 36px 12px 14px; font-size:14px; line-height:1.5; margin-bottom:14px; position:relative; }
+.tip button { position:absolute; right:6px; top:4px; font-size:20px; color:#999; padding:4px 8px; }
+
+.list { padding:12px 12px 24px; }
+.card { background:#fff; border-radius:16px; margin-bottom:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.08); border-left:6px solid var(--c); }
+.card .show { display:block; width:100%; text-align:center; padding:18px 10px 10px; }
+.card .jp { font-family:var(--ja); font-weight:700; line-height:1.45; white-space:nowrap; }
+.card .hint { font-size:12px; color:#999; margin-top:6px; }
+.card .row { display:flex; align-items:center; gap:12px; padding:12px 14px 14px; border-top:1px solid #f0ebe1; }
+.card .txt { flex:1; min-width:0; }
+.en { font-size:17px; font-weight:600; line-height:1.35; }
+.ro { font-size:15px; color:#666; font-style:italic; margin-top:3px; }
+.play { flex:none; width:56px; height:56px; border-radius:50%; background:var(--c); color:#fff; font-size:22px;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+.play:active { transform:scale(.94); }
+.play.on { animation:pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow:0 0 0 10px rgba(0,0,0,.08); } }
+
+/* full-screen "show the staff" view */
+.full { position:fixed; inset:0; z-index:10; background:var(--cream); display:flex; flex-direction:column; overflow-y:auto; }
+.full .band { background:var(--c); color:#fff; padding:calc(env(safe-area-inset-top) + 10px) 16px 10px; display:flex; align-items:center; justify-content:space-between; font-weight:600; min-height:52px; }
+.full .band button { font-size:16px; padding:6px 10px; margin-right:-8px; }
+.full .please { font-family:var(--ja); text-align:center; color:#777; font-size:15px; margin-top:18px; }
+.full .jp { flex:1 0 auto; display:flex; align-items:center; justify-content:center; text-align:center; padding:0 4vw;
+  font-family:var(--ja); font-weight:700; line-height:1.45; white-space:nowrap; }
+.full .row { display:flex; align-items:center; gap:14px; background:#fff; border-top:1px solid #e6e0d4;
+  padding:16px 18px calc(env(safe-area-inset-bottom) + 18px); }
+.full .row .txt { flex:1; }
+.full .nav { display:flex; gap:8px; }
+.full .nav button { height:44px; padding:0 16px; border-radius:22px; background:#eee8dc; font-size:18px; color:#555; }
+
+.sos .item { background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:12px; border-left:6px solid #C0392B; display:block; color:inherit; text-decoration:none; }
+.sos .big { font-size:30px; font-weight:800; color:#C0392B; }
+.sos .lbl { font-size:15px; margin-top:2px; }
+.sos .lbl span { font-family:var(--ja); color:#666; font-size:13px; }
+.err { position:fixed; left:16px; right:16px; bottom:calc(env(safe-area-inset-bottom) + 16px); z-index:20; background:#333; color:#fff;
+  border-radius:12px; padding:12px 16px; font-size:14px; text-align:center; }
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const DATA = {"cats": [{"id": "basics", "en": "Basics", "ja": "基本", "col": "#2B4C7E", "cards": [{"en": "Hello", "jp": "こんにちは", "ro": "Konnichiwa", "audio": "../phrase-cards/basics-01.mp3"}, {"en": "Thank you very much", "jp": "ありがとう\nございます", "ro": "Arigatō gozaimasu", "audio": "../phrase-cards/basics-02.mp3"}, {"en": "Excuse me / Sorry", "jp": "すみません", "ro": "Sumimasen", "audio": "../phrase-cards/basics-03.mp3"}, {"en": "I don't understand Japanese.", "jp": "日本語が\nわかりません。", "ro": "Nihongo ga wakarimasen.", "audio": "../phrase-cards/basics-04.mp3"}, {"en": "Do you speak English?", "jp": "英語は\n話せますか？", "ro": "Eigo wa hanasemasu ka?", "audio": "../phrase-cards/basics-05.mp3"}, {"en": "Could you write it down, please?", "jp": "紙に書いて\nもらえますか？", "ro": "Kami ni kaite moraemasu ka?", "audio": "../phrase-cards/basics-06.mp3"}, {"en": "Where is the restroom?", "jp": "トイレは\nどこですか？", "ro": "Toire wa doko desu ka?", "audio": "../phrase-cards/basics-07.mp3"}, {"en": "May I take a photo?", "jp": "写真を撮っても\nいいですか？", "ro": "Shashin o totte mo ii desu ka?", "audio": "../phrase-cards/basics-08.mp3"}]}, {"id": "restaurant", "en": "Restaurant", "ja": "レストラン", "col": "#B5452B", "cards": [{"en": "Table for two, please.", "jp": "2名で\nお願いします。", "ro": "Ni-mei de onegaishimasu.", "audio": "../phrase-cards/restaurant-01.mp3"}, {"en": "Do you have an English menu?", "jp": "英語のメニューは\nありますか？", "ro": "Eigo no menyū wa arimasu ka?", "audio": "../phrase-cards/restaurant-02.mp3"}, {"en": "What do you recommend?", "jp": "おすすめは\n何ですか？", "ro": "Osusume wa nan desu ka?", "audio": "../phrase-cards/restaurant-03.mp3"}, {"en": "This one, please.", "jp": "これを\nください。", "ro": "Kore o kudasai.", "audio": "../phrase-cards/restaurant-04.mp3"}, {"en": "Water, please.", "jp": "お水を\nください。", "ro": "Omizu o kudasai.", "audio": "../phrase-cards/restaurant-05.mp3"}, {"en": "The check, please.", "jp": "お会計を\nお願いします。", "ro": "Okaikei o onegaishimasu.", "audio": "../phrase-cards/restaurant-06.mp3"}, {"en": "Can I pay by credit card?", "jp": "クレジットカードは\n使えますか？", "ro": "Kurejitto kādo wa tsukaemasu ka?", "audio": "../phrase-cards/restaurant-07.mp3"}, {"en": "Thank you, it was delicious!", "jp": "ごちそうさまでした。\nとても\nおいしかったです。", "ro": "Gochisōsama deshita. Totemo oishikatta desu.", "audio": "../phrase-cards/restaurant-08.mp3"}]}, {"id": "diet", "en": "Allergies & Diet", "ja": "アレルギー・食事", "col": "#7A3E6B", "cards": [{"en": "I have a peanut allergy. I cannot eat even a small amount.", "jp": "ピーナッツ\nアレルギーです。\n少しでも\n食べられません。", "ro": "Pīnattsu arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-01.mp3"}, {"en": "I have a tree nut allergy (walnut, almond, cashew, etc.). I cannot eat even a small amount.", "jp": "ナッツ類の\nアレルギーです。\n（くるみ・\nアーモンドなど）\n少しでも\n食べられません。", "ro": "Nattsu-rui no arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-02.mp3"}, {"en": "I have a shellfish allergy (shrimp, crab). I cannot eat even a small amount.", "jp": "えび・かにの\nアレルギーです。\n少しでも\n食べられません。", "ro": "Ebi, kani no arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-03.mp3"}, {"en": "I have a fish allergy. Fish broth (dashi) is also not OK.", "jp": "魚の\nアレルギーです。\n魚のだしも\n食べられません。", "ro": "Sakana no arerugī desu. Sakana no dashi mo taberaremasen.", "audio": "../phrase-cards/diet-04.mp3"}, {"en": "I have an egg allergy. I cannot eat even a small amount.", "jp": "卵\nアレルギーです。\n少しでも\n食べられません。", "ro": "Tamago arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-05.mp3"}, {"en": "I have a milk / dairy allergy. I cannot eat even a small amount.", "jp": "乳製品の\nアレルギーです。\n（牛乳・バター・\nチーズなど）\n少しでも\n食べられません。", "ro": "Nyūseihin no arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-06.mp3"}, {"en": "I have a wheat allergy (gluten). Soy sauce also contains wheat.", "jp": "小麦\nアレルギーです。\nしょうゆも\n食べられません。", "ro": "Komugi arerugī desu. Shōyu mo taberaremasen.", "audio": "../phrase-cards/diet-07.mp3"}, {"en": "I have a sesame allergy. I cannot eat even a small amount.", "jp": "ごま\nアレルギーです。\n少しでも\n食べられません。", "ro": "Goma arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-08.mp3"}, {"en": "I have a soy allergy. I cannot eat even a small amount.", "jp": "大豆\nアレルギーです。\n少しでも\n食べられません。", "ro": "Daizu arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-09.mp3"}, {"en": "I have a buckwheat (soba) allergy. I cannot eat even a small amount.", "jp": "そば\nアレルギーです。\n少しでも\n食べられません。", "ro": "Soba arerugī desu. Sukoshi demo taberaremasen.", "audio": "../phrase-cards/diet-10.mp3"}, {"en": "Does this dish contain the food on my allergy card?", "jp": "この料理に、\nアレルギーの\n食材は\n入っていますか？", "ro": "Kono ryōri ni, arerugī no shokuzai wa haitte imasu ka?", "audio": "../phrase-cards/diet-11.mp3"}, {"en": "I am vegetarian. I don't eat meat or fish, including fish broth (dashi).", "jp": "ベジタリアンです。\n肉と魚は\n食べられません。\n（魚のだしも\n食べられません）", "ro": "Bejitarian desu. Niku to sakana wa taberaremasen.", "audio": "../phrase-cards/diet-12.mp3"}, {"en": "I don't eat pork.", "jp": "豚肉は\n食べられません。", "ro": "Butaniku wa taberaremasen.", "audio": "../phrase-cards/diet-13.mp3"}, {"en": "I am Muslim. I cannot eat pork or alcohol, including mirin and sake used in cooking.", "jp": "イスラム教徒です。\n豚肉とアルコールは\n食べられません。\n（料理用の\nみりん・酒も\n食べられません）", "ro": "Isuramu kyōto desu. Butaniku to arukōru wa taberaremasen.", "audio": "../phrase-cards/diet-14.mp3"}]}, {"id": "shopping", "en": "Shopping", "ja": "買い物", "col": "#3C7A5A", "cards": [{"en": "How much is this?", "jp": "これは\nいくらですか？", "ro": "Kore wa ikura desu ka?", "audio": "../phrase-cards/shopping-01.mp3"}, {"en": "Tax-free, please. (show passport)", "jp": "免税で\nお願いします。", "ro": "Menzei de onegaishimasu.", "audio": "../phrase-cards/shopping-02.mp3"}, {"en": "I'm just looking, thank you.", "jp": "見ているだけです。\nありがとう\nございます。", "ro": "Mite iru dake desu. Arigatō gozaimasu.", "audio": "../phrase-cards/shopping-03.mp3"}, {"en": "Do you have a bigger / smaller size?", "jp": "もっと大きい・小さい\nサイズはありますか？", "ro": "Motto ōkii / chiisai saizu wa arimasu ka?", "audio": "../phrase-cards/shopping-04.mp3"}, {"en": "May I try this on?", "jp": "試着しても\nいいですか？", "ro": "Shichaku shite mo ii desu ka?", "audio": "../phrase-cards/shopping-05.mp3"}, {"en": "No bag, thank you.", "jp": "袋は\nいりません。", "ro": "Fukuro wa irimasen.", "audio": "../phrase-cards/shopping-06.mp3"}]}, {"id": "transport", "en": "Trains & Taxis", "ja": "電車・タクシー", "col": "#C28A1E", "cards": [{"en": "Please take me to this address.", "jp": "この住所まで\nお願いします。", "ro": "Kono jūsho made onegaishimasu.", "audio": "../phrase-cards/transport-01.mp3"}, {"en": "Please stop here.", "jp": "ここで\n止めてください。", "ro": "Koko de tomete kudasai.", "audio": "../phrase-cards/transport-02.mp3"}, {"en": "Where can I buy a ticket?", "jp": "切符はどこで\n買えますか？", "ro": "Kippu wa doko de kaemasu ka?", "audio": "../phrase-cards/transport-03.mp3"}, {"en": "Which platform for this station? (show the name)", "jp": "この駅へ行く電車は\n何番線ですか？", "ro": "Kono eki e iku densha wa nan-bansen desu ka?", "audio": "../phrase-cards/transport-04.mp3"}, {"en": "Does this train stop at this station? (show the name)", "jp": "この電車は\nこの駅に\n止まりますか？", "ro": "Kono densha wa kono eki ni tomarimasu ka?", "audio": "../phrase-cards/transport-05.mp3"}, {"en": "I'm lost.", "jp": "道に\n迷いました。", "ro": "Michi ni mayoimashita.", "audio": "../phrase-cards/transport-06.mp3"}]}, {"id": "hotel", "en": "Hotel & Onsen", "ja": "ホテル・温泉", "col": "#4F6D7A", "cards": [{"en": "I have a reservation.", "jp": "予約\nしています。", "ro": "Yoyaku shite imasu.", "audio": "../phrase-cards/hotel-01.mp3"}, {"en": "Could you keep my luggage?", "jp": "荷物を預かって\nもらえますか？", "ro": "Nimotsu o azukatte moraemasu ka?", "audio": "../phrase-cards/hotel-02.mp3"}, {"en": "What time is check-out?", "jp": "チェックアウトは\n何時ですか？", "ro": "Chekku-auto wa nanji desu ka?", "audio": "../phrase-cards/hotel-03.mp3"}, {"en": "What is the Wi-Fi password?", "jp": "Wi-Fiのパスワードを\n教えてください。", "ro": "Waifai no pasuwādo o oshiete kudasai.", "audio": "../phrase-cards/hotel-04.mp3"}, {"en": "I have a tattoo. Can I use the bath (onsen)?", "jp": "タトゥーが\nありますが、\n温泉に入れますか？", "ro": "Tatū ga arimasu ga, onsen ni hairemasu ka?", "audio": "../phrase-cards/hotel-05.mp3"}]}, {"id": "emergency", "en": "Emergency", "ja": "緊急", "col": "#C0392B", "cards": [{"en": "Please help me!", "jp": "助けて\nください！", "ro": "Tasukete kudasai!", "audio": "../phrase-cards/emergency-01.mp3"}, {"en": "Please call an ambulance.", "jp": "救急車を\n呼んでください。", "ro": "Kyūkyūsha o yonde kudasai.", "audio": "../phrase-cards/emergency-02.mp3"}, {"en": "I feel sick.", "jp": "気分が\n悪いです。", "ro": "Kibun ga warui desu.", "audio": "../phrase-cards/emergency-03.mp3"}, {"en": "Where is the nearest hospital?", "jp": "一番近い病院は\nどこですか？", "ro": "Ichiban chikai byōin wa doko desu ka?", "audio": "../phrase-cards/emergency-04.mp3"}, {"en": "Is there a pharmacy nearby?", "jp": "近くに薬局は\nありますか？", "ro": "Chikaku ni yakkyoku wa arimasu ka?", "audio": "../phrase-cards/emergency-05.mp3"}, {"en": "I lost my passport / wallet.", "jp": "パスポート・財布を\nなくしました。", "ro": "Pasupōto / saifu o nakushimashita.", "audio": "../phrase-cards/emergency-06.mp3"}]}], "sos": [{"num": "110", "en": "Police", "ja": "警察"}, {"num": "119", "en": "Ambulance / Fire", "ja": "救急車・消防"}, {"num": "050-3816-2787", "en": "Japan Visitor Hotline (JNTO, 24h, English)", "ja": "訪日外国人向けホットライン"}]};
+const app = document.getElementById("app");
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const br = s => esc(s).replace(/\n/g, "<br>");
+const longest = s => Math.max(...s.split("\n").map(l => l.length));
+const total = DATA.cats.reduce((n, c) => n + c.cards.length, 0);
+
+// ---------- audio: plays on the same screen (Web Audio works offline and on iPhone)
+const AC = window.AudioContext || window.webkitAudioContext;
+let ctx = null, current = null, playingBtn = null;
+const buffers = new Map();
+try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}  // iPhone: play even in silent mode
+
+function stopAudio() {
+  if (current) { try { current.onended = null; current.stop(); } catch (e) {} current = null; }
+  if (playingBtn) { playingBtn.classList.remove("on"); playingBtn = null; }
+}
+async function play(url, btn) {
+  const same = playingBtn === btn;
+  stopAudio();
+  if (same) return;  // second tap = stop
+  btn.classList.add("on"); playingBtn = btn;
+  try {
+    if (!AC) { const a = new Audio(url); a.onended = stopAudio; await a.play(); current = {stop: () => a.pause()}; return; }
+    if (!ctx) ctx = new AC();
+    if (ctx.state === "suspended") ctx.resume();
+    let buf = buffers.get(url);
+    if (!buf) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      const raw = await res.arrayBuffer();
+      buf = await new Promise((ok, ng) => ctx.decodeAudioData(raw, ok, ng));
+      buffers.set(url, buf);
+    }
+    if (playingBtn !== btn) return;  // user tapped something else meanwhile
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination);
+    src.onended = () => { if (current === src) { current = null; stopAudio(); } };
+    src.start(0); current = src;
+  } catch (e) {
+    stopAudio();
+    toast("Sound could not load. Please connect to the internet once, then it works offline.");
+  }
+}
+function toast(msg) {
+  const d = document.createElement("div"); d.className = "err"; d.textContent = msg;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 4000);
+}
+
+// ---------- screens (the address after # keeps the phone's Back button working)
+function header(title, ja, back) {
+  return `<header>${back ? `<button class="back" onclick="history.back()">◀ Back</button>` : ""}
+    <h1>${title}${ja ? `<small>${ja}</small>` : ""}</h1></header>`;
+}
+function home() {
+  let tip = "";
+  try { if (!localStorage.getItem("tipClosed") && !matchMedia("(display-mode: standalone)").matches)
+    tip = `<div class="tip" id="tip"><button onclick="closeTip()" aria-label="Close">×</button>
+      <b>Tip:</b> add this page to your home screen to open it like an app.<br>
+      iPhone: tap <b>Share</b> → <b>Add to Home Screen</b>.<br>Android: tap <b>⋮</b> → <b>Add to Home screen</b>.</div>`; } catch (e) {}
+  const cats = DATA.cats.map(c => `<button class="cat" style="background:${c.col}" onclick="go('#/c/${c.id}')">
+      <span>${c.en}</span><span class="ja">${c.ja}</span></button>`).join("");
+  return header("Japan Travel Phrase Cards", "旅行で使える日本語カード") + `<div class="wrap home">
+    <div class="hero"><div class="sun"></div><p>${total} cards. Show the big Japanese to staff.<br>Tap ▶ to hear it.</p></div>
+    ${tip}${cats}
+    <button class="cat" style="background:#555" onclick="go('#/sos')"><span>Emergency numbers</span><span class="ja">緊急電話番号</span></button>
+    <p class="note">Works offline after your first visit (cards and sound).<br>
+    <b>Allergy cards</b> help you explain, but they are not a medical guarantee. Always carry your own medicine.</p></div>`;
+}
+function closeTip() { try { localStorage.setItem("tipClosed", "1"); } catch (e) {} document.getElementById("tip")?.remove(); }
+function category(c) {
+  const cards = c.cards.map((p, i) => {
+    const size = Math.min(28, 250 / longest(p.jp));
+    return `<div class="card" style="--c:${c.col}">
+      <button class="show" onclick="go('#/p/${c.id}/${i}')"><div class="jp" style="font-size:min(${size}px, ${(size / 3.6).toFixed(2)}vw)">${br(p.jp)}</div>
+        <div class="hint">Tap to show full screen</div></button>
+      <div class="row"><div class="txt"><div class="en">${esc(p.en)}</div><div class="ro">${esc(p.ro)}</div></div>
+        <button class="play" aria-label="Play sound" onclick="play('${p.audio}', this)">▶</button></div></div>`;
+  }).join("");
+  return header(c.en, c.ja, true) + `<div class="wrap list">${cards}</div>`;
+}
+function full(c, i) {
+  const p = c.cards[i], lines = p.jp.split("\n").length, L = longest(p.jp);
+  // largest size where the longest line fits the width and all lines fit the height
+  const size = `min(${(92 / L).toFixed(2)}vw, ${(42 / (lines * 1.45)).toFixed(2)}vh, 120px)`;
+  return `<div class="full" style="--c:${c.col}">
+    <div class="band"><span>${c.en}</span><button onclick="history.back()">✕ Close</button></div>
+    <div class="please">この画面をご覧ください</div>
+    <div class="jp" style="font-size:${size}">${br(p.jp)}</div>
+    <div class="row"><div class="txt"><div class="en">${esc(p.en)}</div><div class="ro">${esc(p.ro)}</div></div>
+      <button class="play" aria-label="Play sound" onclick="play('${p.audio}', this)">▶</button></div>
+    <div class="row" style="padding-top:0;border:0;justify-content:space-between">
+      <div class="nav">${i > 0 ? `<button onclick="go('#/p/${c.id}/${i - 1}', true)">‹ Prev</button>` : ""}</div>
+      <span style="color:#aaa;font-size:13px">${i + 1} / ${c.cards.length}</span>
+      <div class="nav">${i < c.cards.length - 1 ? `<button onclick="go('#/p/${c.id}/${i + 1}', true)">Next ›</button>` : ""}</div></div></div>`;
+}
+function sos() {
+  const rows = DATA.sos.map(s => `<a class="item" href="tel:${s.num.replace(/-/g, "")}">
+    <div class="big">${s.num}</div><div class="lbl">${s.en} <span>${s.ja}</span></div></a>`).join("");
+  return header("Emergency numbers", "緊急電話番号", true) + `<div class="wrap list sos">${rows}
+    <p class="note">Tap a number to call. Calls to 110 and 119 are free from any phone.
+    Say “Eigo de onegaishimasu” (English, please).</p></div>`;
+}
+function go(hash, replace) { replace ? location.replace(hash) : (location.hash = hash); }
+function render() {
+  stopAudio();
+  const h = location.hash.split("/");
+  const c = DATA.cats.find(x => x.id === h[2]);
+  if (h[1] === "c" && c) app.innerHTML = category(c);
+  else if (h[1] === "p" && c && c.cards[+h[3]]) app.innerHTML = full(c, +h[3]);
+  else if (h[1] === "sos") app.innerHTML = sos();
+  else app.innerHTML = home();
+  if (h[1] !== "p") window.scrollTo(0, 0);
+}
+addEventListener("hashchange", render);
+render();
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body></html>
