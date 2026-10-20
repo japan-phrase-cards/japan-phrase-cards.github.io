@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F3A5F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kana">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Hiragana & Katakana with Audio</title>
+<style>
+:root { --navy:#1F3A5F; --cream:#FBF8F2; --ink:#1d1d1f; --c:#C0392B;
+  --ja:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic UI","Meiryo",sans-serif;
+  --en:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--cream); color:var(--ink); font-family:var(--en); }
+body { padding-bottom:env(safe-area-inset-bottom); }
+button { font:inherit; border:0; cursor:pointer; color:inherit; background:none; }
+.ja { font-family:var(--ja); }
+.wrap { max-width:560px; margin:0 auto; }
+header { position:sticky; top:0; z-index:5; background:var(--hc, var(--navy)); color:var(--cream);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px; display:flex; align-items:center; gap:12px; min-height:56px; }
+header h1 { font-size:18px; font-weight:700; flex:1; line-height:1.2; }
+header h1 small { display:block; font-family:var(--ja); font-weight:400; font-size:12px; opacity:.8; }
+.back { font-size:16px; font-weight:600; padding:8px 12px; margin:-8px 0 -8px -8px; border-radius:20px; }
+.home { padding:16px; }
+.hero { text-align:center; padding:10px 0 18px; }
+.hero .sun { width:76px; height:76px; border-radius:50%; background:#C0392B; margin:0 auto 12px; color:#fff; font:700 40px/76px var(--ja); }
+.hero p { font-size:15px; line-height:1.5; color:#444; }
+.big-btn { display:flex; align-items:center; justify-content:space-between; width:100%; padding:20px 18px; margin-bottom:10px;
+  border-radius:14px; color:#fff; font-size:20px; font-weight:700; text-align:left; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.big-btn .ja { font-size:15px; font-weight:400; opacity:.9; }
+.big-btn:active { transform:scale(.98); }
+.note { font-size:13px; line-height:1.5; color:#666; margin:16px 4px 8px; }
+.tip { background:#fff; border:1px solid #e6e0d4; border-radius:12px; padding:12px 36px 12px 14px; font-size:14px; line-height:1.5; margin-bottom:14px; position:relative; }
+.tip button { position:absolute; right:6px; top:4px; font-size:20px; color:#999; padding:4px 8px; }
+.tabs { display:flex; gap:6px; padding:12px 12px 0; }
+.tabs button { flex:1; padding:10px 4px; border-radius:10px; background:#eee8dc; font-size:14px; font-weight:600; color:#555; }
+.tabs button.sel { background:var(--c); color:#fff; }
+.grid { display:grid; gap:6px; padding:12px; }
+.cell { background:#fff; border:1px solid #ece5d8; border-radius:10px; padding:6px 0 5px; text-align:center; min-height:58px; }
+.cell .k { font:700 26px/1.15 var(--ja); }
+.cell .r { font-size:12px; color:#777; }
+.cell.on { background:var(--c); color:#fff; } .cell.on .r { color:#fff; }
+.cell.e { background:none; border:0; }
+.six { gap:4px; } .six .cell .k { font-size:min(22px, 6vw); letter-spacing:-1px; }
+.hint { text-align:center; font-size:13px; color:#888; padding:0 16px 20px; }
+.card { padding:18px 16px 28px; text-align:center; }
+.card .big { height:min(240px, 62vw); margin-top:2px; }
+.card .big img { height:100%; width:auto; }
+.card .sohint { font-size:12px; color:#999; }
+details.credits { font-size:12px; color:#888; margin:10px 4px 20px; }
+details.credits pre { white-space:pre-wrap; font:11px/1.4 var(--en); margin-top:8px; }
+.card .rom { font-size:34px; font-weight:800; margin-top:4px; }
+.card .n { font-size:14px; color:#666; margin-top:6px; line-height:1.4; }
+.play { width:64px; height:64px; border-radius:50%; background:var(--c); color:#fff; font-size:24px; display:inline-flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.15); }
+.play.sm { width:52px; height:52px; font-size:20px; flex:none; }
+.play.on { animation:pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow:0 0 0 10px rgba(0,0,0,.08); } }
+.ex { display:flex; align-items:center; gap:12px; text-align:left; background:#fff; border-radius:14px; border:1px solid #e6e0d4; padding:14px 16px; margin-top:22px; }
+.ex .lbl { font-size:11px; color:#999; text-transform:uppercase; letter-spacing:.5px; }
+.ex .w { font:700 28px/1.3 var(--ja); } .ex .w b { color:var(--c); }
+.ex .wr { font-size:15px; color:#555; font-style:italic; } .ex .we { font-size:16px; font-weight:600; }
+.nav { display:flex; justify-content:space-between; align-items:center; margin-top:22px; }
+.nav button { height:46px; min-width:96px; padding:0 16px; border-radius:23px; background:#eee8dc; font-size:17px; color:#555; }
+.nav button:disabled { visibility:hidden; }
+.quiz { padding:16px; text-align:center; }
+.opt-row { display:flex; gap:8px; margin-bottom:10px; }
+.opt-row button { flex:1; padding:14px 6px; border-radius:12px; background:#eee8dc; font-size:15px; font-weight:600; color:#555; }
+.opt-row button.sel { background:var(--navy); color:#fff; }
+.qtop { display:flex; justify-content:space-between; font-size:14px; color:#777; margin-bottom:14px; }
+.choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:22px; }
+.choices button { background:#fff; border:2px solid #e6e0d4; border-radius:16px; font:700 44px/1 var(--ja); padding:22px 0; }
+.choices button.ok { background:#3C7A5A; border-color:#3C7A5A; color:#fff; }
+.choices button.ng { background:#C0392B; border-color:#C0392B; color:#fff; }
+.choices button small { display:block; font:600 14px var(--en); margin-top:6px; min-height:17px; }
+.score { font-size:56px; font-weight:800; color:var(--navy); margin:20px 0 6px; }
+.missed { font:700 26px/1.6 var(--ja); color:#C0392B; margin:10px 0 18px; letter-spacing:6px; }
+.go { display:block; width:100%; padding:16px; border-radius:14px; background:var(--navy); color:#fff; font-size:18px; font-weight:700; margin-top:10px; }
+.go.alt { background:#eee8dc; color:#555; }
+.err { position:fixed; left:16px; right:16px; bottom:calc(env(safe-area-inset-bottom) + 16px); z-index:20; background:#333; color:#fff;
+  border-radius:12px; padding:12px 16px; font-size:14px; text-align:center; }
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const DATA = {"title": "Hiragana & Katakana with Audio", "titleJa": "ひらがな・カタカナ", "scripts": [{"id": "hira", "en": "Hiragana", "ja": "ひらがな", "col": "#C0392B", "basic": [[{"k": "あ", "r": "a", "a": "../kana/k-a.mp3", "n": "", "so": "so/3042.svg", "w": {"w": "あめ", "r": "ame", "e": "rain", "a": "../kana/w-h-a.mp3"}}, {"k": "い", "r": "i", "a": "../kana/k-i.mp3", "n": "", "so": "so/3044.svg", "w": {"w": "いぬ", "r": "inu", "e": "dog", "a": "../kana/w-h-i.mp3"}}, {"k": "う", "r": "u", "a": "../kana/k-u.mp3", "n": "", "so": "so/3046.svg", "w": {"w": "うみ", "r": "umi", "e": "sea", "a": "../kana/w-h-u.mp3"}}, {"k": "え", "r": "e", "a": "../kana/k-e.mp3", "n": "", "so": "so/3048.svg", "w": {"w": "えき", "r": "eki", "e": "station", "a": "../kana/w-h-e.mp3"}}, {"k": "お", "r": "o", "a": "../kana/k-o.mp3", "n": "", "so": "so/304a.svg", "w": {"w": "おかね", "r": "okane", "e": "money", "a": "../kana/w-h-o.mp3"}}], [{"k": "か", "r": "ka", "a": "../kana/k-ka.mp3", "n": "", "so": "so/304b.svg", "w": {"w": "かさ", "r": "kasa", "e": "umbrella", "a": "../kana/w-h-ka.mp3"}}, {"k": "き", "r": "ki", "a": "../kana/k-ki.mp3", "n": "", "so": "so/304d.svg", "w": {"w": "きもの", "r": "kimono", "e": "kimono", "a": "../kana/w-h-ki.mp3"}}, {"k": "く", "r": "ku", "a": "../kana/k-ku.mp3", "n": "", "so": "so/304f.svg", "w": {"w": "くるま", "r": "kuruma", "e": "car", "a": "../kana/w-h-ku.mp3"}}, {"k": "け", "r": "ke", "a": "../kana/k-ke.mp3", "n": "", "so": "so/3051.svg", "w": {"w": "けしごむ", "r": "keshigomu", "e": "eraser", "a": "../kana/w-h-ke.mp3"}}, {"k": "こ", "r": "ko", "a": "../kana/k-ko.mp3", "n": "", "so": "so/3053.svg", "w": {"w": "こども", "r": "kodomo", "e": "child", "a": "../kana/w-h-ko.mp3"}}], [{"k": "さ", "r": "sa", "a": "../kana/k-sa.mp3", "n": "", "so": "so/3055.svg", "w": {"w": "さかな", "r": "sakana", "e": "fish", "a": "../kana/w-h-sa.mp3"}}, {"k": "し", "r": "shi", "a": "../kana/k-shi.mp3", "n": "shi, not \"si\"", "so": "so/3057.svg", "w": {"w": "しお", "r": "shio", "e": "salt", "a": "../kana/w-h-shi.mp3"}}, {"k": "す", "r": "su", "a": "../kana/k-su.mp3", "n": "", "so": "so/3059.svg", "w": {"w": "すし", "r": "sushi", "e": "sushi", "a": "../kana/w-h-su.mp3"}}, {"k": "せ", "r": "se", "a": "../kana/k-se.mp3", "n": "", "so": "so/305b.svg", "w": {"w": "せんせい", "r": "sensei", "e": "teacher", "a": "../kana/w-h-se.mp3"}}, {"k": "そ", "r": "so", "a": "../kana/k-so.mp3", "n": "", "so": "so/305d.svg", "w": {"w": "そら", "r": "sora", "e": "sky", "a": "../kana/w-h-so.mp3"}}], [{"k": "た", "r": "ta", "a": "../kana/k-ta.mp3", "n": "", "so": "so/305f.svg", "w": {"w": "たまご", "r": "tamago", "e": "egg", "a": "../kana/w-h-ta.mp3"}}, {"k": "ち", "r": "chi", "a": "../kana/k-chi.mp3", "n": "chi, not \"ti\"", "so": "so/3061.svg", "w": {"w": "ちず", "r": "chizu", "e": "map", "a": "../kana/w-h-chi.mp3"}}, {"k": "つ", "r": "tsu", "a": "../kana/k-tsu.mp3", "n": "tsu, not \"tu\"", "so": "so/3064.svg", "w": {"w": "つくえ", "r": "tsukue", "e": "desk", "a": "../kana/w-h-tsu.mp3"}}, {"k": "て", "r": "te", "a": "../kana/k-te.mp3", "n": "", "so": "so/3066.svg", "w": {"w": "てがみ", "r": "tegami", "e": "letter", "a": "../kana/w-h-te.mp3"}}, {"k": "と", "r": "to", "a": "../kana/k-to.mp3", "n": "", "so": "so/3068.svg", "w": {"w": "とけい", "r": "tokei", "e": "clock", "a": "../kana/w-h-to.mp3"}}], [{"k": "な", "r": "na", "a": "../kana/k-na.mp3", "n": "", "so": "so/306a.svg", "w": {"w": "なつ", "r": "natsu", "e": "summer", "a": "../kana/w-h-na.mp3"}}, {"k": "に", "r": "ni", "a": "../kana/k-ni.mp3", "n": "", "so": "so/306b.svg", "w": {"w": "にく", "r": "niku", "e": "meat", "a": "../kana/w-h-ni.mp3"}}, {"k": "ぬ", "r": "nu", "a": "../kana/k-nu.mp3", "n": "", "so": "so/306c.svg", "w": {"w": "ぬいぐるみ", "r": "nuigurumi", "e": "stuffed toy", "a": "../kana/w-h-nu.mp3"}}, {"k": "ね", "r": "ne", "a": "../kana/k-ne.mp3", "n": "", "so": "so/306d.svg", "w": {"w": "ねこ", "r": "neko", "e": "cat", "a": "../kana/w-h-ne.mp3"}}, {"k": "の", "r": "no", "a": "../kana/k-no.mp3", "n": "", "so": "so/306e.svg", "w": {"w": "のり", "r": "nori", "e": "seaweed", "a": "../kana/w-h-no.mp3"}}], [{"k": "は", "r": "ha", "a": "../kana/k-ha.mp3", "n": "ha — but \"wa\" when used as a particle", "so": "so/306f.svg", "w": {"w": "はな", "r": "hana", "e": "flower", "a": "../kana/w-h-ha.mp3"}}, {"k": "ひ", "r": "hi", "a": "../kana/k-hi.mp3", "n": "", "so": "so/3072.svg", "w": {"w": "ひと", "r": "hito", "e": "person", "a": "../kana/w-h-hi.mp3"}}, {"k": "ふ", "r": "fu", "a": "../kana/k-fu.mp3", "n": "fu — soft, between f and h", "so": "so/3075.svg", "w": {"w": "ふね", "r": "fune", "e": "boat", "a": "../kana/w-h-fu.mp3"}}, {"k": "へ", "r": "he", "a": "../kana/k-he.mp3", "n": "he — but \"e\" when used as a particle", "so": "so/3078.svg", "w": {"w": "へや", "r": "heya", "e": "room", "a": "../kana/w-h-he.mp3"}}, {"k": "ほ", "r": "ho", "a": "../kana/k-ho.mp3", "n": "", "so": "so/307b.svg", "w": {"w": "ほし", "r": "hoshi", "e": "star", "a": "../kana/w-h-ho.mp3"}}], [{"k": "ま", "r": "ma", "a": "../kana/k-ma.mp3", "n": "", "so": "so/307e.svg", "w": {"w": "まど", "r": "mado", "e": "window", "a": "../kana/w-h-ma.mp3"}}, {"k": "み", "r": "mi", "a": "../kana/k-mi.mp3", "n": "", "so": "so/307f.svg", "w": {"w": "みず", "r": "mizu", "e": "water", "a": "../kana/w-h-mi.mp3"}}, {"k": "む", "r": "mu", "a": "../kana/k-mu.mp3", "n": "", "so": "so/3080.svg", "w": {"w": "むし", "r": "mushi", "e": "bug", "a": "../kana/w-h-mu.mp3"}}, {"k": "め", "r": "me", "a": "../kana/k-me.mp3", "n": "", "so": "so/3081.svg", "w": {"w": "めがね", "r": "megane", "e": "glasses", "a": "../kana/w-h-me.mp3"}}, {"k": "も", "r": "mo", "a": "../kana/k-mo.mp3", "n": "", "so": "so/3082.svg", "w": {"w": "もり", "r": "mori", "e": "forest", "a": "../kana/w-h-mo.mp3"}}], [{"k": "や", "r": "ya", "a": "../kana/k-ya.mp3", "n": "", "so": "so/3084.svg", "w": {"w": "やま", "r": "yama", "e": "mountain", "a": "../kana/w-h-ya.mp3"}}, null, {"k": "ゆ", "r": "yu", "a": "../kana/k-yu.mp3", "n": "", "so": "so/3086.svg", "w": {"w": "ゆき", "r": "yuki", "e": "snow", "a": "../kana/w-h-yu.mp3"}}, null, {"k": "よ", "r": "yo", "a": "../kana/k-yo.mp3", "n": "", "so": "so/3088.svg", "w": {"w": "よる", "r": "yoru", "e": "night", "a": "../kana/w-h-yo.mp3"}}], [{"k": "ら", "r": "ra", "a": "../kana/k-ra.mp3", "n": "r is a soft tap, between r and l", "so": "so/3089.svg", "w": {"w": "らくだ", "r": "rakuda", "e": "camel", "a": "../kana/w-h-ra.mp3"}}, {"k": "り", "r": "ri", "a": "../kana/k-ri.mp3", "n": "", "so": "so/308a.svg", "w": {"w": "りんご", "r": "ringo", "e": "apple", "a": "../kana/w-h-ri.mp3"}}, {"k": "る", "r": "ru", "a": "../kana/k-ru.mp3", "n": "", "so": "so/308b.svg", "w": {"w": "はる", "r": "haru", "e": "spring (る at the end)", "a": "../kana/w-h-ru.mp3"}}, {"k": "れ", "r": "re", "a": "../kana/k-re.mp3", "n": "", "so": "so/308c.svg", "w": {"w": "れいぞうこ", "r": "reizōko", "e": "fridge", "a": "../kana/w-h-re.mp3"}}, {"k": "ろ", "r": "ro", "a": "../kana/k-ro.mp3", "n": "", "so": "so/308d.svg", "w": {"w": "ろうそく", "r": "rōsoku", "e": "candle", "a": "../kana/w-h-ro.mp3"}}], [{"k": "わ", "r": "wa", "a": "../kana/k-wa.mp3", "n": "", "so": "so/308f.svg", "w": {"w": "わたし", "r": "watashi", "e": "I, me", "a": "../kana/w-h-wa.mp3"}}, null, null, null, {"k": "を", "r": "o", "a": "../kana/k-wo.mp3", "n": "o — sometimes written \"wo\"; only used as a particle", "so": "so/3092.svg", "w": {"w": "みずを のむ", "r": "mizu o nomu", "e": "drink water", "a": "../kana/w-h-wo.mp3"}}], [{"k": "ん", "r": "n", "a": "../kana/k-n.mp3", "n": "n — never starts a word", "so": "so/3093.svg", "w": {"w": "みかん", "r": "mikan", "e": "mandarin orange", "a": "../kana/w-h-n.mp3"}}, null, null, null, null]], "dakuten": [[{"k": "が", "r": "ga", "a": "../kana/k-ga.mp3"}, {"k": "ぎ", "r": "gi", "a": "../kana/k-gi.mp3"}, {"k": "ぐ", "r": "gu", "a": "../kana/k-gu.mp3"}, {"k": "げ", "r": "ge", "a": "../kana/k-ge.mp3"}, {"k": "ご", "r": "go", "a": "../kana/k-go.mp3"}], [{"k": "ざ", "r": "za", "a": "../kana/k-za.mp3"}, {"k": "じ", "r": "ji", "a": "../kana/k-ji.mp3"}, {"k": "ず", "r": "zu", "a": "../kana/k-zu.mp3"}, {"k": "ぜ", "r": "ze", "a": "../kana/k-ze.mp3"}, {"k": "ぞ", "r": "zo", "a": "../kana/k-zo.mp3"}], [{"k": "だ", "r": "da", "a": "../kana/k-da.mp3"}, {"k": "ぢ", "r": "ji", "a": "../kana/k-dji.mp3"}, {"k": "づ", "r": "zu", "a": "../kana/k-dzu.mp3"}, {"k": "で", "r": "de", "a": "../kana/k-de.mp3"}, {"k": "ど", "r": "do", "a": "../kana/k-do.mp3"}], [{"k": "ば", "r": "ba", "a": "../kana/k-ba.mp3"}, {"k": "び", "r": "bi", "a": "../kana/k-bi.mp3"}, {"k": "ぶ", "r": "bu", "a": "../kana/k-bu.mp3"}, {"k": "べ", "r": "be", "a": "../kana/k-be.mp3"}, {"k": "ぼ", "r": "bo", "a": "../kana/k-bo.mp3"}], [{"k": "ぱ", "r": "pa", "a": "../kana/k-pa.mp3"}, {"k": "ぴ", "r": "pi", "a": "../kana/k-pi.mp3"}, {"k": "ぷ", "r": "pu", "a": "../kana/k-pu.mp3"}, {"k": "ぺ", "r": "pe", "a": "../kana/k-pe.mp3"}, {"k": "ぽ", "r": "po", "a": "../kana/k-po.mp3"}]], "combo": [[{"k": "きゃ", "r": "kya", "a": "../kana/k-kya.mp3"}, {"k": "きゅ", "r": "kyu", "a": "../kana/k-kyu.mp3"}, {"k": "きょ", "r": "kyo", "a": "../kana/k-kyo.mp3"}, {"k": "しゃ", "r": "sha", "a": "../kana/k-sha.mp3"}, {"k": "しゅ", "r": "shu", "a": "../kana/k-shu.mp3"}, {"k": "しょ", "r": "sho", "a": "../kana/k-sho.mp3"}], [{"k": "ちゃ", "r": "cha", "a": "../kana/k-cha.mp3"}, {"k": "ちゅ", "r": "chu", "a": "../kana/k-chu.mp3"}, {"k": "ちょ", "r": "cho", "a": "../kana/k-cho.mp3"}, {"k": "にゃ", "r": "nya", "a": "../kana/k-nya.mp3"}, {"k": "にゅ", "r": "nyu", "a": "../kana/k-nyu.mp3"}, {"k": "にょ", "r": "nyo", "a": "../kana/k-nyo.mp3"}], [{"k": "ひゃ", "r": "hya", "a": "../kana/k-hya.mp3"}, {"k": "ひゅ", "r": "hyu", "a": "../kana/k-hyu.mp3"}, {"k": "ひょ", "r": "hyo", "a": "../kana/k-hyo.mp3"}, {"k": "みゃ", "r": "mya", "a": "../kana/k-mya.mp3"}, {"k": "みゅ", "r": "myu", "a": "../kana/k-myu.mp3"}, {"k": "みょ", "r": "myo", "a": "../kana/k-myo.mp3"}], [{"k": "りゃ", "r": "rya", "a": "../kana/k-rya.mp3"}, {"k": "りゅ", "r": "ryu", "a": "../kana/k-ryu.mp3"}, {"k": "りょ", "r": "ryo", "a": "../kana/k-ryo.mp3"}, {"k": "ぎゃ", "r": "gya", "a": "../kana/k-gya.mp3"}, {"k": "ぎゅ", "r": "gyu", "a": "../kana/k-gyu.mp3"}, {"k": "ぎょ", "r": "gyo", "a": "../kana/k-gyo.mp3"}], [{"k": "じゃ", "r": "ja", "a": "../kana/k-ja.mp3"}, {"k": "じゅ", "r": "ju", "a": "../kana/k-ju.mp3"}, {"k": "じょ", "r": "jo", "a": "../kana/k-jo.mp3"}, {"k": "びゃ", "r": "bya", "a": "../kana/k-bya.mp3"}, {"k": "びゅ", "r": "byu", "a": "../kana/k-byu.mp3"}, {"k": "びょ", "r": "byo", "a": "../kana/k-byo.mp3"}], [{"k": "ぴゃ", "r": "pya", "a": "../kana/k-pya.mp3"}, {"k": "ぴゅ", "r": "pyu", "a": "../kana/k-pyu.mp3"}, {"k": "ぴょ", "r": "pyo", "a": "../kana/k-pyo.mp3"}, null, null, null]]}, {"id": "kata", "en": "Katakana", "ja": "カタカナ", "col": "#1F3A5F", "basic": [[{"k": "ア", "r": "a", "a": "../kana/k-a.mp3", "n": "", "so": "so/30a2.svg", "w": {"w": "アイス", "r": "aisu", "e": "ice cream", "a": "../kana/w-k-a.mp3"}}, {"k": "イ", "r": "i", "a": "../kana/k-i.mp3", "n": "", "so": "so/30a4.svg", "w": {"w": "イギリス", "r": "igirisu", "e": "the UK", "a": "../kana/w-k-i.mp3"}}, {"k": "ウ", "r": "u", "a": "../kana/k-u.mp3", "n": "", "so": "so/30a6.svg", "w": {"w": "ウクレレ", "r": "ukurere", "e": "ukulele", "a": "../kana/w-k-u.mp3"}}, {"k": "エ", "r": "e", "a": "../kana/k-e.mp3", "n": "", "so": "so/30a8.svg", "w": {"w": "エレベーター", "r": "erebētā", "e": "elevator", "a": "../kana/w-k-e.mp3"}}, {"k": "オ", "r": "o", "a": "../kana/k-o.mp3", "n": "", "so": "so/30aa.svg", "w": {"w": "オレンジ", "r": "orenji", "e": "orange", "a": "../kana/w-k-o.mp3"}}], [{"k": "カ", "r": "ka", "a": "../kana/k-ka.mp3", "n": "", "so": "so/30ab.svg", "w": {"w": "カメラ", "r": "kamera", "e": "camera", "a": "../kana/w-k-ka.mp3"}}, {"k": "キ", "r": "ki", "a": "../kana/k-ki.mp3", "n": "", "so": "so/30ad.svg", "w": {"w": "キウイ", "r": "kiui", "e": "kiwi", "a": "../kana/w-k-ki.mp3"}}, {"k": "ク", "r": "ku", "a": "../kana/k-ku.mp3", "n": "", "so": "so/30af.svg", "w": {"w": "クッキー", "r": "kukkī", "e": "cookie", "a": "../kana/w-k-ku.mp3"}}, {"k": "ケ", "r": "ke", "a": "../kana/k-ke.mp3", "n": "", "so": "so/30b1.svg", "w": {"w": "ケーキ", "r": "kēki", "e": "cake", "a": "../kana/w-k-ke.mp3"}}, {"k": "コ", "r": "ko", "a": "../kana/k-ko.mp3", "n": "", "so": "so/30b3.svg", "w": {"w": "コーヒー", "r": "kōhī", "e": "coffee", "a": "../kana/w-k-ko.mp3"}}], [{"k": "サ", "r": "sa", "a": "../kana/k-sa.mp3", "n": "", "so": "so/30b5.svg", "w": {"w": "サラダ", "r": "sarada", "e": "salad", "a": "../kana/w-k-sa.mp3"}}, {"k": "シ", "r": "shi", "a": "../kana/k-shi.mp3", "n": "shi, not \"si\"", "so": "so/30b7.svg", "w": {"w": "シール", "r": "shīru", "e": "sticker", "a": "../kana/w-k-shi.mp3"}}, {"k": "ス", "r": "su", "a": "../kana/k-su.mp3", "n": "", "so": "so/30b9.svg", "w": {"w": "スープ", "r": "sūpu", "e": "soup", "a": "../kana/w-k-su.mp3"}}, {"k": "セ", "r": "se", "a": "../kana/k-se.mp3", "n": "", "so": "so/30bb.svg", "w": {"w": "セーター", "r": "sētā", "e": "sweater", "a": "../kana/w-k-se.mp3"}}, {"k": "ソ", "r": "so", "a": "../kana/k-so.mp3", "n": "", "so": "so/30bd.svg", "w": {"w": "ソース", "r": "sōsu", "e": "sauce", "a": "../kana/w-k-so.mp3"}}], [{"k": "タ", "r": "ta", "a": "../kana/k-ta.mp3", "n": "", "so": "so/30bf.svg", "w": {"w": "タクシー", "r": "takushī", "e": "taxi", "a": "../kana/w-k-ta.mp3"}}, {"k": "チ", "r": "chi", "a": "../kana/k-chi.mp3", "n": "chi, not \"ti\"", "so": "so/30c1.svg", "w": {"w": "チーズ", "r": "chīzu", "e": "cheese", "a": "../kana/w-k-chi.mp3"}}, {"k": "ツ", "r": "tsu", "a": "../kana/k-tsu.mp3", "n": "tsu, not \"tu\"", "so": "so/30c4.svg", "w": {"w": "ツアー", "r": "tsuā", "e": "tour", "a": "../kana/w-k-tsu.mp3"}}, {"k": "テ", "r": "te", "a": "../kana/k-te.mp3", "n": "", "so": "so/30c6.svg", "w": {"w": "テレビ", "r": "terebi", "e": "TV", "a": "../kana/w-k-te.mp3"}}, {"k": "ト", "r": "to", "a": "../kana/k-to.mp3", "n": "", "so": "so/30c8.svg", "w": {"w": "トマト", "r": "tomato", "e": "tomato", "a": "../kana/w-k-to.mp3"}}], [{"k": "ナ", "r": "na", "a": "../kana/k-na.mp3", "n": "", "so": "so/30ca.svg", "w": {"w": "ナイフ", "r": "naifu", "e": "knife", "a": "../kana/w-k-na.mp3"}}, {"k": "ニ", "r": "ni", "a": "../kana/k-ni.mp3", "n": "", "so": "so/30cb.svg", "w": {"w": "ニックネーム", "r": "nikkunēmu", "e": "nickname", "a": "../kana/w-k-ni.mp3"}}, {"k": "ヌ", "r": "nu", "a": "../kana/k-nu.mp3", "n": "", "so": "so/30cc.svg", "w": {"w": "ヌードル", "r": "nūdoru", "e": "noodles", "a": "../kana/w-k-nu.mp3"}}, {"k": "ネ", "r": "ne", "a": "../kana/k-ne.mp3", "n": "", "so": "so/30cd.svg", "w": {"w": "ネクタイ", "r": "nekutai", "e": "necktie", "a": "../kana/w-k-ne.mp3"}}, {"k": "ノ", "r": "no", "a": "../kana/k-no.mp3", "n": "", "so": "so/30ce.svg", "w": {"w": "ノート", "r": "nōto", "e": "notebook", "a": "../kana/w-k-no.mp3"}}], [{"k": "ハ", "r": "ha", "a": "../kana/k-ha.mp3", "n": "ha — but \"wa\" when used as a particle", "so": "so/30cf.svg", "w": {"w": "ハンバーガー", "r": "hanbāgā", "e": "hamburger", "a": "../kana/w-k-ha.mp3"}}, {"k": "ヒ", "r": "hi", "a": "../kana/k-hi.mp3", "n": "", "so": "so/30d2.svg", "w": {"w": "ヒーター", "r": "hītā", "e": "heater", "a": "../kana/w-k-hi.mp3"}}, {"k": "フ", "r": "fu", "a": "../kana/k-fu.mp3", "n": "fu — soft, between f and h", "so": "so/30d5.svg", "w": {"w": "フルーツ", "r": "furūtsu", "e": "fruit", "a": "../kana/w-k-fu.mp3"}}, {"k": "ヘ", "r": "he", "a": "../kana/k-he.mp3", "n": "he — but \"e\" when used as a particle", "so": "so/30d8.svg", "w": {"w": "ヘルメット", "r": "herumetto", "e": "helmet", "a": "../kana/w-k-he.mp3"}}, {"k": "ホ", "r": "ho", "a": "../kana/k-ho.mp3", "n": "", "so": "so/30db.svg", "w": {"w": "ホテル", "r": "hoteru", "e": "hotel", "a": "../kana/w-k-ho.mp3"}}], [{"k": "マ", "r": "ma", "a": "../kana/k-ma.mp3", "n": "", "so": "so/30de.svg", "w": {"w": "マスク", "r": "masuku", "e": "face mask", "a": "../kana/w-k-ma.mp3"}}, {"k": "ミ", "r": "mi", "a": "../kana/k-mi.mp3", "n": "", "so": "so/30df.svg", "w": {"w": "ミルク", "r": "miruku", "e": "milk", "a": "../kana/w-k-mi.mp3"}}, {"k": "ム", "r": "mu", "a": "../kana/k-mu.mp3", "n": "", "so": "so/30e0.svg", "w": {"w": "ムース", "r": "mūsu", "e": "mousse", "a": "../kana/w-k-mu.mp3"}}, {"k": "メ", "r": "me", "a": "../kana/k-me.mp3", "n": "", "so": "so/30e1.svg", "w": {"w": "メニュー", "r": "menyū", "e": "menu", "a": "../kana/w-k-me.mp3"}}, {"k": "モ", "r": "mo", "a": "../kana/k-mo.mp3", "n": "", "so": "so/30e2.svg", "w": {"w": "モニター", "r": "monitā", "e": "monitor", "a": "../kana/w-k-mo.mp3"}}], [{"k": "ヤ", "r": "ya", "a": "../kana/k-ya.mp3", "n": "", "so": "so/30e4.svg", "w": {"w": "タイヤ", "r": "taiya", "e": "tire (ヤ at the end)", "a": "../kana/w-k-ya.mp3"}}, null, {"k": "ユ", "r": "yu", "a": "../kana/k-yu.mp3", "n": "", "so": "so/30e6.svg", "w": {"w": "ユニフォーム", "r": "yunifōmu", "e": "uniform", "a": "../kana/w-k-yu.mp3"}}, null, {"k": "ヨ", "r": "yo", "a": "../kana/k-yo.mp3", "n": "", "so": "so/30e8.svg", "w": {"w": "ヨーグルト", "r": "yōguruto", "e": "yogurt", "a": "../kana/w-k-yo.mp3"}}], [{"k": "ラ", "r": "ra", "a": "../kana/k-ra.mp3", "n": "r is a soft tap, between r and l", "so": "so/30e9.svg", "w": {"w": "ラジオ", "r": "rajio", "e": "radio", "a": "../kana/w-k-ra.mp3"}}, {"k": "リ", "r": "ri", "a": "../kana/k-ri.mp3", "n": "", "so": "so/30ea.svg", "w": {"w": "リボン", "r": "ribon", "e": "ribbon", "a": "../kana/w-k-ri.mp3"}}, {"k": "ル", "r": "ru", "a": "../kana/k-ru.mp3", "n": "", "so": "so/30eb.svg", "w": {"w": "ルール", "r": "rūru", "e": "rule", "a": "../kana/w-k-ru.mp3"}}, {"k": "レ", "r": "re", "a": "../kana/k-re.mp3", "n": "", "so": "so/30ec.svg", "w": {"w": "レモン", "r": "remon", "e": "lemon", "a": "../kana/w-k-re.mp3"}}, {"k": "ロ", "r": "ro", "a": "../kana/k-ro.mp3", "n": "", "so": "so/30ed.svg", "w": {"w": "ロボット", "r": "robotto", "e": "robot", "a": "../kana/w-k-ro.mp3"}}], [{"k": "ワ", "r": "wa", "a": "../kana/k-wa.mp3", "n": "", "so": "so/30ef.svg", "w": {"w": "ワイン", "r": "wain", "e": "wine", "a": "../kana/w-k-wa.mp3"}}, null, null, null, {"k": "ヲ", "r": "o", "a": "../kana/k-wo.mp3", "n": "o — almost never used today", "so": "so/30f2.svg"}], [{"k": "ン", "r": "n", "a": "../kana/k-n.mp3", "n": "n — never starts a word", "so": "so/30f3.svg", "w": {"w": "パン", "r": "pan", "e": "bread", "a": "../kana/w-k-n.mp3"}}, null, null, null, null]], "dakuten": [[{"k": "ガ", "r": "ga", "a": "../kana/k-ga.mp3"}, {"k": "ギ", "r": "gi", "a": "../kana/k-gi.mp3"}, {"k": "グ", "r": "gu", "a": "../kana/k-gu.mp3"}, {"k": "ゲ", "r": "ge", "a": "../kana/k-ge.mp3"}, {"k": "ゴ", "r": "go", "a": "../kana/k-go.mp3"}], [{"k": "ザ", "r": "za", "a": "../kana/k-za.mp3"}, {"k": "ジ", "r": "ji", "a": "../kana/k-ji.mp3"}, {"k": "ズ", "r": "zu", "a": "../kana/k-zu.mp3"}, {"k": "ゼ", "r": "ze", "a": "../kana/k-ze.mp3"}, {"k": "ゾ", "r": "zo", "a": "../kana/k-zo.mp3"}], [{"k": "ダ", "r": "da", "a": "../kana/k-da.mp3"}, {"k": "ヂ", "r": "ji", "a": "../kana/k-dji.mp3"}, {"k": "ヅ", "r": "zu", "a": "../kana/k-dzu.mp3"}, {"k": "デ", "r": "de", "a": "../kana/k-de.mp3"}, {"k": "ド", "r": "do", "a": "../kana/k-do.mp3"}], [{"k": "バ", "r": "ba", "a": "../kana/k-ba.mp3"}, {"k": "ビ", "r": "bi", "a": "../kana/k-bi.mp3"}, {"k": "ブ", "r": "bu", "a": "../kana/k-bu.mp3"}, {"k": "ベ", "r": "be", "a": "../kana/k-be.mp3"}, {"k": "ボ", "r": "bo", "a": "../kana/k-bo.mp3"}], [{"k": "パ", "r": "pa", "a": "../kana/k-pa.mp3"}, {"k": "ピ", "r": "pi", "a": "../kana/k-pi.mp3"}, {"k": "プ", "r": "pu", "a": "../kana/k-pu.mp3"}, {"k": "ペ", "r": "pe", "a": "../kana/k-pe.mp3"}, {"k": "ポ", "r": "po", "a": "../kana/k-po.mp3"}]], "combo": [[{"k": "キャ", "r": "kya", "a": "../kana/k-kya.mp3"}, {"k": "キュ", "r": "kyu", "a": "../kana/k-kyu.mp3"}, {"k": "キョ", "r": "kyo", "a": "../kana/k-kyo.mp3"}, {"k": "シャ", "r": "sha", "a": "../kana/k-sha.mp3"}, {"k": "シュ", "r": "shu", "a": "../kana/k-shu.mp3"}, {"k": "ショ", "r": "sho", "a": "../kana/k-sho.mp3"}], [{"k": "チャ", "r": "cha", "a": "../kana/k-cha.mp3"}, {"k": "チュ", "r": "chu", "a": "../kana/k-chu.mp3"}, {"k": "チョ", "r": "cho", "a": "../kana/k-cho.mp3"}, {"k": "ニャ", "r": "nya", "a": "../kana/k-nya.mp3"}, {"k": "ニュ", "r": "nyu", "a": "../kana/k-nyu.mp3"}, {"k": "ニョ", "r": "nyo", "a": "../kana/k-nyo.mp3"}], [{"k": "ヒャ", "r": "hya", "a": "../kana/k-hya.mp3"}, {"k": "ヒュ", "r": "hyu", "a": "../kana/k-hyu.mp3"}, {"k": "ヒョ", "r": "hyo", "a": "../kana/k-hyo.mp3"}, {"k": "ミャ", "r": "mya", "a": "../kana/k-mya.mp3"}, {"k": "ミュ", "r": "myu", "a": "../kana/k-myu.mp3"}, {"k": "ミョ", "r": "myo", "a": "../kana/k-myo.mp3"}], [{"k": "リャ", "r": "rya", "a": "../kana/k-rya.mp3"}, {"k": "リュ", "r": "ryu", "a": "../kana/k-ryu.mp3"}, {"k": "リョ", "r": "ryo", "a": "../kana/k-ryo.mp3"}, {"k": "ギャ", "r": "gya", "a": "../kana/k-gya.mp3"}, {"k": "ギュ", "r": "gyu", "a": "../kana/k-gyu.mp3"}, {"k": "ギョ", "r": "gyo", "a": "../kana/k-gyo.mp3"}], [{"k": "ジャ", "r": "ja", "a": "../kana/k-ja.mp3"}, {"k": "ジュ", "r": "ju", "a": "../kana/k-ju.mp3"}, {"k": "ジョ", "r": "jo", "a": "../kana/k-jo.mp3"}, {"k": "ビャ", "r": "bya", "a": "../kana/k-bya.mp3"}, {"k": "ビュ", "r": "byu", "a": "../kana/k-byu.mp3"}, {"k": "ビョ", "r": "byo", "a": "../kana/k-byo.mp3"}], [{"k": "ピャ", "r": "pya", "a": "../kana/k-pya.mp3"}, {"k": "ピュ", "r": "pyu", "a": "../kana/k-pyu.mp3"}, {"k": "ピョ", "r": "pyo", "a": "../kana/k-pyo.mp3"}, null, null, null]]}], "credits": "<b>Stroke order diagrams:</b> KanjiStrokeOrders font, Copyright (C) 2004-2020 Ulrich Apel, the AAAA project and the Wadoku project. Stroke numbers enlarged for this product. Used under the BSD-style licence below.<br><b>Tracing font:</b> Klee One, Copyright 2020 The Klee Project Authors (SIL Open Font License 1.1).<br><b>Text font:</b> Noto Sans / Noto Sans JP (SIL Open Font License 1.1).", "license": "KanjiStrokeOrders font, version 4.005 (kana-only subset made for this product)\nSource: https://sites.google.com/site/nihilistorguk/\n\nCopyright (C) 2004-2020 Ulrich Apel, the AAAA project and the Wadoku project\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions\nare met:\n\n1. Redistributions of source code must retain the above copyright\n   notice, this list of conditions and the following disclaimer.\n2. Redistributions in binary form must reproduce the above copyright\n   notice, this list of conditions and the following disclaimer in the\n   documentation and/or other materials provided with the distribution.\n3. Neither the name of the author may be used to endorse or promote products\n   derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\nIMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\nOF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\nIN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\nINCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\nNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\nDATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\nTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\nTHIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"};
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const S = id => DATA.scripts.find(s => s.id === id);
+const cards = s => s.basic.flat().filter(Boolean);
+const allCells = (s, set) => (set === "all" ? [...s.basic, ...s.dakuten, ...s.combo] : s.basic).flat().filter(Boolean);
+
+// ---------- audio (same engine as the travel cards: plays on the same screen, works offline)
+const AC = window.AudioContext || window.webkitAudioContext;
+let ctx = null, current = null, playingBtn = null;
+const buffers = new Map();
+try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+function stopAudio() {
+  if (current) { try { current.onended = null; current.stop(); } catch (e) {} current = null; }
+  if (playingBtn) { playingBtn.classList.remove("on"); playingBtn = null; }
+}
+async function play(url, btn) {
+  stopAudio();
+  const me = btn || {classList: {remove() {}}};   // no button (tap on a chart cell) = nothing to animate
+  if (btn) btn.classList.add("on");
+  playingBtn = me;
+  try {
+    if (!AC) { const a = new Audio(url); a.onended = stopAudio; await a.play(); current = {stop: () => a.pause()}; return; }
+    if (!ctx) ctx = new AC();
+    if (ctx.state === "suspended") ctx.resume();
+    let buf = buffers.get(url);
+    if (!buf) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      const raw = await res.arrayBuffer();
+      buf = await new Promise((ok, ng) => ctx.decodeAudioData(raw, ok, ng));
+      buffers.set(url, buf);
+    }
+    if (playingBtn !== me) return;
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination);
+    src.onended = () => { if (current === src) { current = null; stopAudio(); } };
+    src.start(0); current = src;
+  } catch (e) {
+    stopAudio();
+    toast("Sound could not load. Please connect to the internet once, then it works offline.");
+  }
+}
+function toast(msg) {
+  const d = document.createElement("div"); d.className = "err"; d.textContent = msg;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 4000);
+}
+
+// ---------- screens
+function header(title, ja, back, col) {
+  return `<header style="--hc:${col || "var(--navy)"}">${back ? `<button class="back" onclick="history.back()">◀ Back</button>` : ""}
+    <h1>${title}${ja ? `<small>${ja}</small>` : ""}</h1></header>`;
+}
+function home() {
+  let tip = "";
+  try { if (!localStorage.getItem("tipClosed") && !matchMedia("(display-mode: standalone)").matches)
+    tip = `<div class="tip" id="tip"><button onclick="closeTip()" aria-label="Close">×</button>
+      <b>Tip:</b> add this page to your home screen to open it like an app.<br>
+      iPhone: tap <b>Share</b> → <b>Add to Home Screen</b>.<br>Android: tap <b>⋮</b> → <b>Add to Home screen</b>.</div>`; } catch (e) {}
+  const btns = DATA.scripts.map(s => `<button class="big-btn" style="background:${s.col}" onclick="go('#/s/${s.id}/basic')">
+      <span>${s.en}</span><span class="ja">${s.ja}</span></button>`).join("");
+  return header(DATA.title, DATA.titleJa) + `<div class="wrap home">
+    <div class="hero"><div class="sun">あ</div><p>Tap any kana to hear it.<br>Then test yourself with the listening quiz.</p></div>
+    ${tip}${btns}
+    <button class="big-btn" style="background:#3C7A5A" onclick="go('#/q')"><span>Listening quiz</span><span class="ja">聞き取りクイズ</span></button>
+    <p class="note">Start with hiragana: learn one row a day (あいうえお, then かきくけこ…).<br>
+    Works offline after your first visit (all sounds are saved on your phone).</p>
+    <details class="credits"><summary>Credits</summary><p>${DATA.credits}</p><pre>${esc(DATA.license)}</pre></details></div>`;
+}
+function closeTip() { try { localStorage.setItem("tipClosed", "1"); } catch (e) {} document.getElementById("tip")?.remove(); }
+function chart(s, tab) {
+  const rows = tab === "basic" ? s.basic : tab === "dakuten" ? s.dakuten : s.combo;
+  const cols = rows[0].length;
+  const cells = rows.flat().map(c => !c ? `<div class="cell e"></div>` :
+    `<button class="cell" onclick="tapCell(this, '${s.id}', '${tab}', '${c.k}')"><div class="k">${c.k}</div><div class="r">${c.r}</div></button>`).join("");
+  const t = (id, label) => `<button class="${tab === id ? "sel" : ""}" onclick="go('#/s/${s.id}/${id}', true)">${label}</button>`;
+  return header(s.en, s.ja, true, s.col) + `<div class="wrap" style="--c:${s.col}">
+    <div class="tabs">${t("basic", "Basic")}${t("dakuten", s.id === "hira" ? "が ぱ" : "ガ パ")}${t("combo", s.id === "hira" ? "きゃ" : "キャ")}</div>
+    <div class="grid${cols > 5 ? " six" : ""}" style="grid-template-columns:repeat(${cols},1fr)">${cells}</div>
+    <p class="hint">${tab === "basic" ? "Tap a kana to hear it and see an example word." : "Tap to hear the sound."}</p></div>`;
+}
+function tapCell(btn, sid, tab, k) {
+  const s = S(sid), c = allCells(s, "all").find(x => x.k === k);
+  if (tab === "basic") { play(c.a); go(`#/k/${sid}/${cards(s).indexOf(c)}`); return; }
+  document.querySelectorAll(".cell.on").forEach(x => x.classList.remove("on"));
+  btn.classList.add("on"); play(c.a);
+}
+function card(s, i) {
+  const list = cards(s), c = list[i];
+  const word = c.w ? `<div class="ex"><div style="flex:1"><div class="lbl">Example word</div>
+      <div class="w">${[...c.w.w].map(ch => ch === c.k ? `<b>${esc(ch)}</b>` : esc(ch)).join("")}</div>
+      <div class="wr">${esc(c.w.r)}</div><div class="we">${esc(c.w.e)}</div></div>
+      <button class="play sm" aria-label="Play word" onclick="play('${c.w.a}', this)">▶</button></div>`
+    : `<div class="ex"><div class="we">No example word — this kana is almost never used today.</div></div>`;
+  return header(s.en, s.ja, true, s.col) + `<div class="wrap card" style="--c:${s.col}">
+    <div class="big"><img src="${c.so}" alt="${c.k}"></div><div class="sohint">red numbers = stroke order</div><div class="rom">${c.r}</div>${c.n ? `<div class="n">${esc(c.n)}</div>` : ""}
+    <div style="margin-top:16px"><button class="play" aria-label="Play sound" onclick="play('${c.a}', this)">▶</button></div>
+    ${word}
+    <div class="nav"><button ${i ? "" : "disabled"} onclick="go('#/k/${s.id}/${i - 1}', true)">‹ ${i ? list[i - 1].k : ""}</button>
+      <span style="color:#aaa;font-size:13px">${i + 1} / ${list.length}</span>
+      <button ${i < list.length - 1 ? "" : "disabled"} onclick="go('#/k/${s.id}/${i + 1}', true)">${i < list.length - 1 ? list[i + 1].k : ""} ›</button></div></div>`;
+}
+
+// ---------- listening quiz: hear a sound, pick the kana
+let Q = null;
+let qset = {script: "hira", set: "basic"};
+try { Object.assign(qset, JSON.parse(localStorage.getItem("qset") || "{}")); } catch (e) {}
+function quizStart() {
+  const o = (key, val, label) => `<button class="${qset[key] === val ? "sel" : ""}" onclick="qset.${key}='${val}';render()">${label}</button>`;
+  return header("Listening quiz", "聞き取りクイズ", true, "#3C7A5A") + `<div class="wrap quiz">
+    <p style="font-size:16px;line-height:1.5;margin:6px 0 18px">Listen to the sound, then tap the matching kana. 10 questions.</p>
+    <div class="opt-row">${o("script", "hira", "Hiragana")}${o("script", "kata", "Katakana")}${o("script", "both", "Both")}</div>
+    <div class="opt-row">${o("set", "basic", "Basic 46")}${o("set", "all", "All sounds")}</div>
+    <button class="go" onclick="newQuiz()">Start ▶</button></div>`;
+}
+function pool() {
+  const ids = qset.script === "both" ? ["hira", "kata"] : [qset.script];
+  return ids.flatMap(id => allCells(S(id), qset.set).map(c => ({...c, sid: id})));
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function newQuiz(only) {
+  try { localStorage.setItem("qset", JSON.stringify(qset)); } catch (e) {}
+  const p = pool();
+  const qs = only && only.length ? shuffle([...only]) : shuffle([...p]).slice(0, 10);
+  Q = {pool: p, qs, i: 0, right: 0, missed: [], answered: false};
+  go("#/q/play"); setTimeout(() => sayQ(), 250);
+}
+function sayQ() { const b = document.getElementById("qplay"); if (Q && b) play(Q.qs[Q.i].a, b); }
+function quizPlay() {
+  if (!Q) return quizStart();
+  const q = Q.qs[Q.i];
+  if (!Q.choices) {
+    // 3 wrong answers with a different sound, from the same script so the shapes are comparable
+    const others = shuffle(Q.pool.filter(c => c.r !== q.r && c.sid === q.sid && [...c.k].length === [...q.k].length));
+    Q.choices = shuffle([q, ...others.slice(0, 3)]);
+  }
+  const ch = Q.choices.map((c, n) => `<button id="c${n}" onclick="answer(${n})">${c.k}<small></small></button>`).join("");
+  return header("Listening quiz", "", true, "#3C7A5A") + `<div class="wrap quiz">
+    <div class="qtop"><span>Question ${Q.i + 1} / ${Q.qs.length}</span><span>✓ ${Q.right}</span></div>
+    <button class="play" id="qplay" style="--c:#3C7A5A;width:88px;height:88px;font-size:32px" onclick="sayQ()" aria-label="Play again">▶</button>
+    <p class="hint" style="padding-top:10px">Tap ▶ to hear it again</p>
+    <div class="choices">${ch}</div><div id="after"></div></div>`;
+}
+function answer(n) {
+  if (Q.answered) return;
+  Q.answered = true;
+  const q = Q.qs[Q.i], ok = Q.choices[n].k === q.k;
+  Q.choices.forEach((c, m) => { document.querySelector(`#c${m} small`).textContent = c.r; });
+  const right = Q.choices.findIndex(c => c.k === q.k);
+  document.getElementById("c" + right).classList.add("ok");
+  if (ok) Q.right++; else { document.getElementById("c" + n).classList.add("ng"); Q.missed.push(q); }
+  play(q.a);
+  const last = Q.i === Q.qs.length - 1;
+  document.getElementById("after").innerHTML = `<button class="go" onclick="nextQ()">${last ? "See score" : "Next ›"}</button>`;
+}
+function nextQ() {
+  Q.i++; Q.choices = null; Q.answered = false;
+  if (Q.i >= Q.qs.length) return go("#/q/done", true);
+  render(); setTimeout(sayQ, 150);
+}
+function quizDone() {
+  if (!Q) return quizStart();
+  const m = Q.missed;
+  return header("Listening quiz", "", true, "#3C7A5A") + `<div class="wrap quiz">
+    <div class="score">${Q.right} / ${Q.qs.length}</div>
+    <p style="font-size:17px">${Q.right === Q.qs.length ? "Perfect! よくできました！" : Q.right >= 7 ? "Great job! Keep going." : "Good practice! Try again."}</p>
+    ${m.length ? `<p style="margin-top:18px;color:#666">Practice these again:</p><div class="missed">${m.map(c => c.k).join(" ")}</div>
+      <button class="go" onclick="newQuiz(Q.missed)">Practice missed (${m.length})</button>` : ""}
+    <button class="go ${m.length ? "alt" : ""}" onclick="newQuiz()">New quiz</button>
+    <button class="go alt" onclick="go('#/q', true)">Change settings</button></div>`;
+}
+
+function go(hash, replace) { replace ? location.replace(hash) : (location.hash = hash); }
+function render() {
+  if (!location.hash.startsWith("#/q/play")) stopAudio();
+  const h = location.hash.split("/"), s = S(h[2]);
+  if (h[1] === "s" && s) app.innerHTML = chart(s, ["basic", "dakuten", "combo"].includes(h[3]) ? h[3] : "basic");
+  else if (h[1] === "k" && s && cards(s)[+h[3]]) app.innerHTML = card(s, +h[3]);
+  else if (h[1] === "q" && h[2] === "play") app.innerHTML = quizPlay();
+  else if (h[1] === "q" && h[2] === "done") app.innerHTML = quizDone();
+  else if (h[1] === "q") app.innerHTML = quizStart();
+  else app.innerHTML = home();
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", render);
+render();
+
+if ("serviceWorker" in navigator) {
+  const hadOld = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadOld) location.reload(); });
+  navigator.serviceWorker.register("sw.js", {updateViaCache: "none"}).catch(() => {});
+}
+</script>
+</body></html>
