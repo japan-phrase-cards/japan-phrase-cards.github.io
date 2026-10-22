@@ -52,30 +52,32 @@ const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "");
 
 // iPhone: after the microphone is used, sound comes out quietly (phone-call mode). Switch back to loud playback.
 function speakerMode() { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }
-function micMode() { try { if (navigator.audioSession) navigator.audioSession.type = "play-and-record"; } catch (e) {} }
+function micMode() { try { if (navigator.audioSession) navigator.audioSession.type = "auto"; } catch (e) {} }
+
+let lastEnd = Promise.resolve();   // a new listening waits until the last one has fully ended (iPhone gives no words otherwise)
 
 function hear(match, onText) {
   // the phone's voice typing (Siri / Google): turns what you say into text, for the OK check. Needs the internet.
-  // Words come in while you speak; as soon as they match, it stops and says OK (no waiting for the end).
+  // Words come in while you speak; as soon as they match, it says OK (no waiting for the end).
   if (!SR) return null;
   const r = new SR(), texts = [];
   r.lang = "ja-JP"; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
-  let error = "", finish;
-  const done = new Promise(res => finish = res);
-  const end = () => { speakerMode(); finish({texts, error}); };
+  let error = "", finish, ended;
+  const done = new Promise(res => finish = res), over = new Promise(res => ended = res);
   r.onresult = e => {
     const now = [];
     for (const x of e.results) for (const a of x) now.push(a.transcript);
     now.push([...e.results].map(x => x[0].transcript).join(""));   // everything so far, last = best guess
     texts.push(...now);
     if (onText) onText(now[now.length - 1]);
-    if (match && now.some(match)) { error = ""; try { r.abort(); } catch (e2) {} end(); }
+    if (match && now.some(match)) { finish({texts, error: ""}); try { r.stop(); } catch (e2) {} }   // stop gently, not abort
   };
-  r.onerror = e => { if (e.error !== "aborted") error = e.error; };
-  r.onend = end;
-  micMode();
-  try { r.start(); } catch (e) { speakerMode(); return {stop() {}, done: Promise.resolve({texts: [], error: e.name})}; }
-  const late = new Promise(res => setTimeout(() => { try { r.abort(); } catch (e) {} speakerMode(); res({texts, error: error || "timeout"}); }, 8000));
+  r.onerror = e => { error = e.error; };
+  r.onend = () => { ended(); speakerMode(); finish({texts, error}); };
+  const before = lastEnd;
+  lastEnd = Promise.race([over, new Promise(res => setTimeout(res, 10000))]);
+  before.then(() => { micMode(); r.start(); }).catch(e => { error = e.name || String(e); ended(); speakerMode(); finish({texts, error}); });
+  const late = new Promise(res => setTimeout(() => { try { r.stop(); } catch (e) {} res({texts, error: error || "timeout"}); }, 9000));
   return {stop() { try { r.stop(); } catch (e) {} }, done: Promise.race([done, late])};
 }
 
@@ -90,7 +92,7 @@ function okText(res, pattern) {
     "service-not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
     "no-speech": "We didn't hear anything. Try again, a little louder.",
     "audio-capture": "The OK check couldn't use the microphone."}[res.error || "no-speech"];
-  return ["", why || `The OK check didn't work this time (${res.error || "no result"}).`];
+  return ["", (why || "The OK check didn't work this time.") + (res.error ? ` [${res.error}]` : "")];   // [code] helps find the cause in the trial
 }
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function play(src) { if (!heard) speakerMode(); return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
@@ -101,7 +103,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 7 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 8 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
