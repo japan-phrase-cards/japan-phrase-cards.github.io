@@ -103,24 +103,45 @@ function yourTurn(s, i) {
   q(".rec").onclick = async () => {
     const b = q(".rec");
     if (rec && rec.state === "recording") { rec.stop(); return; }
+    const why = cantRecord();
+    if (why) { msg.textContent = why; return; }
     try {
-      stream = stream || await navigator.mediaDevices.getUserMedia({audio: true});
-    } catch (e) { msg.textContent = "Please allow the microphone to record your voice. (You can still practice by saying it out loud.)"; return; }
-    player.pause(); chunks = [];
-    rec = new MediaRecorder(stream);
-    rec.ondataavailable = e => chunks.push(e.data);
-    rec.onstop = () => {
-      mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType}));
-      b.classList.remove("on"); b.textContent = "● Record again";
-      q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
-      play(mine);
-    };
-    rec.start(); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
+      player.pause();
+      // a fresh microphone stream each time: some phones (iPhone) give silence when an old stream is reused
+      if (stream) stream.getTracks().forEach(tr => tr.stop());
+      stream = await navigator.mediaDevices.getUserMedia({audio: true});
+      const type = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m));
+      rec = type ? new MediaRecorder(stream, {mimeType: type}) : new MediaRecorder(stream);
+      chunks = [];
+      rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = () => {
+        stream.getTracks().forEach(tr => tr.stop()); stream = null;
+        b.classList.remove("on"); b.textContent = "● Record again";
+        if (!chunks.length) { msg.textContent = "Nothing was recorded. Please try again."; return; }
+        mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType || type || "audio/mp4"}));
+        q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
+        play(mine);
+      };
+      rec.start(250); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
+    } catch (e) {
+      msg.textContent = (e.name === "NotAllowedError" || e.name === "SecurityError")
+        ? "The microphone is blocked. Allow it for this page in your browser settings, then reload. (You can still practice by saying it out loud.)"
+        : `Recording didn't start (${e.name}: ${e.message}).`;
+    }
   };
   return new Promise(r => {
     const go = () => { stopRec(); t.innerHTML = ""; r(); };
     q(".next").onclick = go; q(".skip").onclick = go;
   });
+}
+
+function cantRecord() {
+  // apps like LINE or Instagram open links in their own small browser, which often has no microphone
+  const inApp = /Line\/|FBAN|FBAV|Instagram|MicroMessenger|GSA\//.test(navigator.userAgent);
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined")
+    return inApp ? "This app's built-in browser can't record. Please open this page in Safari (iPhone) or Chrome (Android)."
+                 : "This browser can't record. Please open this page in Safari (iPhone) or Chrome (Android).";
+  return "";
 }
 
 function stopRec() { if (rec && rec.state === "recording") rec.stop(); player.pause(); }
