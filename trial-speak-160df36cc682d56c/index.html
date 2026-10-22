@@ -76,6 +76,21 @@ async function play(src) {
   } catch (e) {}
 }
 
+function tone(good) {
+  // OK = two bright notes going up; try again = two soft low notes going down. Made in the browser, no sound files.
+  try {
+    const c = audioCtx(), t = c.currentTime;
+    (good ? [[880, 0], [1320, .13]] : [[330, 0], [247, .2]]).forEach(([hz, at]) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = good ? "sine" : "triangle"; o.frequency.value = hz;
+      g.gain.setValueAtTime(0, t + at);
+      g.gain.linearRampToValueAtTime(good ? .3 : .25, t + at + .02);
+      g.gain.exponentialRampToValueAtTime(.001, t + at + (good ? .25 : .3));
+      o.connect(g); g.connect(c.destination); o.start(t + at); o.stop(t + at + .35);
+    });
+  } catch (e) {}
+}
+
 // One voice-typing object for the whole visit, started again for each answer (iPhone is steadier this way).
 let recog = null, recogBusy = false, hearId = 0;
 
@@ -134,7 +149,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 9 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 10 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -232,7 +247,7 @@ function yourTurn(s, i) {
       const res = await h.done;
       heard = null; b.classList.remove("on"); b.textContent = "🎤 Tap and say it";
       const [cls, txt] = okText(res, l.ok);
-      ok.className = "ok " + cls; ok.textContent = txt;
+      ok.className = "ok " + cls; ok.textContent = txt; tone(cls === "good");
       if (cls === "good") { b.disabled = true; await new Promise(z => setTimeout(z, 900)); go(); return; }
       misses++;
       if (misses >= 2 || (res.error && res.error !== "no-speech")) q(".next").hidden = false;
