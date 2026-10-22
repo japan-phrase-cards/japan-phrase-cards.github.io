@@ -33,7 +33,7 @@ main{max-width:520px;margin:0 auto;padding:16px}
 .mic{display:block;width:100%;margin-top:16px;padding:20px 10px;border:0;border-radius:16px;background:var(--red);color:#fff;font-size:21px;font-weight:700;cursor:pointer}
 .mic.on{background:#7a1f15}.mic:disabled{background:var(--green)}
 .turn .next{display:block;width:100%;margin-top:10px;padding:14px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:17px;cursor:pointer}
-.turn .next[hidden]{display:none}.ok{text-align:center}
+.turn .next[hidden]{display:none}.ok{text-align:center}.ok.live{color:#555;font-size:18px}
 .ok{margin-top:12px;font-size:15px;color:#9C4A1A;line-height:1.4}.ok.good{font-size:24px;font-weight:800;color:var(--green)}
 .tip{font-size:13px;color:#777;margin-top:10px;line-height:1.4}.msg{color:var(--red);font-size:14px;margin-top:8px}
 .done{text-align:center;padding:20px 0}.done button{font-size:16px;padding:12px 18px;border-radius:12px;border:0;background:var(--navy);color:#fff;margin:4px;cursor:pointer}
@@ -50,19 +50,32 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const kata = s => s.normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "");
 
-function hear() {
+// iPhone: after the microphone is used, sound comes out quietly (phone-call mode). Switch back to loud playback.
+function speakerMode() { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }
+function micMode() { try { if (navigator.audioSession) navigator.audioSession.type = "play-and-record"; } catch (e) {} }
+
+function hear(match, onText) {
   // the phone's voice typing (Siri / Google): turns what you say into text, for the OK check. Needs the internet.
+  // Words come in while you speak; as soon as they match, it stops and says OK (no waiting for the end).
   if (!SR) return null;
   const r = new SR(), texts = [];
-  r.lang = "ja-JP"; r.interimResults = false; r.maxAlternatives = 5; r.continuous = false;
-  let error = "";
-  const done = new Promise(res => {
-    r.onresult = e => { for (const res2 of e.results) for (const a of res2) texts.push(a.transcript); };
-    r.onerror = e => { error = e.error; };
-    r.onend = () => res({texts, error});
-  });
-  try { r.start(); } catch (e) { return {stop() {}, done: Promise.resolve({texts: [], error: e.name})}; }
-  const late = new Promise(res => setTimeout(() => res({texts, error: error || "timeout"}), 8000));
+  r.lang = "ja-JP"; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
+  let error = "", finish;
+  const done = new Promise(res => finish = res);
+  const end = () => { speakerMode(); finish({texts, error}); };
+  r.onresult = e => {
+    const now = [];
+    for (const x of e.results) for (const a of x) now.push(a.transcript);
+    now.push([...e.results].map(x => x[0].transcript).join(""));   // everything so far, last = best guess
+    texts.push(...now);
+    if (onText) onText(now[now.length - 1]);
+    if (match && now.some(match)) { error = ""; try { r.abort(); } catch (e2) {} end(); }
+  };
+  r.onerror = e => { if (e.error !== "aborted") error = e.error; };
+  r.onend = end;
+  micMode();
+  try { r.start(); } catch (e) { speakerMode(); return {stop() {}, done: Promise.resolve({texts: [], error: e.name})}; }
+  const late = new Promise(res => setTimeout(() => { try { r.abort(); } catch (e) {} speakerMode(); res({texts, error: error || "timeout"}); }, 8000));
   return {stop() { try { r.stop(); } catch (e) {} }, done: Promise.race([done, late])};
 }
 
@@ -71,7 +84,7 @@ function okText(res, pattern) {
   if (!res) return ["", ""];
   const re = new RegExp(kata(pattern));   // not norm(): it would remove the "?" of the pattern
   if (res.texts.some(t => re.test(norm(t)))) return ["good", "✓ OK!"];
-  if (res.texts.length) return ["", `We heard: 「${res.texts[0]}」. Try again!`];
+  if (res.texts.length) return ["", `We heard: 「${res.texts[res.texts.length - 1]}」. Try again!`];
   const why = {"network": "The OK check needs the internet.",
     "not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
     "service-not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
@@ -80,7 +93,7 @@ function okText(res, pattern) {
   return ["", why || `The OK check didn't work this time (${res.error || "no result"}).`];
 }
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function play(src) { return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
+function play(src) { if (!heard) speakerMode(); return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
 
 function home() {
   stopRec(); back.hidden = true; title.textContent = "Speak Japanese";
@@ -88,7 +101,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 6 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 7 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -180,13 +193,14 @@ function yourTurn(s, i) {
       const b = q(".mic");
       if (heard) { heard.stop(); return; }
       player.pause();
-      const h = heard = hear();
+      const re = new RegExp(kata(l.ok));
+      const h = heard = hear(t2 => re.test(norm(t2)), t2 => { ok.className = "ok live"; ok.textContent = "「" + t2 + "」"; });
       b.classList.add("on"); b.textContent = "Listening… say it now"; ok.className = "ok"; ok.textContent = "";
       const res = await h.done;
       heard = null; b.classList.remove("on"); b.textContent = "🎤 Tap and say it";
       const [cls, txt] = okText(res, l.ok);
       ok.className = "ok " + cls; ok.textContent = txt;
-      if (cls === "good") { b.disabled = true; await new Promise(z => setTimeout(z, 1200)); go(); return; }
+      if (cls === "good") { b.disabled = true; await new Promise(z => setTimeout(z, 900)); go(); return; }
       misses++;
       if (misses >= 2 || (res.error && res.error !== "no-speech")) q(".next").hidden = false;
     };
