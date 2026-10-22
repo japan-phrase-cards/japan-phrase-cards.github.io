@@ -45,8 +45,37 @@ function home() {
   app.innerHTML = `<p class="intro">Practice real conversations. The app plays the other person.
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
-      <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("");
-  app.querySelectorAll(".scene").forEach(b => b.onclick = () => scene(+b.dataset.n));
+      <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 3 · tap and say something for 3 seconds</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+  app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
+  document.getElementById("mic").onclick = micCheck;
+}
+
+async function micCheck() {
+  // trial only: shows each step, so a screenshot tells us where recording stops on a phone
+  const d = document.getElementById("diag"), say = m => d.textContent += m + "\n";
+  d.textContent = "";
+  say("Browser: " + navigator.userAgent);
+  say("Secure page: " + window.isSecureContext);
+  say("Microphone API: " + !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia));
+  say("Recorder: " + (typeof MediaRecorder !== "undefined"));
+  try {
+    if (navigator.permissions) { try { say("Permission: " + (await navigator.permissions.query({name: "microphone"})).state); } catch (e) { say("Permission: (can't ask)"); } }
+    const st = await navigator.mediaDevices.getUserMedia({audio: true});
+    say("Microphone: ON (" + st.getAudioTracks().map(t => t.label || "mic").join(", ") + ")");
+    const type = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m));
+    const r = type ? new MediaRecorder(st, {mimeType: type}) : new MediaRecorder(st), parts = [];
+    r.ondataavailable = e => { if (e.data && e.data.size) parts.push(e.data); };
+    const done = new Promise(res => r.onstop = res);
+    r.start(250); say("Recording 3 seconds… (" + (r.mimeType || type || "default") + ")");
+    await new Promise(res => setTimeout(res, 3000));
+    r.stop(); await done; st.getTracks().forEach(t => t.stop());
+    const blob = new Blob(parts, {type: r.mimeType || type || "audio/mp4"});
+    say("Recorded: " + blob.size + " bytes");
+    say("Playing it back…");
+    await play(URL.createObjectURL(blob));
+    say("Done.");
+  } catch (e) { say("STOPPED: " + e.name + ": " + e.message); }
 }
 
 function bubble(s, n, i) {
