@@ -26,6 +26,7 @@ main{max-width:520px;margin:0 auto;padding:16px}
 .btns .rec{background:var(--red);color:#fff;border:0;grid-column:1/-1;font-size:17px}
 .btns .rec.on{background:#7a1f15}.btns .next{background:var(--navy);color:#fff;border:0;grid-column:1/-1}
 .btns button:disabled{opacity:.4}
+.ok{margin-top:12px;font-size:15px;color:#9C4A1A;line-height:1.4}.ok.good{font-size:24px;font-weight:800;color:var(--green)}
 .tip{font-size:13px;color:#777;margin-top:10px;line-height:1.4}.msg{color:var(--red);font-size:14px;margin-top:8px}
 .done{text-align:center;padding:20px 0}.done button{font-size:16px;padding:12px 18px;border-radius:12px;border:0;background:var(--navy);color:#fff;margin:4px;cursor:pointer}
 label.tg{display:flex;gap:8px;align-items:center;font-size:14px;color:#555;margin:0 0 12px}
@@ -33,10 +34,43 @@ label.tg{display:flex;gap:8px;align-items:center;font-size:14px;color:#555;margi
 <header><button id="back" hidden>‹ Back</button><h1 id="title">Speak Japanese</h1></header>
 <main id="app"></main>
 <script>
-const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビニで", "them": "Clerk", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome! (You don't need to answer.)"}, {"who": "them", "kana": "ふくろ ごりよう ですか？", "ro": "Fukuro goriyō desu ka?", "en": "Do you need a bag?"}, {"who": "you", "kana": "いいえ、だいじょうぶ です。", "ro": "Iie, daijōbu desu.", "en": "No, I'm fine."}, {"who": "them", "kana": "あたためますか？", "ro": "Atatamemasu ka?", "en": "Shall I heat it up?"}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please."}, {"who": "them", "kana": "おしはらいは どう されますか？", "ro": "Oshiharai wa dō saremasu ka?", "en": "How would you like to pay?"}, {"who": "you", "kana": "カードで おねがい します。", "ro": "Kādo de onegai shimasu.", "en": "By card, please."}]}, {"id": "restaurant", "en": "At a restaurant", "ja": "レストランで", "them": "Server", "lines": [{"who": "them", "kana": "いらっしゃいませ。なんめいさま ですか？", "ro": "Irasshaimase. Nanmei-sama desu ka?", "en": "Welcome! How many people?"}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two."}, {"who": "them", "kana": "ごちゅうもんは おきまり ですか？", "ro": "Gochūmon wa okimari desu ka?", "en": "Are you ready to order?"}, {"who": "you", "kana": "これを ください。", "ro": "Kore o kudasai.", "en": "This one, please."}, {"who": "them", "kana": "おのみものは いかが ですか？", "ro": "Onomimono wa ikaga desu ka?", "en": "Would you like something to drink?"}, {"who": "you", "kana": "おみずを ください。", "ro": "Omizu o kudasai.", "en": "Water, please."}]}, {"id": "michi", "en": "Asking the way", "ja": "みちを きく", "them": "Person on the street", "lines": [{"who": "you", "kana": "すみません、えきは どこ ですか？", "ro": "Sumimasen, eki wa doko desu ka?", "en": "Excuse me, where is the station?"}, {"who": "them", "kana": "この みちを まっすぐ いって、みぎ です。", "ro": "Kono michi o massugu itte, migi desu.", "en": "Go straight along this street, then it's on the right."}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much."}]}];
+const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビニで", "them": "Clerk", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome! (You don't need to answer.)", "ok": ""}, {"who": "them", "kana": "ふくろ ごりよう ですか？", "ro": "Fukuro goriyō desu ka?", "en": "Do you need a bag?", "ok": ""}, {"who": "you", "kana": "いいえ、だいじょうぶ です。", "ro": "Iie, daijōbu desu.", "en": "No, I'm fine.", "ok": "いいえ(大丈夫|だいじょうぶ)です"}, {"who": "them", "kana": "あたためますか？", "ro": "Atatamemasu ka?", "en": "Shall I heat it up?", "ok": ""}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please.", "ok": "はい(お願い|おねがい)します"}, {"who": "them", "kana": "おしはらいは どう されますか？", "ro": "Oshiharai wa dō saremasu ka?", "en": "How would you like to pay?", "ok": ""}, {"who": "you", "kana": "カードで おねがい します。", "ro": "Kādo de onegai shimasu.", "en": "By card, please.", "ok": "かーどで(お願い|おねがい)します"}]}, {"id": "restaurant", "en": "At a restaurant", "ja": "レストランで", "them": "Server", "lines": [{"who": "them", "kana": "いらっしゃいませ。なんめいさま ですか？", "ro": "Irasshaimase. Nanmei-sama desu ka?", "en": "Welcome! How many people?", "ok": ""}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two.", "ok": "(二人|2人|ふたり)です"}, {"who": "them", "kana": "ごちゅうもんは おきまり ですか？", "ro": "Gochūmon wa okimari desu ka?", "en": "Are you ready to order?", "ok": ""}, {"who": "you", "kana": "これを ください。", "ro": "Kore o kudasai.", "en": "This one, please.", "ok": "これを?(ください|下さい)"}, {"who": "them", "kana": "おのみものは いかが ですか？", "ro": "Onomimono wa ikaga desu ka?", "en": "Would you like something to drink?", "ok": ""}, {"who": "you", "kana": "おみずを ください。", "ro": "Omizu o kudasai.", "en": "Water, please.", "ok": "(お水|おみず)を?(ください|下さい)"}]}, {"id": "michi", "en": "Asking the way", "ja": "みちを きく", "them": "Person on the street", "lines": [{"who": "you", "kana": "すみません、えきは どこ ですか？", "ro": "Sumimasen, eki wa doko desu ka?", "en": "Excuse me, where is the station?", "ok": "(すみません|すいません)(駅|えき)は(どこ|何処)ですか"}, {"who": "them", "kana": "この みちを まっすぐ いって、みぎ です。", "ro": "Kono michi o massugu itte, migi desu.", "en": "Go straight along this street, then it's on the right.", "ok": ""}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much.", "ok": "(ありがとう|有難う)(ございます|御座います)"}]}];
 const app = document.getElementById("app"), back = document.getElementById("back"), title = document.getElementById("title");
 const player = new Audio();
-let rec = null, chunks = [], mine = null, stream = null, hide = false;
+let rec = null, chunks = [], mine = null, stream = null, hide = false, heard = null;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const kata = s => s.normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "");
+
+function hear() {
+  // the phone's voice typing (Siri / Google): turns what you say into text, for the OK check. Needs the internet.
+  if (!SR) return null;
+  const r = new SR(), texts = [];
+  r.lang = "ja-JP"; r.interimResults = false; r.maxAlternatives = 5; r.continuous = false;
+  let error = "";
+  const done = new Promise(res => {
+    r.onresult = e => { for (const res2 of e.results) for (const a of res2) texts.push(a.transcript); };
+    r.onerror = e => { error = e.error; };
+    r.onend = () => res({texts, error});
+  });
+  try { r.start(); } catch (e) { return {stop() {}, done: Promise.resolve({texts: [], error: e.name})}; }
+  const late = new Promise(res => setTimeout(() => res({texts, error: error || "timeout"}), 8000));
+  return {stop() { try { r.stop(); } catch (e) {} }, done: Promise.race([done, late])};
+}
+
+function okText(res, pattern) {
+  // [class, text] for the OK check result
+  if (!res) return ["", ""];
+  const re = new RegExp(kata(pattern));   // not norm(): it would remove the "?" of the pattern
+  if (res.texts.some(t => re.test(norm(t)))) return ["good", "✓ OK!"];
+  if (res.texts.length) return ["", `We heard: 「${res.texts[0]}」 — not quite. Try again!`];
+  const why = {"network": "The OK check needs the internet.",
+    "not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
+    "service-not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
+    "no-speech": "We didn't hear anything. Try again, a little louder.",
+    "audio-capture": "The OK check couldn't use the microphone."}[res.error || "no-speech"];
+  return ["", why || `The OK check didn't work this time (${res.error || "no result"}).`];
+}
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function play(src) { return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
 
@@ -46,7 +80,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 3 · tap and say something for 3 seconds</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 4 · tap and say something in Japanese for 3 seconds</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -67,9 +101,11 @@ async function micCheck() {
     const r = type ? new MediaRecorder(st, {mimeType: type}) : new MediaRecorder(st), parts = [];
     r.ondataavailable = e => { if (e.data && e.data.size) parts.push(e.data); };
     const done = new Promise(res => r.onstop = res);
-    r.start(250); say("Recording 3 seconds… (" + (r.mimeType || type || "default") + ")");
+    r.start(250); const h = hear(); say("Recording 3 seconds… (" + (r.mimeType || type || "default") + ")");
+    say("Voice typing: " + (SR ? "yes" : "not in this browser"));
     await new Promise(res => setTimeout(res, 3000));
-    r.stop(); await done; st.getTracks().forEach(t => t.stop());
+    r.stop(); if (h) h.stop(); await done; st.getTracks().forEach(t => t.stop());
+    if (h) { const res = await h.done; say("Voice typing heard: " + (res.texts.length ? "「" + res.texts.slice(0, 3).join("」「") + "」" : "nothing") + (res.error ? " (" + res.error + ")" : "")); }
     const blob = new Blob(parts, {type: r.mimeType || type || "audio/mp4"});
     say("Recorded: " + blob.size + " bytes");
     say("Playing it back…");
@@ -121,8 +157,8 @@ function yourTurn(s, i) {
       <button class="model">▶ Model</button><button class="me" disabled>▶ My voice</button>
       <button class="both" disabled>▶ Compare (model, then me)</button><button class="skip">Skip</button>
       <button class="next" disabled>Next ›</button></div>
-    <div class="msg"></div>
-    <div class="tip">Say it out loud first. Then tap Record, say it again, and tap Stop.</div></div>`;
+    <div class="ok"></div><div class="msg"></div>
+    <div class="tip">Say it out loud first. Then tap Record, say it again, and tap Stop.${SR ? " The app checks if a Japanese listener would understand you (needs internet)." : ""}</div></div>`;
   t.scrollIntoView({behavior: "smooth", block: "end"});
   const q = c => t.querySelector(c), msg = q(".msg");
   const w = q(".words"); w.onclick = () => t.querySelector(".turn").classList.remove("hidden");
@@ -131,7 +167,7 @@ function yourTurn(s, i) {
   q(".both").onclick = async () => { await play(model); await new Promise(r => setTimeout(r, 300)); if (mine) await play(mine); };
   q(".rec").onclick = async () => {
     const b = q(".rec");
-    if (rec && rec.state === "recording") { rec.stop(); return; }
+    if (rec && rec.state === "recording") { rec.stop(); if (heard) heard.stop(); return; }
     const why = cantRecord();
     if (why) { msg.textContent = why; return; }
     try {
@@ -143,15 +179,21 @@ function yourTurn(s, i) {
       rec = type ? new MediaRecorder(stream, {mimeType: type}) : new MediaRecorder(stream);
       chunks = [];
       rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-      rec.onstop = () => {
+      const h = heard = hear(), ok = q(".ok");   // this recording's own OK check
+      rec.onstop = async () => {
         stream.getTracks().forEach(tr => tr.stop()); stream = null;
         b.classList.remove("on"); b.textContent = "● Record again";
+        if (h) {
+          ok.className = "ok"; ok.textContent = "Checking…";
+          const [cls, txt] = okText(await h.done, l.ok);
+          ok.className = "ok " + cls; ok.textContent = txt;
+        }
         if (!chunks.length) { msg.textContent = "Nothing was recorded. Please try again."; return; }
         mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType || type || "audio/mp4"}));
         q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
         play(mine);
       };
-      rec.start(250); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
+      rec.start(250); ok.className = "ok"; ok.textContent = ""; b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
     } catch (e) {
       msg.textContent = (e.name === "NotAllowedError" || e.name === "SecurityError")
         ? "The microphone is blocked. Allow it for this page in your browser settings, then reload. (You can still practice by saying it out loud.)"
@@ -173,7 +215,7 @@ function cantRecord() {
   return "";
 }
 
-function stopRec() { if (rec && rec.state === "recording") rec.stop(); player.pause(); }
+function stopRec() { if (rec && rec.state === "recording") rec.stop(); if (heard) heard.stop(); player.pause(); }
 back.onclick = home;
 home();
 </script></body></html>
