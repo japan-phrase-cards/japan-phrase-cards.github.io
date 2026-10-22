@@ -24,7 +24,9 @@ main{max-width:520px;margin:0 auto;padding:16px}
 .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .btns button{font-size:15px;padding:12px 6px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}
 .btns .rec{background:var(--red);color:#fff;border:0;grid-column:1/-1;font-size:17px}
-.btns .rec.on{background:#7a1f15}.btns .next{background:var(--navy);color:#fff;border:0;grid-column:1/-1}
+.btns .rec.on,.btns .check.on{background:#7a1f15}
+.btns .check{background:var(--green);color:#fff;border:0;grid-column:1/-1;font-size:17px}
+.btns .rec.second{background:#fff;color:var(--red);border:2px solid var(--red)}.btns .rec.second.on{color:#fff}.btns .next{background:var(--navy);color:#fff;border:0;grid-column:1/-1}
 .btns button:disabled{opacity:.4}
 .ok{margin-top:12px;font-size:15px;color:#9C4A1A;line-height:1.4}.ok.good{font-size:24px;font-weight:800;color:var(--green)}
 .tip{font-size:13px;color:#777;margin-top:10px;line-height:1.4}.msg{color:var(--red);font-size:14px;margin-top:8px}
@@ -80,7 +82,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 4 · tap and say something in Japanese for 3 seconds</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 5 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -101,16 +103,18 @@ async function micCheck() {
     const r = type ? new MediaRecorder(st, {mimeType: type}) : new MediaRecorder(st), parts = [];
     r.ondataavailable = e => { if (e.data && e.data.size) parts.push(e.data); };
     const done = new Promise(res => r.onstop = res);
-    r.start(250); const h = hear(); say("Recording 3 seconds… (" + (r.mimeType || type || "default") + ")");
-    say("Voice typing: " + (SR ? "yes" : "not in this browser"));
+    r.start(250); say("Recording 3 seconds… (" + (r.mimeType || type || "default") + ")");
     await new Promise(res => setTimeout(res, 3000));
-    r.stop(); if (h) h.stop(); await done; st.getTracks().forEach(t => t.stop());
-    if (h) { const res = await h.done; say("Voice typing heard: " + (res.texts.length ? "「" + res.texts.slice(0, 3).join("」「") + "」" : "nothing") + (res.error ? " (" + res.error + ")" : "")); }
+    r.stop(); await done; st.getTracks().forEach(t => t.stop());
     const blob = new Blob(parts, {type: r.mimeType || type || "audio/mp4"});
     say("Recorded: " + blob.size + " bytes");
     say("Playing it back…");
     await play(URL.createObjectURL(blob));
     say("Done.");
+    if (!SR) { say("Voice typing: not in this browser"); return; }
+    say("Voice typing: say something in Japanese now…");
+    const h = hear(), res = await h.done;
+    say("Voice typing heard: " + (res.texts.length ? "「" + res.texts.slice(0, 3).join("」「") + "」" : "nothing") + (res.error ? " (" + res.error + ")" : ""));
   } catch (e) { say("STOPPED: " + e.name + ": " + e.message); }
 }
 
@@ -153,21 +157,37 @@ function yourTurn(s, i) {
   const t = document.getElementById("turn");
   t.innerHTML = `<div class="turn ${hide ? "hidden" : ""}"><div class="say">Your turn — say:</div><div class="en">${esc(l.en)}</div>
     <div class="words"><div class="ja">${esc(l.kana)}</div><div class="ro">${esc(l.ro)}</div></div>
-    <div class="btns"><button class="rec">● Record my voice</button>
+    <div class="btns">${SR ? '<button class="check">🎤 Say it — OK check</button>' : ""}
+      <button class="rec ${SR ? "second" : ""}">● Record my voice</button>
       <button class="model">▶ Model</button><button class="me" disabled>▶ My voice</button>
       <button class="both" disabled>▶ Compare (model, then me)</button><button class="skip">Skip</button>
       <button class="next" disabled>Next ›</button></div>
     <div class="ok"></div><div class="msg"></div>
-    <div class="tip">Say it out loud first. Then tap Record, say it again, and tap Stop.${SR ? " The app checks if a Japanese listener would understand you (needs internet)." : ""}</div></div>`;
+    <div class="tip">${SR ? "🎤 Say it: the app checks if a Japanese listener would understand you (needs internet).<br>● Record: hear yourself and compare with the model." : "Say it out loud first. Then tap Record, say it again, and tap Stop."}</div></div>`;
   t.scrollIntoView({behavior: "smooth", block: "end"});
-  const q = c => t.querySelector(c), msg = q(".msg");
+  const q = c => t.querySelector(c), msg = q(".msg"), ok = q(".ok");
   const w = q(".words"); w.onclick = () => t.querySelector(".turn").classList.remove("hidden");
   q(".model").onclick = () => play(model);
   q(".me").onclick = () => mine && play(mine);
   q(".both").onclick = async () => { await play(model); await new Promise(r => setTimeout(r, 300)); if (mine) await play(mine); };
+  // The OK check and the recording are separate buttons: an iPhone can't do voice typing and record at the same time.
+  if (SR) q(".check").onclick = async () => {
+    const b = q(".check");
+    if (heard) { heard.stop(); return; }
+    if (rec && rec.state === "recording") rec.stop();
+    player.pause(); msg.textContent = "";
+    const h = heard = hear();
+    b.classList.add("on"); b.textContent = "■ Stop (or just pause)"; ok.className = "ok"; ok.textContent = "Listening… say it now.";
+    const res = await h.done;
+    heard = null; b.classList.remove("on"); b.textContent = "🎤 Say it again";
+    const [cls, txt] = okText(res, l.ok);
+    ok.className = "ok " + cls; ok.textContent = txt;
+    q(".next").disabled = false;
+  };
   q(".rec").onclick = async () => {
     const b = q(".rec");
-    if (rec && rec.state === "recording") { rec.stop(); if (heard) heard.stop(); return; }
+    if (rec && rec.state === "recording") { rec.stop(); return; }
+    if (heard) heard.stop();
     const why = cantRecord();
     if (why) { msg.textContent = why; return; }
     try {
@@ -179,21 +199,15 @@ function yourTurn(s, i) {
       rec = type ? new MediaRecorder(stream, {mimeType: type}) : new MediaRecorder(stream);
       chunks = [];
       rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-      const h = heard = hear(), ok = q(".ok");   // this recording's own OK check
-      rec.onstop = async () => {
+      rec.onstop = () => {
         stream.getTracks().forEach(tr => tr.stop()); stream = null;
         b.classList.remove("on"); b.textContent = "● Record again";
-        if (h) {
-          ok.className = "ok"; ok.textContent = "Checking…";
-          const [cls, txt] = okText(await h.done, l.ok);
-          ok.className = "ok " + cls; ok.textContent = txt;
-        }
         if (!chunks.length) { msg.textContent = "Nothing was recorded. Please try again."; return; }
         mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType || type || "audio/mp4"}));
         q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
         play(mine);
       };
-      rec.start(250); ok.className = "ok"; ok.textContent = ""; b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
+      rec.start(250); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
     } catch (e) {
       msg.textContent = (e.name === "NotAllowedError" || e.name === "SecurityError")
         ? "The microphone is blocked. Allow it for this page in your browser settings, then reload. (You can still practice by saying it out loud.)"
