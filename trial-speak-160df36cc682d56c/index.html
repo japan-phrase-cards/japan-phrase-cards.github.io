@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Speak Japanese — trial</title>
+<style>
+:root{--navy:#1F3A5F;--red:#C0392B;--green:#3C7A5A;--bg:#FBF8F2;--line:#e4dccd}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#222}
+header{background:var(--navy);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}
+header h1{font-size:18px;margin:0;flex:1}header button{background:none;border:0;color:#fff;font-size:15px;padding:4px 0;cursor:pointer}
+main{max-width:520px;margin:0 auto;padding:16px}
+.scene{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 12px;font-size:17px;cursor:pointer}
+.scene small{display:block;color:#777;margin-top:4px}.ja{font-family:"Noto Sans JP","Yu Gothic",sans-serif}
+.intro{color:#555;line-height:1.5;margin:4px 0 18px}
+.chat{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+.b{max-width:85%;border-radius:16px;padding:10px 14px;line-height:1.4}
+.b .ja{font-size:19px}.b .ro{font-size:13px;color:#666}.b .en{font-size:13px;color:#555;margin-top:2px}
+.them{background:#fff;border:1px solid var(--line);align-self:flex-start}.you{background:#E6F0EA;align-self:flex-end}
+.who{font-size:12px;color:#888;margin-bottom:2px}.b button{background:none;border:0;color:var(--navy);font-size:14px;padding:4px 0 0;cursor:pointer}
+.turn{background:#fff;border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:6px}
+.turn .say{font-size:13px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.turn .en{font-size:21px;font-weight:700;margin:4px 0 10px}
+.turn .ja{font-size:22px}.turn .ro{color:#666;margin-top:2px}
+.hidden .words{filter:blur(7px);cursor:pointer}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.btns button{font-size:15px;padding:12px 6px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.btns .rec{background:var(--red);color:#fff;border:0;grid-column:1/-1;font-size:17px}
+.btns .rec.on{background:#7a1f15}.btns .next{background:var(--navy);color:#fff;border:0;grid-column:1/-1}
+.btns button:disabled{opacity:.4}
+.tip{font-size:13px;color:#777;margin-top:10px;line-height:1.4}.msg{color:var(--red);font-size:14px;margin-top:8px}
+.done{text-align:center;padding:20px 0}.done button{font-size:16px;padding:12px 18px;border-radius:12px;border:0;background:var(--navy);color:#fff;margin:4px;cursor:pointer}
+label.tg{display:flex;gap:8px;align-items:center;font-size:14px;color:#555;margin:0 0 12px}
+</style></head><body>
+<header><button id="back" hidden>‹ Back</button><h1 id="title">Speak Japanese</h1></header>
+<main id="app"></main>
+<script>
+const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビニで", "them": "Clerk", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome! (You don't need to answer.)"}, {"who": "them", "kana": "ふくろ ごりよう ですか？", "ro": "Fukuro goriyō desu ka?", "en": "Do you need a bag?"}, {"who": "you", "kana": "いいえ、だいじょうぶ です。", "ro": "Iie, daijōbu desu.", "en": "No, I'm fine."}, {"who": "them", "kana": "あたためますか？", "ro": "Atatamemasu ka?", "en": "Shall I heat it up?"}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please."}, {"who": "them", "kana": "おしはらいは どう されますか？", "ro": "Oshiharai wa dō saremasu ka?", "en": "How would you like to pay?"}, {"who": "you", "kana": "カードで おねがい します。", "ro": "Kādo de onegai shimasu.", "en": "By card, please."}]}, {"id": "restaurant", "en": "At a restaurant", "ja": "レストランで", "them": "Server", "lines": [{"who": "them", "kana": "いらっしゃいませ。なんめいさま ですか？", "ro": "Irasshaimase. Nanmei-sama desu ka?", "en": "Welcome! How many people?"}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two."}, {"who": "them", "kana": "ごちゅうもんは おきまり ですか？", "ro": "Gochūmon wa okimari desu ka?", "en": "Are you ready to order?"}, {"who": "you", "kana": "これを ください。", "ro": "Kore o kudasai.", "en": "This one, please."}, {"who": "them", "kana": "おのみものは いかが ですか？", "ro": "Onomimono wa ikaga desu ka?", "en": "Would you like something to drink?"}, {"who": "you", "kana": "おみずを ください。", "ro": "Omizu o kudasai.", "en": "Water, please."}]}, {"id": "michi", "en": "Asking the way", "ja": "みちを きく", "them": "Person on the street", "lines": [{"who": "you", "kana": "すみません、えきは どこ ですか？", "ro": "Sumimasen, eki wa doko desu ka?", "en": "Excuse me, where is the station?"}, {"who": "them", "kana": "この みちを まっすぐ いって、みぎ です。", "ro": "Kono michi o massugu itte, migi desu.", "en": "Go straight along this street, then it's on the right."}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much."}]}];
+const app = document.getElementById("app"), back = document.getElementById("back"), title = document.getElementById("title");
+const player = new Audio();
+let rec = null, chunks = [], mine = null, stream = null, hide = false;
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function play(src) { return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
+
+function home() {
+  stopRec(); back.hidden = true; title.textContent = "Speak Japanese";
+  app.innerHTML = `<p class="intro">Practice real conversations. The app plays the other person.
+    On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
+    S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
+      <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("");
+  app.querySelectorAll(".scene").forEach(b => b.onclick = () => scene(+b.dataset.n));
+}
+
+function bubble(s, n, i) {
+  const l = s.lines[i], src = `audio/${s.id}-${i + 1}.mp3`;
+  const d = document.createElement("div");
+  d.className = "b " + l.who;
+  d.innerHTML = `<div class="who">${l.who === "you" ? "You" : esc(s.them)}</div><div class="ja">${esc(l.kana)}</div>
+    <div class="ro">${esc(l.ro)}</div><div class="en">${esc(l.en)}</div><button>▶ Play</button>`;
+  d.querySelector("button").onclick = () => play(src);
+  return d;
+}
+
+async function scene(n) {
+  const s = S[n]; back.hidden = false; title.textContent = s.en;
+  app.innerHTML = `<label class="tg"><input type="checkbox" id="hide" ${hide ? "checked" : ""}> Challenge: hide the Japanese on my turn</label><div class="chat"></div><div id="turn"></div>`;
+  document.getElementById("hide").onchange = e => { hide = e.target.checked; const t = app.querySelector(".turn"); if (t) t.classList.toggle("hidden", hide); };
+  const chat = app.querySelector(".chat");
+  for (let i = 0; i < s.lines.length; i++) {
+    if (S[n] !== s || !app.contains(chat)) return;
+    if (s.lines[i].who === "them") {
+      chat.append(bubble(s, n, i)); chat.lastChild.scrollIntoView({behavior: "smooth", block: "end"});
+      await play(`audio/${s.id}-${i + 1}.mp3`);
+      await new Promise(r => setTimeout(r, 400));
+    } else {
+      await yourTurn(s, i);
+      if (!app.contains(chat)) return;
+      chat.append(bubble(s, n, i));
+    }
+  }
+  document.getElementById("turn").innerHTML = `<div class="done"><p><b>Well done!</b> 🎉</p>
+    <button id="again">Try again</button><button id="other">Other scenes</button></div>`;
+  document.getElementById("again").onclick = () => scene(n);
+  document.getElementById("other").onclick = home;
+}
+
+function yourTurn(s, i) {
+  const l = s.lines[i], model = `audio/${s.id}-${i + 1}.mp3`;
+  mine = null;
+  const t = document.getElementById("turn");
+  t.innerHTML = `<div class="turn ${hide ? "hidden" : ""}"><div class="say">Your turn — say:</div><div class="en">${esc(l.en)}</div>
+    <div class="words"><div class="ja">${esc(l.kana)}</div><div class="ro">${esc(l.ro)}</div></div>
+    <div class="btns"><button class="rec">● Record my voice</button>
+      <button class="model">▶ Model</button><button class="me" disabled>▶ My voice</button>
+      <button class="both" disabled>▶ Compare (model, then me)</button><button class="skip">Skip</button>
+      <button class="next" disabled>Next ›</button></div>
+    <div class="msg"></div>
+    <div class="tip">Say it out loud first. Then tap Record, say it again, and tap Stop.</div></div>`;
+  t.scrollIntoView({behavior: "smooth", block: "end"});
+  const q = c => t.querySelector(c), msg = q(".msg");
+  const w = q(".words"); w.onclick = () => t.querySelector(".turn").classList.remove("hidden");
+  q(".model").onclick = () => play(model);
+  q(".me").onclick = () => mine && play(mine);
+  q(".both").onclick = async () => { await play(model); await new Promise(r => setTimeout(r, 300)); if (mine) await play(mine); };
+  q(".rec").onclick = async () => {
+    const b = q(".rec");
+    if (rec && rec.state === "recording") { rec.stop(); return; }
+    try {
+      stream = stream || await navigator.mediaDevices.getUserMedia({audio: true});
+    } catch (e) { msg.textContent = "Please allow the microphone to record your voice. (You can still practice by saying it out loud.)"; return; }
+    player.pause(); chunks = [];
+    rec = new MediaRecorder(stream);
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = () => {
+      mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType}));
+      b.classList.remove("on"); b.textContent = "● Record again";
+      q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
+      play(mine);
+    };
+    rec.start(); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
+  };
+  return new Promise(r => {
+    const go = () => { stopRec(); t.innerHTML = ""; r(); };
+    q(".next").onclick = go; q(".skip").onclick = go;
+  });
+}
+
+function stopRec() { if (rec && rec.state === "recording") rec.stop(); player.pause(); }
+back.onclick = home;
+home();
+</script></body></html>
