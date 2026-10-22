@@ -44,26 +44,52 @@ label.tg{display:flex;gap:8px;align-items:center;font-size:14px;color:#555;margi
 <script>
 const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビニで", "them": "Clerk", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome! (You don't need to answer.)", "ok": ""}, {"who": "them", "kana": "ふくろ ごりよう ですか？", "ro": "Fukuro goriyō desu ka?", "en": "Do you need a bag?", "ok": ""}, {"who": "you", "kana": "いいえ、だいじょうぶ です。", "ro": "Iie, daijōbu desu.", "en": "No, I'm fine.", "ok": "いいえ(大丈夫|だいじょうぶ)です"}, {"who": "them", "kana": "あたためますか？", "ro": "Atatamemasu ka?", "en": "Shall I heat it up?", "ok": ""}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please.", "ok": "はい(お願い|おねがい)します"}, {"who": "them", "kana": "おしはらいは どう されますか？", "ro": "Oshiharai wa dō saremasu ka?", "en": "How would you like to pay?", "ok": ""}, {"who": "you", "kana": "カードで おねがい します。", "ro": "Kādo de onegai shimasu.", "en": "By card, please.", "ok": "かーどで(お願い|おねがい)します"}]}, {"id": "restaurant", "en": "At a restaurant", "ja": "レストランで", "them": "Server", "lines": [{"who": "them", "kana": "いらっしゃいませ。なんめいさま ですか？", "ro": "Irasshaimase. Nanmei-sama desu ka?", "en": "Welcome! How many people?", "ok": ""}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two.", "ok": "(二人|2人|ふたり)です"}, {"who": "them", "kana": "ごちゅうもんは おきまり ですか？", "ro": "Gochūmon wa okimari desu ka?", "en": "Are you ready to order?", "ok": ""}, {"who": "you", "kana": "これを ください。", "ro": "Kore o kudasai.", "en": "This one, please.", "ok": "これを?(ください|下さい)"}, {"who": "them", "kana": "おのみものは いかが ですか？", "ro": "Onomimono wa ikaga desu ka?", "en": "Would you like something to drink?", "ok": ""}, {"who": "you", "kana": "おみずを ください。", "ro": "Omizu o kudasai.", "en": "Water, please.", "ok": "(お水|おみず)を?(ください|下さい)"}]}, {"id": "michi", "en": "Asking the way", "ja": "みちを きく", "them": "Person on the street", "lines": [{"who": "you", "kana": "すみません、えきは どこ ですか？", "ro": "Sumimasen, eki wa doko desu ka?", "en": "Excuse me, where is the station?", "ok": "(すみません|すいません)(駅|えき)は(どこ|何処)ですか"}, {"who": "them", "kana": "この みちを まっすぐ いって、みぎ です。", "ro": "Kono michi o massugu itte, migi desu.", "en": "Go straight along this street, then it's on the right.", "ok": ""}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much.", "ok": "(ありがとう|有難う)(ございます|御座います)"}]}];
 const app = document.getElementById("app"), back = document.getElementById("back"), title = document.getElementById("title");
-const player = new Audio();
 let rec = null, chunks = [], mine = null, stream = null, hide = false, heard = null;
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const kata = s => s.normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "");
 
-// iPhone: after the microphone is used, sound comes out quietly (phone-call mode). Switch back to loud playback.
-function speakerMode() { try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {} }
-function micMode() { try { if (navigator.audioSession) navigator.audioSession.type = "auto"; } catch (e) {} }
+// Sound plays through Web Audio, not an <audio> player: on iPhone the <audio> player gets in the way of voice typing
+// (it works once, then hears nothing) and sounds quiet after the mic is used. Known WebKit problem
+// (github.com/WebAudio/web-speech-api/issues/96, bugs.webkit.org/show_bug.cgi?id=225298).
+let actx = null, cur = null, playId = 0;
+const bufs = {};
+function audioCtx() {
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state !== "running") actx.resume();
+  return actx;
+}
+function stopSound() { playId++; if (cur) { try { cur.onended = null; cur.stop(); } catch (e) {} cur = null; } }
+async function play(src) {
+  stopSound();
+  const id = playId;
+  try {
+    const c = audioCtx();   // first call is inside a tap, so the iPhone allows sound
+    if (!bufs[src]) bufs[src] = await c.decodeAudioData(await (await fetch(src)).arrayBuffer());
+    if (id !== playId) return;   // another sound was started meanwhile
+    await new Promise(r => {
+      const n = c.createBufferSource();
+      n.buffer = bufs[src]; n.connect(c.destination);
+      n.onended = () => { if (cur === n) cur = null; r(); };
+      cur = n; n.start();
+    });
+  } catch (e) {}
+}
 
-let lastEnd = Promise.resolve();   // a new listening waits until the last one has fully ended (iPhone gives no words otherwise)
+// One voice-typing object for the whole visit, started again for each answer (iPhone is steadier this way).
+let recog = null, recogBusy = false, hearId = 0;
 
 function hear(match, onText) {
   // the phone's voice typing (Siri / Google): turns what you say into text, for the OK check. Needs the internet.
   // Words come in while you speak; as soon as they match, it says OK (no waiting for the end).
   if (!SR) return null;
-  const r = new SR(), texts = [];
-  r.lang = "ja-JP"; r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
-  let error = "", finish, ended;
-  const done = new Promise(res => finish = res), over = new Promise(res => ended = res);
+  if (!recog) {
+    recog = new SR();
+    recog.lang = "ja-JP"; recog.interimResults = true; recog.maxAlternatives = 5; recog.continuous = false;
+  }
+  const r = recog, texts = [], id = ++hearId;   // id: old timers must not stop a newer listening
+  let error = "", finish;
+  const done = new Promise(res => finish = res);
   r.onresult = e => {
     const now = [];
     for (const x of e.results) for (const a of x) now.push(a.transcript);
@@ -73,12 +99,18 @@ function hear(match, onText) {
     if (match && now.some(match)) { finish({texts, error: ""}); try { r.stop(); } catch (e2) {} }   // stop gently, not abort
   };
   r.onerror = e => { error = e.error; };
-  r.onend = () => { ended(); speakerMode(); finish({texts, error}); };
-  const before = lastEnd;
-  lastEnd = Promise.race([over, new Promise(res => setTimeout(res, 10000))]);
-  before.then(() => { micMode(); r.start(); }).catch(e => { error = e.name || String(e); ended(); speakerMode(); finish({texts, error}); });
-  const late = new Promise(res => setTimeout(() => { try { r.stop(); } catch (e) {} res({texts, error: error || "timeout"}); }, 9000));
-  return {stop() { try { r.stop(); } catch (e) {} }, done: Promise.race([done, late])};
+  r.onend = () => { recogBusy = false; finish({texts, error}); };
+  const go = () => { recogBusy = true; try { r.start(); } catch (e) { recogBusy = false; error = e.name; finish({texts, error}); } };
+  if (!recogBusy) go();   // straight away, inside the tap
+  else {   // the last listening is still closing: wait for it (max 4 s)
+    const t0 = Date.now(), w = setInterval(() => {
+      if (!recogBusy || Date.now() - t0 > 4000) { clearInterval(w); if (recogBusy) { try { r.abort(); } catch (e) {} recogBusy = false; } go(); }
+    }, 100);
+  }
+  let timer;
+  const late = new Promise(res => timer = setTimeout(() => { if (id === hearId) try { r.stop(); } catch (e) {} res({texts, error: error || "timeout"}); }, 9000));
+  done.then(() => clearTimeout(timer));
+  return {stop() { if (id === hearId) try { r.stop(); } catch (e) {} }, done: Promise.race([done, late])};
 }
 
 function okText(res, pattern) {
@@ -95,7 +127,6 @@ function okText(res, pattern) {
   return ["", (why || "The OK check didn't work this time.") + (res.error ? ` [${res.error}]` : "")];   // [code] helps find the cause in the trial
 }
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function play(src) { if (!heard) speakerMode(); return new Promise(r => { player.pause(); player.src = src; player.onended = r; player.onerror = r; player.play().catch(r); }); }
 
 function home() {
   stopRec(); back.hidden = true; title.textContent = "Speak Japanese";
@@ -103,7 +134,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 8 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 9 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -194,7 +225,7 @@ function yourTurn(s, i) {
     q(".mic").onclick = async () => {
       const b = q(".mic");
       if (heard) { heard.stop(); return; }
-      player.pause();
+      stopSound();
       const re = new RegExp(kata(l.ok));
       const h = heard = hear(t2 => re.test(norm(t2)), t2 => { ok.className = "ok live"; ok.textContent = "「" + t2 + "」"; });
       b.classList.add("on"); b.textContent = "Listening… say it now"; ok.className = "ok"; ok.textContent = "";
@@ -218,7 +249,7 @@ function cantRecord() {
   return "";
 }
 
-function stopRec() { if (rec && rec.state === "recording") rec.stop(); if (heard) heard.stop(); player.pause(); }
+function stopRec() { if (rec && rec.state === "recording") rec.stop(); if (heard) heard.stop(); stopSound(); }
 back.onclick = home;
 home();
 </script></body></html>
