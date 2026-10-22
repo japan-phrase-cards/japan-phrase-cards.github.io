@@ -28,6 +28,12 @@ main{max-width:520px;margin:0 auto;padding:16px}
 .btns .check{background:var(--green);color:#fff;border:0;grid-column:1/-1;font-size:17px}
 .btns .rec.second{background:#fff;color:var(--red);border:2px solid var(--red)}.btns .rec.second.on{color:#fff}.btns .next{background:var(--navy);color:#fff;border:0;grid-column:1/-1}
 .btns button:disabled{opacity:.4}
+.turn .words{display:flex;gap:12px;align-items:center}
+.hear{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--navy);background:#fff;color:var(--navy);font-size:18px;cursor:pointer}
+.mic{display:block;width:100%;margin-top:16px;padding:20px 10px;border:0;border-radius:16px;background:var(--red);color:#fff;font-size:21px;font-weight:700;cursor:pointer}
+.mic.on{background:#7a1f15}.mic:disabled{background:var(--green)}
+.turn .next{display:block;width:100%;margin-top:10px;padding:14px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:17px;cursor:pointer}
+.turn .next[hidden]{display:none}.ok{text-align:center}
 .ok{margin-top:12px;font-size:15px;color:#9C4A1A;line-height:1.4}.ok.good{font-size:24px;font-weight:800;color:var(--green)}
 .tip{font-size:13px;color:#777;margin-top:10px;line-height:1.4}.msg{color:var(--red);font-size:14px;margin-top:8px}
 .done{text-align:center;padding:20px 0}.done button{font-size:16px;padding:12px 18px;border-radius:12px;border:0;background:var(--navy);color:#fff;margin:4px;cursor:pointer}
@@ -65,7 +71,7 @@ function okText(res, pattern) {
   if (!res) return ["", ""];
   const re = new RegExp(kata(pattern));   // not norm(): it would remove the "?" of the pattern
   if (res.texts.some(t => re.test(norm(t)))) return ["good", "✓ OK!"];
-  if (res.texts.length) return ["", `We heard: 「${res.texts[0]}」 — not quite. Try again!`];
+  if (res.texts.length) return ["", `We heard: 「${res.texts[0]}」. Try again!`];
   const why = {"network": "The OK check needs the internet.",
     "not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
     "service-not-allowed": "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.",
@@ -82,7 +88,7 @@ function home() {
     On your turn, say your line out loud, record yourself, and compare with the model voice.</p>` +
     S.map((s, n) => `<button class="scene" data-n="${n}">${esc(s.en)} <span class="ja">· ${esc(s.ja)}</span>
       <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
-    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 5 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
+    `<button class="scene" id="mic">🎤 Microphone check <small>Trial version 6 · tap, say something for 3 seconds, then say something in Japanese</small></button><pre id="diag" style="white-space:pre-wrap;font-size:12px"></pre>`;
   app.querySelectorAll(".scene[data-n]").forEach(b => b.onclick = () => scene(+b.dataset.n));
   document.getElementById("mic").onclick = micCheck;
 }
@@ -130,8 +136,7 @@ function bubble(s, n, i) {
 
 async function scene(n) {
   const s = S[n]; back.hidden = false; title.textContent = s.en;
-  app.innerHTML = `<label class="tg"><input type="checkbox" id="hide" ${hide ? "checked" : ""}> Challenge: hide the Japanese on my turn</label><div class="chat"></div><div id="turn"></div>`;
-  document.getElementById("hide").onchange = e => { hide = e.target.checked; const t = app.querySelector(".turn"); if (t) t.classList.toggle("hidden", hide); };
+  app.innerHTML = `<div class="chat"></div><div id="turn"></div>`;
   const chat = app.querySelector(".chat");
   for (let i = 0; i < s.lines.length; i++) {
     if (S[n] !== s || !app.contains(chat)) return;
@@ -152,71 +157,39 @@ async function scene(n) {
 }
 
 function yourTurn(s, i) {
+  // one big button: tap, say the line, the phone's voice typing checks it. OK → the conversation goes on by itself.
   const l = s.lines[i], model = `audio/${s.id}-${i + 1}.mp3`;
-  mine = null;
+  const inApp = /Line\/|FBAN|FBAV|Instagram|MicroMessenger/.test(navigator.userAgent);
   const t = document.getElementById("turn");
-  t.innerHTML = `<div class="turn ${hide ? "hidden" : ""}"><div class="say">Your turn — say:</div><div class="en">${esc(l.en)}</div>
-    <div class="words"><div class="ja">${esc(l.kana)}</div><div class="ro">${esc(l.ro)}</div></div>
-    <div class="btns">${SR ? '<button class="check">🎤 Say it — OK check</button>' : ""}
-      <button class="rec ${SR ? "second" : ""}">● Record my voice</button>
-      <button class="model">▶ Model</button><button class="me" disabled>▶ My voice</button>
-      <button class="both" disabled>▶ Compare (model, then me)</button><button class="skip">Skip</button>
-      <button class="next" disabled>Next ›</button></div>
-    <div class="ok"></div><div class="msg"></div>
-    <div class="tip">${SR ? "🎤 Say it: the app checks if a Japanese listener would understand you (needs internet).<br>● Record: hear yourself and compare with the model." : "Say it out loud first. Then tap Record, say it again, and tap Stop."}</div></div>`;
+  t.innerHTML = `<div class="turn"><div class="say">Your turn — say:</div><div class="en">${esc(l.en)}</div>
+    <div class="words"><button class="hear" aria-label="Hear it">▶</button><div><div class="ja">${esc(l.kana)}</div><div class="ro">${esc(l.ro)}</div></div></div>
+    ${SR ? '<button class="mic">🎤 Tap and say it</button>' : ""}
+    <div class="ok"></div>
+    <button class="next" ${SR ? "hidden" : ""}>Next ›</button>
+    ${inApp ? '<div class="msg">For the OK check, open this page in Safari (iPhone) or Chrome (Android).</div>' : ""}
+    </div>`;
   t.scrollIntoView({behavior: "smooth", block: "end"});
-  const q = c => t.querySelector(c), msg = q(".msg"), ok = q(".ok");
-  const w = q(".words"); w.onclick = () => t.querySelector(".turn").classList.remove("hidden");
-  q(".model").onclick = () => play(model);
-  q(".me").onclick = () => mine && play(mine);
-  q(".both").onclick = async () => { await play(model); await new Promise(r => setTimeout(r, 300)); if (mine) await play(mine); };
-  // The OK check and the recording are separate buttons: an iPhone can't do voice typing and record at the same time.
-  if (SR) q(".check").onclick = async () => {
-    const b = q(".check");
-    if (heard) { heard.stop(); return; }
-    if (rec && rec.state === "recording") rec.stop();
-    player.pause(); msg.textContent = "";
-    const h = heard = hear();
-    b.classList.add("on"); b.textContent = "■ Stop (or just pause)"; ok.className = "ok"; ok.textContent = "Listening… say it now.";
-    const res = await h.done;
-    heard = null; b.classList.remove("on"); b.textContent = "🎤 Say it again";
-    const [cls, txt] = okText(res, l.ok);
-    ok.className = "ok " + cls; ok.textContent = txt;
-    q(".next").disabled = false;
-  };
-  q(".rec").onclick = async () => {
-    const b = q(".rec");
-    if (rec && rec.state === "recording") { rec.stop(); return; }
-    if (heard) heard.stop();
-    const why = cantRecord();
-    if (why) { msg.textContent = why; return; }
-    try {
-      player.pause();
-      // a fresh microphone stream each time: some phones (iPhone) give silence when an old stream is reused
-      if (stream) stream.getTracks().forEach(tr => tr.stop());
-      stream = await navigator.mediaDevices.getUserMedia({audio: true});
-      const type = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm"].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m));
-      rec = type ? new MediaRecorder(stream, {mimeType: type}) : new MediaRecorder(stream);
-      chunks = [];
-      rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-      rec.onstop = () => {
-        stream.getTracks().forEach(tr => tr.stop()); stream = null;
-        b.classList.remove("on"); b.textContent = "● Record again";
-        if (!chunks.length) { msg.textContent = "Nothing was recorded. Please try again."; return; }
-        mine = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType || type || "audio/mp4"}));
-        q(".me").disabled = q(".both").disabled = q(".next").disabled = false;
-        play(mine);
-      };
-      rec.start(250); b.classList.add("on"); b.textContent = "■ Stop"; msg.textContent = "";
-    } catch (e) {
-      msg.textContent = (e.name === "NotAllowedError" || e.name === "SecurityError")
-        ? "The microphone is blocked. Allow it for this page in your browser settings, then reload. (You can still practice by saying it out loud.)"
-        : `Recording didn't start (${e.name}: ${e.message}).`;
-    }
-  };
+  const q = c => t.querySelector(c), ok = q(".ok");
+  q(".hear").onclick = () => play(model);
+  let misses = 0;
   return new Promise(r => {
-    const go = () => { stopRec(); t.innerHTML = ""; r(); };
-    q(".next").onclick = go; q(".skip").onclick = go;
+    const go = () => { if (heard) heard.stop(); t.innerHTML = ""; r(); };
+    q(".next").onclick = go;
+    if (!SR) return;
+    q(".mic").onclick = async () => {
+      const b = q(".mic");
+      if (heard) { heard.stop(); return; }
+      player.pause();
+      const h = heard = hear();
+      b.classList.add("on"); b.textContent = "Listening… say it now"; ok.className = "ok"; ok.textContent = "";
+      const res = await h.done;
+      heard = null; b.classList.remove("on"); b.textContent = "🎤 Tap and say it";
+      const [cls, txt] = okText(res, l.ok);
+      ok.className = "ok " + cls; ok.textContent = txt;
+      if (cls === "good") { b.disabled = true; await new Promise(z => setTimeout(z, 1200)); go(); return; }
+      misses++;
+      if (misses >= 2 || (res.error && res.error !== "no-speech")) q(".next").hidden = false;
+    };
   });
 }
 
