@@ -1,0 +1,22 @@
+{
+ "name": "JLPT N5 Kanji with Audio",
+ "short_name": "N5 Kanji",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#FBF8F2",
+ "theme_color": "#1F3A5F",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}

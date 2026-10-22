@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F3A5F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="N5 Kanji">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>JLPT N5 Kanji with Audio</title>
+<style>
+:root { --navy:#1F3A5F; --cream:#FBF8F2; --ink:#1d1d1f; --c:#C0392B; --green:#3C7A5A;
+  --ja:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic UI","Meiryo",sans-serif;
+  --en:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif; }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--cream); color:var(--ink); font-family:var(--en); }
+body { padding-bottom:env(safe-area-inset-bottom); }
+button { font:inherit; border:0; cursor:pointer; color:inherit; background:none; }
+.ja { font-family:var(--ja); }
+.wrap { max-width:560px; margin:0 auto; }
+header { position:sticky; top:0; z-index:5; background:var(--hc, var(--navy)); color:var(--cream);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px; display:flex; align-items:center; gap:12px; min-height:56px; }
+header h1 { font-size:18px; font-weight:700; flex:1; line-height:1.2; }
+header h1 small { display:block; font-family:var(--ja); font-weight:400; font-size:12px; opacity:.8; }
+.back { font-size:16px; font-weight:600; padding:8px 12px; margin:-8px 0 -8px -8px; border-radius:20px; }
+.home { padding:16px; }
+.hero { text-align:center; padding:18px 0 22px; }
+.hero .sun { width:110px; height:110px; border-radius:50%; background:var(--c); margin:0 auto 16px; color:#fff; font:700 60px/110px var(--ja); }
+.hero p { font-size:19px; line-height:1.55; color:#333; }
+.big-btn { display:flex; align-items:center; justify-content:space-between; width:100%; padding:26px 20px; margin-bottom:14px;
+  border-radius:16px; color:#fff; font-size:23px; font-weight:700; text-align:left; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.big-btn .ja { font-size:17px; font-weight:400; opacity:.9; }
+.big-btn:active { transform:scale(.98); }
+.note { font-size:16px; line-height:1.6; color:#555; margin:20px 4px 10px; }
+.note p { margin-bottom:10px; }
+.tip { background:#fff; border:1px solid #e6e0d4; border-radius:12px; padding:14px 38px 14px 16px; font-size:16px; line-height:1.55; margin-bottom:14px; position:relative; }
+.tip button { position:absolute; right:6px; top:4px; font-size:20px; color:#999; padding:4px 8px; }
+.gh { font-size:15px; font-weight:700; color:var(--navy); padding:16px 14px 6px; }
+.gh span { font:400 13px var(--ja); color:#888; margin-left:6px; }
+.grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; padding:0 12px; }
+.cell { background:#fff; border:1px solid #ece5d8; border-radius:10px; padding:6px 0 5px; text-align:center; }
+.cell .k { font:700 30px/1.2 var(--ja); }
+.cell .r { font-size:11px; color:#777; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 2px; }
+.hint { text-align:center; font-size:13px; color:#888; padding:14px 16px 24px; }
+.card { padding:14px 16px 28px; }
+.top { display:flex; gap:16px; align-items:center; }
+.top .bk { font:700 112px/1 var(--ja); background:#fff; border:1px solid #e6e0d4; border-radius:16px; width:140px; height:140px;
+  display:flex; align-items:center; justify-content:center; flex:none; }
+.top .en { font-size:24px; font-weight:800; line-height:1.2; }
+.top .st { font-size:13px; color:#888; margin-top:4px; }
+.rd { margin-top:10px; font-size:14px; line-height:1.7; }
+.rd b { display:inline-block; min-width:34px; font-size:11px; color:#999; text-transform:uppercase; letter-spacing:.5px; }
+.rd .ja { font-size:18px; }
+.sec { font-size:11px; color:#999; text-transform:uppercase; letter-spacing:.5px; margin:22px 2px 8px; }
+.ex { display:flex; align-items:center; gap:12px; background:#fff; border-radius:14px; border:1px solid #e6e0d4; padding:12px 14px; margin-top:8px; }
+.ex .w { font:700 28px/1.3 var(--ja); } .ex .w b { color:var(--c); }
+.ex .wr { font:16px var(--ja); color:#555; } .ex .we { font-size:15px; font-weight:600; }
+.ex .tag { display:inline-block; font:600 12px var(--ja); background:#eee8dc; color:#555; border-radius:8px; padding:1px 7px; margin-left:6px; vertical-align:2px; }
+.ex .snd { font-size:12px; color:#9C4A1A; margin-top:2px; }
+.ex.sp { border-color:#e8cfa0; background:#fffaf0; }
+.one { font-size:13px; color:#666; margin:6px 2px 0; }
+.play { width:64px; height:64px; border-radius:50%; background:var(--c); color:#fff; font-size:24px; display:inline-flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.15); }
+.play.sm { width:50px; height:50px; font-size:19px; flex:none; }
+.play.on { animation:pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow:0 0 0 10px rgba(0,0,0,.08); } }
+.so { background:#fff; border:1px solid #e6e0d4; border-radius:14px; padding:12px; }
+.so img { width:100%; display:block; }
+.nav { display:flex; justify-content:space-between; align-items:center; margin-top:22px; }
+.nav button { height:46px; min-width:96px; padding:0 16px; border-radius:23px; background:#eee8dc; font:20px var(--ja); color:#555; }
+.nav button:disabled { visibility:hidden; }
+details.credits { font-size:14px; color:#888; margin:14px 4px 24px; line-height:1.5; }
+.quiz { padding:16px; text-align:center; }
+.opt { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; justify-content:center; }
+.opt button { padding:14px 16px; border-radius:14px; background:#eee8dc; font-size:17px; font-weight:600; color:#555; }
+.opt button.sel { background:var(--navy); color:#fff; }
+.qtop { display:flex; justify-content:space-between; font-size:14px; color:#777; margin-bottom:14px; }
+.choices { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:22px; }
+.choices button { background:#fff; border:2px solid #e6e0d4; border-radius:16px; font:700 48px/1 var(--ja); padding:20px 0; }
+.choices button.ok { background:var(--green); border-color:var(--green); color:#fff; }
+.choices button.ng { background:#C0392B; border-color:#C0392B; color:#fff; }
+.choices button small { display:block; font:600 13px var(--en); margin-top:6px; min-height:16px; }
+.ans { margin-top:16px; font-size:16px; line-height:1.5; }
+.ans .w { font:700 30px var(--ja); }
+.score { font-size:56px; font-weight:800; color:var(--navy); margin:20px 0 6px; }
+.missed { font:700 30px/1.6 var(--ja); color:#C0392B; margin:10px 0 18px; letter-spacing:6px; }
+.go { display:block; width:100%; padding:20px; border-radius:16px; background:var(--navy); color:#fff; font-size:21px; font-weight:700; margin-top:12px; }
+.go.alt { background:#eee8dc; color:#555; }
+.err { position:fixed; left:16px; right:16px; bottom:calc(env(safe-area-inset-bottom) + 16px); z-index:20; background:#333; color:#fff;
+  border-radius:12px; padding:12px 16px; font-size:14px; text-align:center; }
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const DATA = {"title": "JLPT N5 Kanji with Audio", "titleJa": "日本語能力試験 N5 漢字", "kanji": [{"k": "一", "en": "one", "n": 1, "so": "so/4e00.svg", "on": ["イチ"], "kun": ["ひと(つ)"], "ex": [{"rd": "イチ", "w": "一月", "r": "いちがつ", "e": "January", "h": "", "a": "../n5/n5-01-1.mp3"}, {"rd": "ひと(つ)", "w": "一つ", "r": "ひとつ", "e": "one (thing)", "h": "", "a": "../n5/n5-01-2.mp3"}], "sp": [{"w": "一人", "r": "ひとり", "e": "one person, alone", "y": "the whole word is read ひとり", "a": "../n5/n5-01-s1.mp3"}]}, {"k": "二", "en": "two", "n": 2, "so": "so/4e8c.svg", "on": ["ニ"], "kun": ["ふた(つ)"], "ex": [{"rd": "ニ", "w": "二月", "r": "にがつ", "e": "February", "h": "", "a": "../n5/n5-02-1.mp3"}, {"rd": "ふた(つ)", "w": "二つ", "r": "ふたつ", "e": "two (things)", "h": "", "a": "../n5/n5-02-2.mp3"}], "sp": [{"w": "二人", "r": "ふたり", "e": "two people", "y": "the whole word is read ふたり", "a": "../n5/n5-02-s1.mp3"}]}, {"k": "三", "en": "three", "n": 3, "so": "so/4e09.svg", "on": ["サン"], "kun": ["みっ(つ)"], "ex": [{"rd": "サン", "w": "三月", "r": "さんがつ", "e": "March", "h": "", "a": "../n5/n5-03-1.mp3"}, {"rd": "みっ(つ)", "w": "三つ", "r": "みっつ", "e": "three (things)", "h": "", "a": "../n5/n5-03-2.mp3"}], "sp": []}, {"k": "四", "en": "four", "n": 5, "so": "so/56db.svg", "on": ["シ"], "kun": ["よん", "よ", "よっ(つ)"], "ex": [{"rd": "シ", "w": "四月", "r": "しがつ", "e": "April", "h": "", "a": "../n5/n5-04-1.mp3"}, {"rd": "よん", "w": "四", "r": "よん", "e": "four", "h": "", "a": "../n5/n5-04-2.mp3"}, {"rd": "よ", "w": "四時", "r": "よじ", "e": "four o'clock", "h": "", "a": "../n5/n5-04-3.mp3"}, {"rd": "よっ(つ)", "w": "四つ", "r": "よっつ", "e": "four (things)", "h": "", "a": "../n5/n5-04-4.mp3"}], "sp": []}, {"k": "五", "en": "five", "n": 4, "so": "so/4e94.svg", "on": ["ゴ"], "kun": ["いつ(つ)"], "ex": [{"rd": "ゴ", "w": "五月", "r": "ごがつ", "e": "May", "h": "", "a": "../n5/n5-05-1.mp3"}, {"rd": "いつ(つ)", "w": "五つ", "r": "いつつ", "e": "five (things)", "h": "", "a": "../n5/n5-05-2.mp3"}], "sp": []}, {"k": "六", "en": "six", "n": 4, "so": "so/516d.svg", "on": ["ロク"], "kun": ["むっ(つ)"], "ex": [{"rd": "ロク", "w": "六月", "r": "ろくがつ", "e": "June", "h": "", "a": "../n5/n5-06-1.mp3"}, {"rd": "むっ(つ)", "w": "六つ", "r": "むっつ", "e": "six (things)", "h": "", "a": "../n5/n5-06-2.mp3"}], "sp": []}, {"k": "七", "en": "seven", "n": 2, "so": "so/4e03.svg", "on": ["シチ"], "kun": ["なな(つ)"], "ex": [{"rd": "シチ", "w": "七月", "r": "しちがつ", "e": "July", "h": "", "a": "../n5/n5-07-1.mp3"}, {"rd": "なな(つ)", "w": "七つ", "r": "ななつ", "e": "seven (things)", "h": "", "a": "../n5/n5-07-2.mp3"}], "sp": []}, {"k": "八", "en": "eight", "n": 2, "so": "so/516b.svg", "on": ["ハチ"], "kun": ["やっ(つ)"], "ex": [{"rd": "ハチ", "w": "八月", "r": "はちがつ", "e": "August", "h": "", "a": "../n5/n5-08-1.mp3"}, {"rd": "やっ(つ)", "w": "八つ", "r": "やっつ", "e": "eight (things)", "h": "", "a": "../n5/n5-08-2.mp3"}], "sp": []}, {"k": "九", "en": "nine", "n": 2, "so": "so/4e5d.svg", "on": ["キュウ", "ク"], "kun": ["ここの(つ)"], "ex": [{"rd": "キュウ", "w": "九", "r": "きゅう", "e": "nine", "h": "", "a": "../n5/n5-09-1.mp3"}, {"rd": "ク", "w": "九月", "r": "くがつ", "e": "September", "h": "", "a": "../n5/n5-09-2.mp3"}, {"rd": "ここの(つ)", "w": "九つ", "r": "ここのつ", "e": "nine (things)", "h": "", "a": "../n5/n5-09-3.mp3"}], "sp": []}, {"k": "十", "en": "ten", "n": 2, "so": "so/5341.svg", "on": ["ジュウ"], "kun": ["とお"], "ex": [{"rd": "ジュウ", "w": "十", "r": "じゅう", "e": "ten", "h": "", "a": "../n5/n5-10-1.mp3"}, {"rd": "とお", "w": "十", "r": "とお", "e": "ten (things)", "h": "", "a": "../n5/n5-10-2.mp3"}], "sp": []}, {"k": "百", "en": "hundred", "n": 6, "so": "so/767e.svg", "on": ["ヒャク"], "kun": [], "ex": [{"rd": "ヒャク", "w": "百", "r": "ひゃく", "e": "one hundred", "h": "", "a": "../n5/n5-11-1.mp3"}, {"rd": "ヒャク", "w": "三百", "r": "さんびゃく", "e": "three hundred", "h": "ひゃく → びゃく", "a": "../n5/n5-11-2.mp3"}], "sp": []}, {"k": "千", "en": "thousand", "n": 3, "so": "so/5343.svg", "on": ["セン"], "kun": ["ち"], "ex": [{"rd": "セン", "w": "千", "r": "せん", "e": "one thousand", "h": "", "a": "../n5/n5-12-1.mp3"}, {"rd": "ち", "w": "千葉", "r": "ちば", "e": "Chiba (a city and prefecture)", "h": "", "a": "../n5/n5-12-2.mp3"}], "sp": []}, {"k": "万", "en": "ten thousand", "n": 3, "so": "so/4e07.svg", "on": ["マン", "バン"], "kun": [], "ex": [{"rd": "マン", "w": "一万", "r": "いちまん", "e": "ten thousand", "h": "", "a": "../n5/n5-13-1.mp3"}, {"rd": "バン", "w": "万歳", "r": "ばんざい", "e": "hooray!", "h": "", "a": "../n5/n5-13-2.mp3"}], "sp": []}, {"k": "円", "en": "yen, circle", "n": 4, "so": "so/5186.svg", "on": ["エン"], "kun": [], "ex": [{"rd": "エン", "w": "円", "r": "えん", "e": "yen; circle", "h": "", "a": "../n5/n5-14-1.mp3"}, {"rd": "エン", "w": "百円", "r": "ひゃくえん", "e": "100 yen", "h": "", "a": "../n5/n5-14-2.mp3"}], "sp": []}, {"k": "日", "en": "day, sun", "n": 4, "so": "so/65e5.svg", "on": ["ニチ"], "kun": ["ひ"], "ex": [{"rd": "ニチ", "w": "毎日", "r": "まいにち", "e": "every day", "h": "", "a": "../n5/n5-15-1.mp3"}, {"rd": "ひ", "w": "日", "r": "ひ", "e": "day; sun", "h": "", "a": "../n5/n5-15-2.mp3"}], "sp": [{"w": "日本", "r": "にほん", "e": "Japan", "y": "日 is shortened to に here (にっぽん is also said)", "a": "../n5/n5-15-s1.mp3"}]}, {"k": "月", "en": "month, moon", "n": 4, "so": "so/6708.svg", "on": ["ゲツ", "ガツ"], "kun": ["つき"], "ex": [{"rd": "ゲツ", "w": "月曜日", "r": "げつようび", "e": "Monday (曜日 is read ようび)", "h": "", "a": "../n5/n5-16-1.mp3"}, {"rd": "ガツ", "w": "十月", "r": "じゅうがつ", "e": "October", "h": "", "a": "../n5/n5-16-2.mp3"}, {"rd": "つき", "w": "月", "r": "つき", "e": "moon", "h": "", "a": "../n5/n5-16-3.mp3"}], "sp": []}, {"k": "火", "en": "fire", "n": 4, "so": "so/706b.svg", "on": ["カ"], "kun": ["ひ"], "ex": [{"rd": "カ", "w": "火曜日", "r": "かようび", "e": "Tuesday (曜日 is read ようび)", "h": "", "a": "../n5/n5-17-1.mp3"}, {"rd": "ひ", "w": "火", "r": "ひ", "e": "fire", "h": "", "a": "../n5/n5-17-2.mp3"}], "sp": []}, {"k": "水", "en": "water", "n": 4, "so": "so/6c34.svg", "on": ["スイ"], "kun": ["みず"], "ex": [{"rd": "スイ", "w": "水曜日", "r": "すいようび", "e": "Wednesday (曜日 is read ようび)", "h": "", "a": "../n5/n5-18-1.mp3"}, {"rd": "みず", "w": "水", "r": "みず", "e": "water", "h": "", "a": "../n5/n5-18-2.mp3"}], "sp": []}, {"k": "木", "en": "tree", "n": 4, "so": "so/6728.svg", "on": ["モク"], "kun": ["き"], "ex": [{"rd": "モク", "w": "木曜日", "r": "もくようび", "e": "Thursday (曜日 is read ようび)", "h": "", "a": "../n5/n5-19-1.mp3"}, {"rd": "き", "w": "木", "r": "き", "e": "tree", "h": "", "a": "../n5/n5-19-2.mp3"}], "sp": []}, {"k": "金", "en": "gold, money", "n": 8, "so": "so/91d1.svg", "on": ["キン"], "kun": ["かね"], "ex": [{"rd": "キン", "w": "金曜日", "r": "きんようび", "e": "Friday (曜日 is read ようび)", "h": "", "a": "../n5/n5-20-1.mp3"}, {"rd": "かね", "w": "お金", "r": "おかね", "e": "money", "h": "", "a": "../n5/n5-20-2.mp3"}], "sp": []}, {"k": "土", "en": "soil, earth", "n": 3, "so": "so/571f.svg", "on": ["ド"], "kun": ["つち"], "ex": [{"rd": "ド", "w": "土曜日", "r": "どようび", "e": "Saturday (曜日 is read ようび)", "h": "", "a": "../n5/n5-21-1.mp3"}, {"rd": "つち", "w": "土", "r": "つち", "e": "soil", "h": "", "a": "../n5/n5-21-2.mp3"}], "sp": []}, {"k": "年", "en": "year", "n": 6, "so": "so/5e74.svg", "on": ["ネン"], "kun": ["とし"], "ex": [{"rd": "ネン", "w": "来年", "r": "らいねん", "e": "next year", "h": "", "a": "../n5/n5-22-1.mp3"}, {"rd": "とし", "w": "年", "r": "とし", "e": "year; age", "h": "", "a": "../n5/n5-22-2.mp3"}], "sp": []}, {"k": "時", "en": "time, o'clock", "n": 10, "so": "so/6642.svg", "on": ["ジ"], "kun": ["とき"], "ex": [{"rd": "ジ", "w": "一時", "r": "いちじ", "e": "one o'clock", "h": "", "a": "../n5/n5-23-1.mp3"}, {"rd": "とき", "w": "時", "r": "とき", "e": "time, when", "h": "", "a": "../n5/n5-23-2.mp3"}], "sp": [{"w": "時計", "r": "とけい", "e": "clock, watch", "y": "the whole word is read とけい", "a": "../n5/n5-23-s1.mp3"}]}, {"k": "間", "en": "between, interval", "n": 12, "so": "so/9593.svg", "on": ["カン"], "kun": ["あいだ"], "ex": [{"rd": "カン", "w": "時間", "r": "じかん", "e": "time, hours", "h": "", "a": "../n5/n5-24-1.mp3"}, {"rd": "あいだ", "w": "間", "r": "あいだ", "e": "between", "h": "", "a": "../n5/n5-24-2.mp3"}], "sp": []}, {"k": "分", "en": "minute, part", "n": 4, "so": "so/5206.svg", "on": ["フン", "ブン"], "kun": ["わ(かる)"], "ex": [{"rd": "フン", "w": "五分", "r": "ごふん", "e": "five minutes", "h": "", "a": "../n5/n5-25-1.mp3"}, {"rd": "ブン", "w": "自分", "r": "じぶん", "e": "oneself", "h": "", "a": "../n5/n5-25-2.mp3"}, {"rd": "わ(かる)", "w": "分かる", "r": "わかる", "e": "to understand", "h": "", "a": "../n5/n5-25-3.mp3"}], "sp": []}, {"k": "半", "en": "half", "n": 5, "so": "so/534a.svg", "on": ["ハン"], "kun": [], "ex": [{"rd": "ハン", "w": "半分", "r": "はんぶん", "e": "half", "h": "", "a": "../n5/n5-26-1.mp3"}, {"rd": "ハン", "w": "半日", "r": "はんにち", "e": "half a day", "h": "", "a": "../n5/n5-26-2.mp3"}], "sp": []}, {"k": "午", "en": "noon", "n": 4, "so": "so/5348.svg", "on": ["ゴ"], "kun": [], "ex": [{"rd": "ゴ", "w": "午前", "r": "ごぜん", "e": "morning, a.m.", "h": "", "a": "../n5/n5-27-1.mp3"}, {"rd": "ゴ", "w": "午後", "r": "ごご", "e": "afternoon, p.m.", "h": "", "a": "../n5/n5-27-2.mp3"}], "sp": []}, {"k": "今", "en": "now", "n": 4, "so": "so/4eca.svg", "on": ["コン"], "kun": ["いま"], "ex": [{"rd": "コン", "w": "今月", "r": "こんげつ", "e": "this month", "h": "", "a": "../n5/n5-28-1.mp3"}, {"rd": "いま", "w": "今", "r": "いま", "e": "now", "h": "", "a": "../n5/n5-28-2.mp3"}], "sp": [{"w": "今日", "r": "きょう", "e": "today", "y": "the whole word is read きょう", "a": "../n5/n5-28-s1.mp3"}, {"w": "今年", "r": "ことし", "e": "this year", "y": "the whole word is read ことし", "a": "../n5/n5-28-s2.mp3"}]}, {"k": "毎", "en": "every", "n": 6, "so": "so/6bce.svg", "on": ["マイ"], "kun": [], "ex": [{"rd": "マイ", "w": "毎日", "r": "まいにち", "e": "every day", "h": "", "a": "../n5/n5-29-1.mp3"}, {"rd": "マイ", "w": "毎朝", "r": "まいあさ", "e": "every morning", "h": "", "a": "../n5/n5-29-2.mp3"}], "sp": []}, {"k": "前", "en": "before, front", "n": 9, "so": "so/524d.svg", "on": ["ゼン"], "kun": ["まえ"], "ex": [{"rd": "ゼン", "w": "午前", "r": "ごぜん", "e": "morning, a.m.", "h": "", "a": "../n5/n5-30-1.mp3"}, {"rd": "まえ", "w": "前", "r": "まえ", "e": "front, before", "h": "", "a": "../n5/n5-30-2.mp3"}], "sp": []}, {"k": "後", "en": "after, behind", "n": 9, "so": "so/5f8c.svg", "on": ["ゴ"], "kun": ["あと", "うし(ろ)"], "ex": [{"rd": "ゴ", "w": "午後", "r": "ごご", "e": "afternoon, p.m.", "h": "", "a": "../n5/n5-31-1.mp3"}, {"rd": "あと", "w": "後で", "r": "あとで", "e": "later", "h": "", "a": "../n5/n5-31-2.mp3"}, {"rd": "うし(ろ)", "w": "後ろ", "r": "うしろ", "e": "behind", "h": "", "a": "../n5/n5-31-3.mp3"}], "sp": []}, {"k": "先", "en": "ahead, previous", "n": 6, "so": "so/5148.svg", "on": ["セン"], "kun": ["さき"], "ex": [{"rd": "セン", "w": "先生", "r": "せんせい", "e": "teacher", "h": "", "a": "../n5/n5-32-1.mp3"}, {"rd": "さき", "w": "先", "r": "さき", "e": "ahead; first", "h": "", "a": "../n5/n5-32-2.mp3"}], "sp": []}, {"k": "週", "en": "week", "n": 11, "so": "so/9031.svg", "on": ["シュウ"], "kun": [], "ex": [{"rd": "シュウ", "w": "今週", "r": "こんしゅう", "e": "this week", "h": "", "a": "../n5/n5-33-1.mp3"}, {"rd": "シュウ", "w": "来週", "r": "らいしゅう", "e": "next week", "h": "", "a": "../n5/n5-33-2.mp3"}], "sp": []}, {"k": "人", "en": "person", "n": 2, "so": "so/4eba.svg", "on": ["ジン", "ニン"], "kun": ["ひと"], "ex": [{"rd": "ジン", "w": "アメリカ人", "r": "アメリカじん", "e": "American (person)", "h": "", "a": "../n5/n5-34-1.mp3"}, {"rd": "ニン", "w": "三人", "r": "さんにん", "e": "three people", "h": "", "a": "../n5/n5-34-2.mp3"}, {"rd": "ひと", "w": "人", "r": "ひと", "e": "person", "h": "", "a": "../n5/n5-34-3.mp3"}], "sp": []}, {"k": "男", "en": "man", "n": 7, "so": "so/7537.svg", "on": ["ダン"], "kun": ["おとこ"], "ex": [{"rd": "ダン", "w": "男子", "r": "だんし", "e": "boys", "h": "", "a": "../n5/n5-35-1.mp3"}, {"rd": "おとこ", "w": "男の人", "r": "おとこのひと", "e": "man", "h": "", "a": "../n5/n5-35-2.mp3"}], "sp": []}, {"k": "女", "en": "woman", "n": 3, "so": "so/5973.svg", "on": ["ジョ"], "kun": ["おんな"], "ex": [{"rd": "ジョ", "w": "女子", "r": "じょし", "e": "girls", "h": "", "a": "../n5/n5-36-1.mp3"}, {"rd": "おんな", "w": "女の人", "r": "おんなのひと", "e": "woman", "h": "", "a": "../n5/n5-36-2.mp3"}], "sp": []}, {"k": "子", "en": "child", "n": 3, "so": "so/5b50.svg", "on": ["シ"], "kun": ["こ"], "ex": [{"rd": "シ", "w": "帽子", "r": "ぼうし", "e": "hat", "h": "", "a": "../n5/n5-37-1.mp3"}, {"rd": "こ", "w": "子ども", "r": "こども", "e": "child", "h": "", "a": "../n5/n5-37-2.mp3"}], "sp": []}, {"k": "父", "en": "father", "n": 4, "so": "so/7236.svg", "on": ["フ"], "kun": ["ちち"], "ex": [{"rd": "フ", "w": "祖父", "r": "そふ", "e": "grandfather", "h": "", "a": "../n5/n5-38-1.mp3"}, {"rd": "ちち", "w": "父", "r": "ちち", "e": "(my) father", "h": "", "a": "../n5/n5-38-2.mp3"}], "sp": [{"w": "お父さん", "r": "おとうさん", "e": "father, dad", "y": "父 is read とう here", "a": "../n5/n5-38-s1.mp3"}]}, {"k": "母", "en": "mother", "n": 5, "so": "so/6bcd.svg", "on": ["ボ"], "kun": ["はは"], "ex": [{"rd": "ボ", "w": "祖母", "r": "そぼ", "e": "grandmother", "h": "", "a": "../n5/n5-39-1.mp3"}, {"rd": "はは", "w": "母", "r": "はは", "e": "(my) mother", "h": "", "a": "../n5/n5-39-2.mp3"}], "sp": [{"w": "お母さん", "r": "おかあさん", "e": "mother, mom", "y": "母 is read かあ here", "a": "../n5/n5-39-s1.mp3"}]}, {"k": "友", "en": "friend", "n": 4, "so": "so/53cb.svg", "on": ["ユウ"], "kun": ["とも"], "ex": [{"rd": "ユウ", "w": "友人", "r": "ゆうじん", "e": "friend (formal)", "h": "", "a": "../n5/n5-40-1.mp3"}, {"rd": "とも", "w": "友だち", "r": "ともだち", "e": "friend", "h": "", "a": "../n5/n5-40-2.mp3"}], "sp": []}, {"k": "生", "en": "life, be born", "n": 5, "so": "so/751f.svg", "on": ["セイ"], "kun": ["い(きる)", "う(まれる)"], "ex": [{"rd": "セイ", "w": "学生", "r": "がくせい", "e": "student", "h": "", "a": "../n5/n5-41-1.mp3"}, {"rd": "い(きる)", "w": "生きる", "r": "いきる", "e": "to live", "h": "", "a": "../n5/n5-41-2.mp3"}, {"rd": "う(まれる)", "w": "生まれる", "r": "うまれる", "e": "to be born", "h": "", "a": "../n5/n5-41-3.mp3"}], "sp": []}, {"k": "名", "en": "name", "n": 6, "so": "so/540d.svg", "on": ["メイ"], "kun": ["な"], "ex": [{"rd": "メイ", "w": "有名", "r": "ゆうめい", "e": "famous", "h": "", "a": "../n5/n5-42-1.mp3"}, {"rd": "な", "w": "名前", "r": "なまえ", "e": "name", "h": "", "a": "../n5/n5-42-2.mp3"}], "sp": []}, {"k": "学", "en": "study", "n": 8, "so": "so/5b66.svg", "on": ["ガク"], "kun": ["まな(ぶ)"], "ex": [{"rd": "ガク", "w": "大学", "r": "だいがく", "e": "university", "h": "", "a": "../n5/n5-43-1.mp3"}, {"rd": "まな(ぶ)", "w": "学ぶ", "r": "まなぶ", "e": "to learn", "h": "", "a": "../n5/n5-43-2.mp3"}], "sp": []}, {"k": "校", "en": "school", "n": 10, "so": "so/6821.svg", "on": ["コウ"], "kun": [], "ex": [{"rd": "コウ", "w": "学校", "r": "がっこう", "e": "school", "h": "", "a": "../n5/n5-44-1.mp3"}, {"rd": "コウ", "w": "高校", "r": "こうこう", "e": "high school", "h": "", "a": "../n5/n5-44-2.mp3"}], "sp": []}, {"k": "語", "en": "language, word", "n": 14, "so": "so/8a9e.svg", "on": ["ゴ"], "kun": [], "ex": [{"rd": "ゴ", "w": "英語", "r": "えいご", "e": "English (language)", "h": "", "a": "../n5/n5-45-1.mp3"}, {"rd": "ゴ", "w": "日本語", "r": "にほんご", "e": "Japanese (language)", "h": "", "a": "../n5/n5-45-2.mp3"}], "sp": []}, {"k": "国", "en": "country", "n": 8, "so": "so/56fd.svg", "on": ["コク"], "kun": ["くに"], "ex": [{"rd": "コク", "w": "外国", "r": "がいこく", "e": "foreign country", "h": "", "a": "../n5/n5-46-1.mp3"}, {"rd": "くに", "w": "国", "r": "くに", "e": "country", "h": "", "a": "../n5/n5-46-2.mp3"}], "sp": []}, {"k": "社", "en": "company, shrine", "n": 7, "so": "so/793e.svg", "on": ["シャ"], "kun": [], "ex": [{"rd": "シャ", "w": "会社", "r": "かいしゃ", "e": "company", "h": "", "a": "../n5/n5-47-1.mp3"}, {"rd": "シャ", "w": "神社", "r": "じんじゃ", "e": "Shinto shrine", "h": "しゃ → じゃ", "a": "../n5/n5-47-2.mp3"}], "sp": []}, {"k": "何", "en": "what", "n": 7, "so": "so/4f55.svg", "on": [], "kun": ["なに", "なん"], "ex": [{"rd": "なに", "w": "何", "r": "なに", "e": "what", "h": "", "a": "../n5/n5-48-1.mp3"}, {"rd": "なん", "w": "何人", "r": "なんにん", "e": "how many people", "h": "", "a": "../n5/n5-48-2.mp3"}], "sp": []}, {"k": "口", "en": "mouth", "n": 3, "so": "so/53e3.svg", "on": ["コウ"], "kun": ["くち"], "ex": [{"rd": "コウ", "w": "人口", "r": "じんこう", "e": "population", "h": "", "a": "../n5/n5-49-1.mp3"}, {"rd": "くち", "w": "口", "r": "くち", "e": "mouth", "h": "", "a": "../n5/n5-49-2.mp3"}], "sp": []}, {"k": "目", "en": "eye", "n": 5, "so": "so/76ee.svg", "on": ["モク"], "kun": ["め"], "ex": [{"rd": "モク", "w": "目的", "r": "もくてき", "e": "purpose, goal", "h": "", "a": "../n5/n5-50-1.mp3"}, {"rd": "め", "w": "目", "r": "め", "e": "eye", "h": "", "a": "../n5/n5-50-2.mp3"}], "sp": []}, {"k": "耳", "en": "ear", "n": 6, "so": "so/8033.svg", "on": [], "kun": ["みみ"], "ex": [{"rd": "みみ", "w": "耳", "r": "みみ", "e": "ear", "h": "", "a": "../n5/n5-51-1.mp3"}, {"rd": "みみ", "w": "耳元", "r": "みみもと", "e": "close to the ear", "h": "", "a": "../n5/n5-51-2.mp3"}], "sp": []}, {"k": "手", "en": "hand", "n": 4, "so": "so/624b.svg", "on": ["シュ"], "kun": ["て"], "ex": [{"rd": "シュ", "w": "歌手", "r": "かしゅ", "e": "singer", "h": "", "a": "../n5/n5-52-1.mp3"}, {"rd": "て", "w": "手", "r": "て", "e": "hand", "h": "", "a": "../n5/n5-52-2.mp3"}], "sp": []}, {"k": "足", "en": "foot, leg", "n": 7, "so": "so/8db3.svg", "on": ["ソク"], "kun": ["あし", "た(りる)"], "ex": [{"rd": "ソク", "w": "遠足", "r": "えんそく", "e": "school trip, outing", "h": "", "a": "../n5/n5-53-1.mp3"}, {"rd": "あし", "w": "足", "r": "あし", "e": "foot, leg", "h": "", "a": "../n5/n5-53-2.mp3"}, {"rd": "た(りる)", "w": "足りる", "r": "たりる", "e": "to be enough", "h": "", "a": "../n5/n5-53-3.mp3"}], "sp": []}, {"k": "上", "en": "up, above", "n": 3, "so": "so/4e0a.svg", "on": ["ジョウ"], "kun": ["うえ", "あ(がる)"], "ex": [{"rd": "ジョウ", "w": "以上", "r": "いじょう", "e": "or more; that's all", "h": "", "a": "../n5/n5-54-1.mp3"}, {"rd": "うえ", "w": "上", "r": "うえ", "e": "above, on top", "h": "", "a": "../n5/n5-54-2.mp3"}, {"rd": "あ(がる)", "w": "上がる", "r": "あがる", "e": "to go up", "h": "", "a": "../n5/n5-54-3.mp3"}], "sp": [{"w": "上手", "r": "じょうず", "e": "good at", "y": "手 is read ず here", "a": "../n5/n5-54-s1.mp3"}]}, {"k": "下", "en": "down, below", "n": 3, "so": "so/4e0b.svg", "on": ["カ"], "kun": ["した", "さ(がる)"], "ex": [{"rd": "カ", "w": "地下鉄", "r": "ちかてつ", "e": "subway", "h": "", "a": "../n5/n5-55-1.mp3"}, {"rd": "した", "w": "下", "r": "した", "e": "below, under", "h": "", "a": "../n5/n5-55-2.mp3"}, {"rd": "さ(がる)", "w": "下がる", "r": "さがる", "e": "to go down", "h": "", "a": "../n5/n5-55-3.mp3"}], "sp": [{"w": "下手", "r": "へた", "e": "bad at", "y": "the whole word is read へた", "a": "../n5/n5-55-s1.mp3"}]}, {"k": "中", "en": "middle, inside", "n": 4, "so": "so/4e2d.svg", "on": ["チュウ"], "kun": ["なか"], "ex": [{"rd": "チュウ", "w": "中国", "r": "ちゅうごく", "e": "China", "h": "", "a": "../n5/n5-56-1.mp3"}, {"rd": "なか", "w": "中", "r": "なか", "e": "inside", "h": "", "a": "../n5/n5-56-2.mp3"}], "sp": []}, {"k": "外", "en": "outside", "n": 5, "so": "so/5916.svg", "on": ["ガイ"], "kun": ["そと"], "ex": [{"rd": "ガイ", "w": "外国", "r": "がいこく", "e": "foreign country", "h": "", "a": "../n5/n5-57-1.mp3"}, {"rd": "そと", "w": "外", "r": "そと", "e": "outside", "h": "", "a": "../n5/n5-57-2.mp3"}], "sp": []}, {"k": "右", "en": "right", "n": 5, "so": "so/53f3.svg", "on": ["ユウ"], "kun": ["みぎ"], "ex": [{"rd": "ユウ", "w": "左右", "r": "さゆう", "e": "left and right", "h": "", "a": "../n5/n5-58-1.mp3"}, {"rd": "みぎ", "w": "右", "r": "みぎ", "e": "right", "h": "", "a": "../n5/n5-58-2.mp3"}], "sp": []}, {"k": "左", "en": "left", "n": 5, "so": "so/5de6.svg", "on": ["サ"], "kun": ["ひだり"], "ex": [{"rd": "サ", "w": "左折", "r": "させつ", "e": "left turn", "h": "", "a": "../n5/n5-59-1.mp3"}, {"rd": "ひだり", "w": "左", "r": "ひだり", "e": "left", "h": "", "a": "../n5/n5-59-2.mp3"}], "sp": []}, {"k": "東", "en": "east", "n": 8, "so": "so/6771.svg", "on": ["トウ"], "kun": ["ひがし"], "ex": [{"rd": "トウ", "w": "東京", "r": "とうきょう", "e": "Tokyo", "h": "", "a": "../n5/n5-60-1.mp3"}, {"rd": "ひがし", "w": "東", "r": "ひがし", "e": "east", "h": "", "a": "../n5/n5-60-2.mp3"}], "sp": []}, {"k": "西", "en": "west", "n": 6, "so": "so/897f.svg", "on": ["サイ"], "kun": ["にし"], "ex": [{"rd": "サイ", "w": "関西", "r": "かんさい", "e": "Kansai (the Osaka–Kyoto area)", "h": "", "a": "../n5/n5-61-1.mp3"}, {"rd": "にし", "w": "西", "r": "にし", "e": "west", "h": "", "a": "../n5/n5-61-2.mp3"}], "sp": []}, {"k": "南", "en": "south", "n": 9, "so": "so/5357.svg", "on": ["ナン"], "kun": ["みなみ"], "ex": [{"rd": "ナン", "w": "南米", "r": "なんべい", "e": "South America", "h": "", "a": "../n5/n5-62-1.mp3"}, {"rd": "みなみ", "w": "南", "r": "みなみ", "e": "south", "h": "", "a": "../n5/n5-62-2.mp3"}], "sp": []}, {"k": "北", "en": "north", "n": 5, "so": "so/5317.svg", "on": ["ホク"], "kun": ["きた"], "ex": [{"rd": "ホク", "w": "東北", "r": "とうほく", "e": "Tohoku (northeast Japan)", "h": "", "a": "../n5/n5-63-1.mp3"}, {"rd": "きた", "w": "北", "r": "きた", "e": "north", "h": "", "a": "../n5/n5-63-2.mp3"}], "sp": []}, {"k": "出", "en": "go out", "n": 5, "so": "so/51fa.svg", "on": ["シュツ"], "kun": ["で(る)", "だ(す)"], "ex": [{"rd": "シュツ", "w": "出発", "r": "しゅっぱつ", "e": "departure", "h": "しゅつ → しゅっ", "a": "../n5/n5-64-1.mp3"}, {"rd": "で(る)", "w": "出る", "r": "でる", "e": "to go out, leave", "h": "", "a": "../n5/n5-64-2.mp3"}, {"rd": "だ(す)", "w": "出す", "r": "だす", "e": "to take out, send", "h": "", "a": "../n5/n5-64-3.mp3"}], "sp": []}, {"k": "入", "en": "enter", "n": 2, "so": "so/5165.svg", "on": ["ニュウ"], "kun": ["はい(る)", "い(れる)"], "ex": [{"rd": "ニュウ", "w": "入学", "r": "にゅうがく", "e": "starting school", "h": "", "a": "../n5/n5-65-1.mp3"}, {"rd": "はい(る)", "w": "入る", "r": "はいる", "e": "to enter", "h": "", "a": "../n5/n5-65-2.mp3"}, {"rd": "い(れる)", "w": "入れる", "r": "いれる", "e": "to put in", "h": "", "a": "../n5/n5-65-3.mp3"}], "sp": []}, {"k": "駅", "en": "station", "n": 14, "so": "so/99c5.svg", "on": ["エキ"], "kun": [], "ex": [{"rd": "エキ", "w": "駅", "r": "えき", "e": "station", "h": "", "a": "../n5/n5-66-1.mp3"}, {"rd": "エキ", "w": "駅員", "r": "えきいん", "e": "station staff", "h": "", "a": "../n5/n5-66-2.mp3"}], "sp": []}, {"k": "店", "en": "shop", "n": 8, "so": "so/5e97.svg", "on": ["テン"], "kun": ["みせ"], "ex": [{"rd": "テン", "w": "店員", "r": "てんいん", "e": "shop clerk", "h": "", "a": "../n5/n5-67-1.mp3"}, {"rd": "みせ", "w": "店", "r": "みせ", "e": "shop, store", "h": "", "a": "../n5/n5-67-2.mp3"}], "sp": []}, {"k": "道", "en": "road, way", "n": 12, "so": "so/9053.svg", "on": ["ドウ"], "kun": ["みち"], "ex": [{"rd": "ドウ", "w": "書道", "r": "しょどう", "e": "calligraphy", "h": "", "a": "../n5/n5-68-1.mp3"}, {"rd": "みち", "w": "道", "r": "みち", "e": "road, way", "h": "", "a": "../n5/n5-68-2.mp3"}], "sp": []}, {"k": "山", "en": "mountain", "n": 3, "so": "so/5c71.svg", "on": ["サン"], "kun": ["やま"], "ex": [{"rd": "サン", "w": "富士山", "r": "ふじさん", "e": "Mt. Fuji", "h": "", "a": "../n5/n5-69-1.mp3"}, {"rd": "やま", "w": "山", "r": "やま", "e": "mountain", "h": "", "a": "../n5/n5-69-2.mp3"}], "sp": []}, {"k": "川", "en": "river", "n": 3, "so": "so/5ddd.svg", "on": [], "kun": ["かわ"], "ex": [{"rd": "かわ", "w": "川", "r": "かわ", "e": "river", "h": "", "a": "../n5/n5-70-1.mp3"}, {"rd": "かわ", "w": "小川", "r": "おがわ", "e": "stream", "h": "かわ → がわ", "a": "../n5/n5-70-2.mp3"}], "sp": []}, {"k": "天", "en": "heaven, sky", "n": 4, "so": "so/5929.svg", "on": ["テン"], "kun": [], "ex": [{"rd": "テン", "w": "天気", "r": "てんき", "e": "weather", "h": "", "a": "../n5/n5-71-1.mp3"}, {"rd": "テン", "w": "天ぷら", "r": "てんぷら", "e": "tempura", "h": "", "a": "../n5/n5-71-2.mp3"}], "sp": []}, {"k": "気", "en": "spirit, air", "n": 6, "so": "so/6c17.svg", "on": ["キ"], "kun": [], "ex": [{"rd": "キ", "w": "元気", "r": "げんき", "e": "healthy, fine", "h": "", "a": "../n5/n5-72-1.mp3"}, {"rd": "キ", "w": "気持ち", "r": "きもち", "e": "feeling", "h": "", "a": "../n5/n5-72-2.mp3"}], "sp": []}, {"k": "雨", "en": "rain", "n": 8, "so": "so/96e8.svg", "on": [], "kun": ["あめ"], "ex": [{"rd": "あめ", "w": "雨", "r": "あめ", "e": "rain", "h": "", "a": "../n5/n5-73-1.mp3"}, {"rd": "あめ", "w": "大雨", "r": "おおあめ", "e": "heavy rain", "h": "", "a": "../n5/n5-73-2.mp3"}], "sp": []}, {"k": "電", "en": "electricity", "n": 13, "so": "so/96fb.svg", "on": ["デン"], "kun": [], "ex": [{"rd": "デン", "w": "電車", "r": "でんしゃ", "e": "train", "h": "", "a": "../n5/n5-74-1.mp3"}, {"rd": "デン", "w": "電気", "r": "でんき", "e": "electricity, light", "h": "", "a": "../n5/n5-74-2.mp3"}], "sp": []}, {"k": "車", "en": "car", "n": 7, "so": "so/8eca.svg", "on": ["シャ"], "kun": ["くるま"], "ex": [{"rd": "シャ", "w": "自転車", "r": "じてんしゃ", "e": "bicycle", "h": "", "a": "../n5/n5-75-1.mp3"}, {"rd": "くるま", "w": "車", "r": "くるま", "e": "car", "h": "", "a": "../n5/n5-75-2.mp3"}], "sp": []}, {"k": "本", "en": "book, origin", "n": 5, "so": "so/672c.svg", "on": ["ホン"], "kun": [], "ex": [{"rd": "ホン", "w": "本", "r": "ほん", "e": "book", "h": "", "a": "../n5/n5-76-1.mp3"}, {"rd": "ホン", "w": "一本", "r": "いっぽん", "e": "one (long thing)", "h": "ほん → ぽん", "a": "../n5/n5-76-2.mp3"}], "sp": []}, {"k": "花", "en": "flower", "n": 7, "so": "so/82b1.svg", "on": ["カ"], "kun": ["はな"], "ex": [{"rd": "カ", "w": "花びん", "r": "かびん", "e": "vase", "h": "", "a": "../n5/n5-77-1.mp3"}, {"rd": "はな", "w": "花", "r": "はな", "e": "flower", "h": "", "a": "../n5/n5-77-2.mp3"}], "sp": []}, {"k": "魚", "en": "fish", "n": 11, "so": "so/9b5a.svg", "on": ["ギョ"], "kun": ["さかな"], "ex": [{"rd": "ギョ", "w": "金魚", "r": "きんぎょ", "e": "goldfish", "h": "", "a": "../n5/n5-78-1.mp3"}, {"rd": "さかな", "w": "魚", "r": "さかな", "e": "fish", "h": "", "a": "../n5/n5-78-2.mp3"}], "sp": []}, {"k": "空", "en": "sky, empty", "n": 8, "so": "so/7a7a.svg", "on": ["クウ"], "kun": ["そら"], "ex": [{"rd": "クウ", "w": "空港", "r": "くうこう", "e": "airport", "h": "", "a": "../n5/n5-79-1.mp3"}, {"rd": "そら", "w": "空", "r": "そら", "e": "sky", "h": "", "a": "../n5/n5-79-2.mp3"}], "sp": []}, {"k": "行", "en": "go", "n": 6, "so": "so/884c.svg", "on": ["コウ"], "kun": ["い(く)"], "ex": [{"rd": "コウ", "w": "銀行", "r": "ぎんこう", "e": "bank", "h": "", "a": "../n5/n5-80-1.mp3"}, {"rd": "い(く)", "w": "行く", "r": "いく", "e": "to go", "h": "", "a": "../n5/n5-80-2.mp3"}], "sp": []}, {"k": "来", "en": "come", "n": 7, "so": "so/6765.svg", "on": ["ライ"], "kun": ["く(る)"], "ex": [{"rd": "ライ", "w": "来年", "r": "らいねん", "e": "next year", "h": "", "a": "../n5/n5-81-1.mp3"}, {"rd": "く(る)", "w": "来る", "r": "くる", "e": "to come", "h": "", "a": "../n5/n5-81-2.mp3"}], "sp": [{"w": "来ます", "r": "きます", "e": "come (polite)", "y": "来る changes its sound: 来ます きます, 来ない こない", "a": "../n5/n5-81-s1.mp3"}]}, {"k": "見", "en": "see", "n": 7, "so": "so/898b.svg", "on": ["ケン"], "kun": ["み(る)"], "ex": [{"rd": "ケン", "w": "見学", "r": "けんがく", "e": "tour, visit to learn", "h": "", "a": "../n5/n5-82-1.mp3"}, {"rd": "み(る)", "w": "見る", "r": "みる", "e": "to see, watch", "h": "", "a": "../n5/n5-82-2.mp3"}], "sp": []}, {"k": "聞", "en": "hear, ask", "n": 14, "so": "so/805e.svg", "on": ["ブン"], "kun": ["き(く)"], "ex": [{"rd": "ブン", "w": "新聞", "r": "しんぶん", "e": "newspaper", "h": "", "a": "../n5/n5-83-1.mp3"}, {"rd": "き(く)", "w": "聞く", "r": "きく", "e": "to listen, ask", "h": "", "a": "../n5/n5-83-2.mp3"}], "sp": []}, {"k": "話", "en": "talk", "n": 13, "so": "so/8a71.svg", "on": ["ワ"], "kun": ["はな(す)", "はなし"], "ex": [{"rd": "ワ", "w": "電話", "r": "でんわ", "e": "telephone", "h": "", "a": "../n5/n5-84-1.mp3"}, {"rd": "はな(す)", "w": "話す", "r": "はなす", "e": "to speak", "h": "", "a": "../n5/n5-84-2.mp3"}, {"rd": "はなし", "w": "話", "r": "はなし", "e": "story, talk", "h": "", "a": "../n5/n5-84-3.mp3"}], "sp": []}, {"k": "読", "en": "read", "n": 14, "so": "so/8aad.svg", "on": ["ドク"], "kun": ["よ(む)"], "ex": [{"rd": "ドク", "w": "読書", "r": "どくしょ", "e": "reading books", "h": "", "a": "../n5/n5-85-1.mp3"}, {"rd": "よ(む)", "w": "読む", "r": "よむ", "e": "to read", "h": "", "a": "../n5/n5-85-2.mp3"}], "sp": []}, {"k": "書", "en": "write", "n": 10, "so": "so/66f8.svg", "on": ["ショ"], "kun": ["か(く)"], "ex": [{"rd": "ショ", "w": "辞書", "r": "じしょ", "e": "dictionary", "h": "", "a": "../n5/n5-86-1.mp3"}, {"rd": "か(く)", "w": "書く", "r": "かく", "e": "to write", "h": "", "a": "../n5/n5-86-2.mp3"}], "sp": []}, {"k": "食", "en": "eat", "n": 9, "so": "so/98df.svg", "on": ["ショク"], "kun": ["た(べる)"], "ex": [{"rd": "ショク", "w": "食事", "r": "しょくじ", "e": "meal", "h": "", "a": "../n5/n5-87-1.mp3"}, {"rd": "た(べる)", "w": "食べる", "r": "たべる", "e": "to eat", "h": "", "a": "../n5/n5-87-2.mp3"}], "sp": []}, {"k": "休", "en": "rest", "n": 6, "so": "so/4f11.svg", "on": ["キュウ"], "kun": ["やす(む)"], "ex": [{"rd": "キュウ", "w": "連休", "r": "れんきゅう", "e": "long weekend, holidays in a row", "h": "", "a": "../n5/n5-88-1.mp3"}, {"rd": "やす(む)", "w": "休む", "r": "やすむ", "e": "to rest, take a day off", "h": "", "a": "../n5/n5-88-2.mp3"}], "sp": []}, {"k": "飲", "en": "drink", "n": 12, "so": "so/98f2.svg", "on": ["イン"], "kun": ["の(む)"], "ex": [{"rd": "イン", "w": "飲食店", "r": "いんしょくてん", "e": "restaurant, place to eat and drink", "h": "", "a": "../n5/n5-89-1.mp3"}, {"rd": "の(む)", "w": "飲む", "r": "のむ", "e": "to drink", "h": "", "a": "../n5/n5-89-2.mp3"}], "sp": []}, {"k": "言", "en": "say, word", "n": 7, "so": "so/8a00.svg", "on": ["ゲン"], "kun": ["い(う)", "こと"], "ex": [{"rd": "ゲン", "w": "言語", "r": "げんご", "e": "language", "h": "", "a": "../n5/n5-90-1.mp3"}, {"rd": "い(う)", "w": "言う", "r": "いう", "e": "to say", "h": "", "a": "../n5/n5-90-2.mp3"}, {"rd": "こと", "w": "言葉", "r": "ことば", "e": "word, language", "h": "", "a": "../n5/n5-90-3.mp3"}], "sp": []}, {"k": "買", "en": "buy", "n": 12, "so": "so/8cb7.svg", "on": [], "kun": ["か(う)"], "ex": [{"rd": "か(う)", "w": "買う", "r": "かう", "e": "to buy", "h": "", "a": "../n5/n5-91-1.mp3"}, {"rd": "か(う)", "w": "買い物", "r": "かいもの", "e": "shopping", "h": "", "a": "../n5/n5-91-2.mp3"}], "sp": []}, {"k": "立", "en": "stand", "n": 5, "so": "so/7acb.svg", "on": ["リツ"], "kun": ["た(つ)"], "ex": [{"rd": "リツ", "w": "国立", "r": "こくりつ", "e": "national (run by the country)", "h": "", "a": "../n5/n5-92-1.mp3"}, {"rd": "た(つ)", "w": "立つ", "r": "たつ", "e": "to stand", "h": "", "a": "../n5/n5-92-2.mp3"}], "sp": []}, {"k": "会", "en": "meet", "n": 6, "so": "so/4f1a.svg", "on": ["カイ"], "kun": ["あ(う)"], "ex": [{"rd": "カイ", "w": "会話", "r": "かいわ", "e": "conversation", "h": "", "a": "../n5/n5-93-1.mp3"}, {"rd": "あ(う)", "w": "会う", "r": "あう", "e": "to meet", "h": "", "a": "../n5/n5-93-2.mp3"}], "sp": []}, {"k": "大", "en": "big", "n": 3, "so": "so/5927.svg", "on": ["ダイ", "タイ"], "kun": ["おお(きい)"], "ex": [{"rd": "ダイ", "w": "大学", "r": "だいがく", "e": "university", "h": "", "a": "../n5/n5-94-1.mp3"}, {"rd": "タイ", "w": "大切", "r": "たいせつ", "e": "important", "h": "", "a": "../n5/n5-94-2.mp3"}, {"rd": "おお(きい)", "w": "大きい", "r": "おおきい", "e": "big", "h": "", "a": "../n5/n5-94-3.mp3"}], "sp": [{"w": "大人", "r": "おとな", "e": "adult", "y": "the whole word is read おとな", "a": "../n5/n5-94-s1.mp3"}]}, {"k": "小", "en": "small", "n": 3, "so": "so/5c0f.svg", "on": ["ショウ"], "kun": ["ちい(さい)"], "ex": [{"rd": "ショウ", "w": "小学校", "r": "しょうがっこう", "e": "elementary school", "h": "", "a": "../n5/n5-95-1.mp3"}, {"rd": "ちい(さい)", "w": "小さい", "r": "ちいさい", "e": "small", "h": "", "a": "../n5/n5-95-2.mp3"}], "sp": []}, {"k": "高", "en": "tall, expensive", "n": 10, "so": "so/9ad8.svg", "on": ["コウ"], "kun": ["たか(い)"], "ex": [{"rd": "コウ", "w": "高校", "r": "こうこう", "e": "high school", "h": "", "a": "../n5/n5-96-1.mp3"}, {"rd": "たか(い)", "w": "高い", "r": "たかい", "e": "tall; expensive", "h": "", "a": "../n5/n5-96-2.mp3"}], "sp": []}, {"k": "長", "en": "long", "n": 8, "so": "so/9577.svg", "on": ["チョウ"], "kun": ["なが(い)"], "ex": [{"rd": "チョウ", "w": "社長", "r": "しゃちょう", "e": "company president", "h": "", "a": "../n5/n5-97-1.mp3"}, {"rd": "なが(い)", "w": "長い", "r": "ながい", "e": "long", "h": "", "a": "../n5/n5-97-2.mp3"}], "sp": []}, {"k": "白", "en": "white", "n": 5, "so": "so/767d.svg", "on": [], "kun": ["しろ(い)"], "ex": [{"rd": "しろ(い)", "w": "白い", "r": "しろい", "e": "white", "h": "", "a": "../n5/n5-98-1.mp3"}, {"rd": "しろ(い)", "w": "面白い", "r": "おもしろい", "e": "interesting, fun", "h": "", "a": "../n5/n5-98-2.mp3"}], "sp": []}, {"k": "安", "en": "cheap, safe", "n": 6, "so": "so/5b89.svg", "on": ["アン"], "kun": ["やす(い)"], "ex": [{"rd": "アン", "w": "安心", "r": "あんしん", "e": "relief, peace of mind", "h": "", "a": "../n5/n5-99-1.mp3"}, {"rd": "やす(い)", "w": "安い", "r": "やすい", "e": "cheap", "h": "", "a": "../n5/n5-99-2.mp3"}], "sp": []}, {"k": "古", "en": "old", "n": 5, "so": "so/53e4.svg", "on": ["コ"], "kun": ["ふる(い)"], "ex": [{"rd": "コ", "w": "中古", "r": "ちゅうこ", "e": "used, second-hand", "h": "", "a": "../n5/n5-100-1.mp3"}, {"rd": "ふる(い)", "w": "古い", "r": "ふるい", "e": "old", "h": "", "a": "../n5/n5-100-2.mp3"}], "sp": []}, {"k": "新", "en": "new", "n": 13, "so": "so/65b0.svg", "on": ["シン"], "kun": ["あたら(しい)"], "ex": [{"rd": "シン", "w": "新幹線", "r": "しんかんせん", "e": "Shinkansen, bullet train", "h": "", "a": "../n5/n5-101-1.mp3"}, {"rd": "あたら(しい)", "w": "新しい", "r": "あたらしい", "e": "new", "h": "", "a": "../n5/n5-101-2.mp3"}], "sp": []}, {"k": "多", "en": "many", "n": 6, "so": "so/591a.svg", "on": ["タ"], "kun": ["おお(い)"], "ex": [{"rd": "タ", "w": "多分", "r": "たぶん", "e": "probably, maybe", "h": "", "a": "../n5/n5-102-1.mp3"}, {"rd": "おお(い)", "w": "多い", "r": "おおい", "e": "many, a lot", "h": "", "a": "../n5/n5-102-2.mp3"}], "sp": []}, {"k": "少", "en": "few, a little", "n": 4, "so": "so/5c11.svg", "on": ["ショウ"], "kun": ["すく(ない)", "すこ(し)"], "ex": [{"rd": "ショウ", "w": "少年", "r": "しょうねん", "e": "boy", "h": "", "a": "../n5/n5-103-1.mp3"}, {"rd": "すく(ない)", "w": "少ない", "r": "すくない", "e": "few, little", "h": "", "a": "../n5/n5-103-2.mp3"}, {"rd": "すこ(し)", "w": "少し", "r": "すこし", "e": "a little", "h": "", "a": "../n5/n5-103-3.mp3"}], "sp": []}], "groups": [{"en": "Numbers", "ja": "数", "k": ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "百", "千", "万", "円"]}, {"en": "Days & time", "ja": "日・時間", "k": ["日", "月", "火", "水", "木", "金", "土", "年", "時", "間", "分", "半", "午", "今", "毎", "前", "後", "先", "週"]}, {"en": "People & school", "ja": "人・学校", "k": ["人", "男", "女", "子", "父", "母", "友", "生", "名", "学", "校", "語", "国", "社", "何"]}, {"en": "Body", "ja": "体", "k": ["口", "目", "耳", "手", "足"]}, {"en": "Places & directions", "ja": "場所・方向", "k": ["上", "下", "中", "外", "右", "左", "東", "西", "南", "北", "出", "入", "駅", "店", "道"]}, {"en": "Nature & things", "ja": "自然・もの", "k": ["山", "川", "天", "気", "雨", "電", "車", "本", "花", "魚", "空"]}, {"en": "Actions", "ja": "動き", "k": ["行", "来", "見", "聞", "話", "読", "書", "食", "休", "飲", "言", "買", "立", "会"]}, {"en": "Describing words", "ja": "ようす", "k": ["大", "小", "高", "長", "白", "安", "古", "新", "多", "少"]}], "credits": "<b>Stroke order:</b> KanjiVG (kanjivg.tagaini.net), Copyright (C) 2009-2026 Ulrich Apel and the KanjiVG contributors, Creative Commons Attribution-Share Alike 3.0. Stroke pictures redrawn for this product and shared under the same licence.<br><b>Readings and words</b> checked against KANJIDIC2 and JMdict (EDRDG, edrdg.org) and by a native Japanese speaker.<br><b>Text font:</b> Noto Sans / Noto Sans JP (SIL Open Font License 1.1)."};
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const K = DATA.kanji;
+const idx = k => K.findIndex(x => x.k === k);
+
+// ---------- audio (same engine as the other apps: plays on the same screen, works offline)
+const AC = window.AudioContext || window.webkitAudioContext;
+let ctx = null, current = null, playingBtn = null;
+const buffers = new Map();
+try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+function stopAudio() {
+  if (current) { try { current.onended = null; current.stop(); } catch (e) {} current = null; }
+  if (playingBtn) { playingBtn.classList.remove("on"); playingBtn = null; }
+}
+async function play(url, btn) {
+  stopAudio();
+  const me = btn || {classList: {remove() {}}};
+  if (btn) btn.classList.add("on");
+  playingBtn = me;
+  try {
+    if (!AC) { const a = new Audio(url); a.onended = stopAudio; await a.play(); current = {stop: () => a.pause()}; return; }
+    if (!ctx) ctx = new AC();
+    if (ctx.state === "suspended") ctx.resume();
+    let buf = buffers.get(url);
+    if (!buf) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+      const raw = await res.arrayBuffer();
+      buf = await new Promise((ok, ng) => ctx.decodeAudioData(raw, ok, ng));
+      buffers.set(url, buf);
+    }
+    if (playingBtn !== me) return;
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(ctx.destination);
+    src.onended = () => { if (current === src) { current = null; stopAudio(); } };
+    src.start(0); current = src;
+  } catch (e) {
+    stopAudio();
+    toast("Sound could not load. Please connect to the internet once, then it works offline.");
+  }
+}
+function toast(msg) {
+  const d = document.createElement("div"); d.className = "err"; d.textContent = msg;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 4000);
+}
+
+// ---------- screens
+function header(title, ja, back, col) {
+  return `<header style="--hc:${col || "var(--navy)"}">${back ? `<button class="back" onclick="history.back()">◀ Back</button>` : ""}
+    <h1>${title}${ja ? `<small>${ja}</small>` : ""}</h1></header>`;
+}
+function home() {
+  let tip = "";
+  try { if (!localStorage.getItem("tipClosed") && !matchMedia("(display-mode: standalone)").matches)
+    tip = `<div class="tip" id="tip"><button onclick="closeTip()" aria-label="Close">×</button>
+      <b>Tip:</b> add this page to your home screen to open it like an app.<br>
+      iPhone: tap <b>Share</b> → <b>Add to Home Screen</b>.<br>Android: tap <b>⋮</b> → <b>Add to Home screen</b>.</div>`; } catch (e) {}
+  return header(DATA.title, DATA.titleJa) + `<div class="wrap home">
+    <div class="hero"><div class="sun">字</div><p>All ${K.length} N5 kanji. Tap ▶ to hear every example word,<br>
+      see the stroke order, then test yourself with the listening quiz.</p></div>
+    ${tip}
+    <button class="big-btn" style="background:var(--navy)" onclick="go('#/list')"><span>All ${K.length} kanji</span><span class="ja">漢字一覧</span></button>
+    <button class="big-btn" style="background:var(--green)" onclick="go('#/q')"><span>Listening quiz</span><span class="ja">聞き取りクイズ</span></button>
+    <div class="note"><p><b>How to read a card:</b> on readings (from Chinese) are in katakana, kun readings (Japanese) in hiragana.
+      Each example shows which reading it uses. <b>★</b> marks words with a special reading.</p>
+      <p>Learn one group at a time — about 5 kanji a day covers all ${K.length} in 3 weeks.</p>
+      <p>Works offline after your first visit (all sounds are saved on your phone).</p></div>
+    <details class="credits"><summary>Credits</summary><p>${DATA.credits}</p></details></div>`;
+}
+function closeTip() { try { localStorage.setItem("tipClosed", "1"); } catch (e) {} document.getElementById("tip")?.remove(); }
+function list() {
+  const gs = DATA.groups.map(g => `<div class="gh">${esc(g.en)}<span>${esc(g.ja)}</span></div><div class="grid">` +
+    g.k.map(k => { const c = K[idx(k)]; return `<button class="cell" onclick="go('#/k/${idx(k)}')"><div class="k">${k}</div><div class="r">${esc(c.en)}</div></button>`; }).join("") +
+    `</div>`).join("");
+  return header(`All ${K.length} kanji`, "漢字一覧", true) + `<div class="wrap">${gs}<p class="hint">Tap a kanji to open its card.</p></div>`;
+}
+function mark(w, k) { return [...w].map(ch => ch === k ? `<b>${esc(ch)}</b>` : esc(ch)).join(""); }
+function card(i) {
+  const c = K[i];
+  const one = c.on.length + c.kun.length === 1;
+  const ex = c.ex.map(e => `<div class="ex"><div style="flex:1">
+      <div class="w">${mark(e.w, c.k)}<span class="tag">${esc(e.rd)}</span></div>
+      <div class="wr">${esc(e.r)}</div><div class="we">${esc(e.e)}</div>
+      ${e.h ? `<div class="snd">Sound change in this word: ${esc(e.h)}</div>` : ""}</div>
+      <button class="play sm" aria-label="Play" onclick="play('${e.a}', this)">▶</button></div>`).join("");
+  const sp = c.sp.map(e => `<div class="ex sp"><div style="flex:1">
+      <div class="w">★ ${mark(e.w, c.k)}</div><div class="wr">${esc(e.r)}</div><div class="we">${esc(e.e)}</div>
+      <div class="snd">${esc(e.y)}</div></div>
+      <button class="play sm" aria-label="Play" onclick="play('${e.a}', this)">▶</button></div>`).join("");
+  return header(`${c.k} — ${c.en}`, "", true) + `<div class="wrap card">
+    <div class="top"><div class="bk">${c.k}</div><div><div class="en">${esc(c.en)}</div><div class="st">${c.n} stroke${c.n > 1 ? "s" : ""}</div>
+      <div class="rd">${c.on.length ? `<div><b>On</b> <span class="ja">${c.on.join("・")}</span></div>` : ""}
+        ${c.kun.length ? `<div><b>Kun</b> <span class="ja">${c.kun.join("・")}</span></div>` : ""}</div></div></div>
+    ${one ? `<p class="one">This kanji has one main reading.</p>` : ""}
+    <div class="sec">Examples — tap ▶ to hear</div>${ex}
+    ${sp ? `<div class="sec">★ Special reading</div>${sp}` : ""}
+    <div class="sec">Stroke order</div><div class="so"><img src="${c.so}" alt="Stroke order of ${c.k}"></div>
+    <div class="nav"><button ${i ? "" : "disabled"} onclick="go('#/k/${i - 1}', true)">‹ ${i ? K[i - 1].k : ""}</button>
+      <span style="color:#aaa;font-size:13px">${i + 1} / ${K.length}</span>
+      <button ${i < K.length - 1 ? "" : "disabled"} onclick="go('#/k/${i + 1}', true)">${i < K.length - 1 ? K[i + 1].k : ""} ›</button></div></div>`;
+}
+
+// ---------- listening quiz: hear a word, pick the kanji in it
+let Q = null;
+let qset = {g: "all"};
+try { Object.assign(qset, JSON.parse(localStorage.getItem("n5qset") || "{}")); } catch (e) {}
+function quizStart() {
+  const o = (val, label) => `<button class="${qset.g === val ? "sel" : ""}" onclick="qset.g='${val}';render()">${label}</button>`;
+  return header("Listening quiz", "聞き取りクイズ", true, "var(--green)") + `<div class="wrap quiz">
+    <div class="hero"><div class="sun" style="background:var(--green)">聞</div>
+      <p>Listen to a word, then tap the kanji you hear in it.<br>10 questions.</p></div>
+    <p style="font-size:17px;font-weight:700;color:#555;margin:4px 0 12px">Choose kanji to practice:</p>
+    <div class="opt">${o("all", "All " + K.length)}${DATA.groups.map((g, n) => o(String(n), esc(g.en))).join("")}</div>
+    <button class="go" onclick="newQuiz()">Start ▶</button></div>`;
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function pool() {
+  const ks = qset.g === "all" ? K.map(c => c.k) : DATA.groups[+qset.g].k;
+  return ks.flatMap(k => K[idx(k)].ex.map(e => ({...e, k})));
+}
+function newQuiz(only) {
+  try { localStorage.setItem("n5qset", JSON.stringify(qset)); } catch (e) {}
+  const p = pool();
+  // one word per kanji, so 10 questions = 10 different kanji
+  const qs = only && only.length ? shuffle([...only]) :
+    shuffle([...new Set(p.map(q => q.k))]).slice(0, 10).map(k => shuffle(p.filter(q => q.k === k))[0]);
+  Q = {qs, i: 0, right: 0, missed: [], answered: false};
+  go("#/q/play"); setTimeout(() => sayQ(), 250);
+}
+function sayQ() { const b = document.getElementById("qplay"); if (Q && b) play(Q.qs[Q.i].a, b); }
+function quizPlay() {
+  if (!Q) return quizStart();
+  const q = Q.qs[Q.i];
+  if (!Q.choices) {
+    // wrong choices: never a kanji that is in the word itself
+    const others = shuffle(K.map(c => c.k).filter(k => !q.w.includes(k)));
+    Q.choices = shuffle([q.k, ...others.slice(0, 3)]);
+  }
+  const ch = Q.choices.map((k, n) => `<button id="c${n}" onclick="answer(${n})">${k}<small></small></button>`).join("");
+  return header("Listening quiz", "", true, "var(--green)") + `<div class="wrap quiz">
+    <div class="qtop"><span>Question ${Q.i + 1} / ${Q.qs.length}</span><span>✓ ${Q.right}</span></div>
+    <button class="play" id="qplay" style="--c:var(--green);width:88px;height:88px;font-size:32px" onclick="sayQ()" aria-label="Play again">▶</button>
+    <p class="hint" style="padding:10px 0 0">Which kanji is in this word? Tap ▶ to hear it again.</p>
+    <div class="choices">${ch}</div><div id="after"></div></div>`;
+}
+function answer(n) {
+  if (Q.answered) return;
+  Q.answered = true;
+  const q = Q.qs[Q.i], ok = Q.choices[n] === q.k;
+  Q.choices.forEach((k, m) => { document.querySelector(`#c${m} small`).textContent = K[idx(k)].en; });
+  const right = Q.choices.indexOf(q.k);
+  document.getElementById("c" + right).classList.add("ok");
+  if (ok) Q.right++; else { document.getElementById("c" + n).classList.add("ng"); Q.missed.push(q); }
+  play(q.a);
+  const last = Q.i === Q.qs.length - 1;
+  document.getElementById("after").innerHTML = `<div class="ans"><div class="w">${mark(q.w, q.k)}</div>${esc(q.r)} — ${esc(q.e)}</div>
+    <button class="go" onclick="nextQ()">${last ? "See score" : "Next ›"}</button>`;
+}
+function nextQ() {
+  Q.i++; Q.choices = null; Q.answered = false;
+  if (Q.i >= Q.qs.length) return go("#/q/done", true);
+  render(); setTimeout(sayQ, 150);
+}
+function quizDone() {
+  if (!Q) return quizStart();
+  const m = Q.missed;
+  return header("Listening quiz", "", true, "var(--green)") + `<div class="wrap quiz">
+    <div class="score">${Q.right} / ${Q.qs.length}</div>
+    <p style="font-size:17px">${Q.right === Q.qs.length ? "Perfect! よくできました！" : Q.right >= 7 ? "Great job! Keep going." : "Good practice! Try again."}</p>
+    ${m.length ? `<p style="margin-top:18px;color:#666">Practice these again:</p><div class="missed">${m.map(q => q.k).join(" ")}</div>
+      <button class="go" onclick="newQuiz(Q.missed)">Practice missed (${m.length})</button>` : ""}
+    <button class="go ${m.length ? "alt" : ""}" onclick="newQuiz()">New quiz</button>
+    <button class="go alt" onclick="go('#/q', true)">Change settings</button></div>`;
+}
+
+function go(hash, replace) { replace ? location.replace(hash) : (location.hash = hash); }
+function render() {
+  if (!location.hash.startsWith("#/q/play")) stopAudio();
+  const h = location.hash.split("/");
+  if (h[1] === "list") app.innerHTML = list();
+  else if (h[1] === "k" && K[+h[2]]) app.innerHTML = card(+h[2]);
+  else if (h[1] === "q" && h[2] === "play") app.innerHTML = quizPlay();
+  else if (h[1] === "q" && h[2] === "done") app.innerHTML = quizDone();
+  else if (h[1] === "q") app.innerHTML = quizStart();
+  else app.innerHTML = home();
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", render);
+render();
+
+if ("serviceWorker" in navigator) {
+  const hadOld = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadOld) location.reload(); });
+  navigator.serviceWorker.register("sw.js", {updateViaCache: "none"}).catch(() => {});
+}
+</script>
+</body></html>
