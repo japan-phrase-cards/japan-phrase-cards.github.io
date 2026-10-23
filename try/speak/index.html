@@ -80,7 +80,7 @@ const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビ�
 const app = document.getElementById("app"), back = document.getElementById("back"), title = document.getElementById("title");
 let heard = null;
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const IN_APP = /Line\/|FBAN|FBAV|Instagram|MicroMessenger/.test(navigator.userAgent);   // LINE, Facebook… open links in their own small browser
+const IN_APP = /Line\/|FBAN|FBAV|Instagram|MicroMessenger|musical_ly|BytedanceWebview|TikTok/.test(navigator.userAgent);   // LINE, Facebook, TikTok… open links in their own small browser
 const kata = s => s.normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "").toLowerCase();   // lower case: "Mサイズ" may come as "m"
 const okRe = p => new RegExp(kata(p).toLowerCase());   // not norm(): it would remove the "?" of the pattern
