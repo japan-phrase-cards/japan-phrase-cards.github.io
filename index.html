@@ -24,13 +24,11 @@ a.card i { font-style:normal; font-size:14px; font-weight:700; color:var(--red);
 a.free { display:block; text-align:center; margin:-4px 0 14px; padding:11px; border-radius:999px; background:#FFF3D6;
   color:var(--navy); font-weight:700; text-decoration:none; }
 #inapp { background:#FFF3D6; border:2px solid #E0B44C; border-radius:14px; padding:12px 14px; margin-bottom:18px; font-size:15px; }
-#inapp button { display:block; width:100%; margin-top:10px; padding:11px; border:0; border-radius:999px; background:var(--navy); color:#fff;
-  font-weight:700; font-size:15px; }
+#inapp small { display:block; margin-top:4px; color:var(--muted); font-size:13px; }
 footer { text-align:center; color:#999; font-size:13px; margin-top:28px; }
 </style></head><body><div class="wrap">
-<div id="inapp" hidden>📱 You're in the TikTok / Instagram browser, which may not open Etsy.
-Tap <b>⋯</b> at the top and choose <b>Open in browser</b> — or copy this page and paste it into Safari or Chrome.
-<button id="copy">Copy page link</button></div>
+<div id="inapp" hidden>📱 Tap any product — it opens in Safari or Chrome, where Etsy works.
+<small>Nothing happens? Tap <b>⋯</b> at the top, then <b>Open in browser</b>.</small></div>
 <header><div class="dot"></div><h1>Ink and Kanji</h1>
 <p>Japanese you can hear — tap ▶ and your phone speaks it.<br>Made by a native Japanese speaker. Instant digital download.</p></header>
 <h2>Traveling to Japan</h2><a class="card" href="https://www.etsy.com/listing/4598461506"><img src="shop/phrase-cards.jpg" alt="" loading="lazy"><div><b>Japan Travel Phrase Cards</b><span>53 cards with audio: restaurant, allergies, shopping, trains, hotel, emergency.</span><i>See it on Etsy ›</i></div></a><a class="card" href="https://www.etsy.com/listing/4598482842"><img src="shop/gluten-free-cards.jpg" alt="" loading="lazy"><div><b>Gluten-Free Japan Cards</b><span>23 celiac &amp; wheat allergy cards with audio, a food guide and a label guide.</span><i>See it on Etsy ›</i></div></a><a class="card" href="https://www.etsy.com/listing/4598626096"><img src="shop/nut-allergy-cards.jpg" alt="" loading="lazy"><div><b>Nut Allergy Japan Cards</b><span>21 peanut &amp; tree nut cards with audio, emergency cards and a label guide.</span><i>See it on Etsy ›</i></div></a><h2>Learning Japanese</h2><a class="card" href="https://www.etsy.com/listing/4601422203"><img src="shop/speaking-roleplay.jpg" alt="" loading="lazy"><div><b>Speak Japanese: 20 Real-Life Conversations</b><span>The app plays the clerk or the driver, you answer, and your phone says OK.</span><i>See it on Etsy ›</i></div></a><a class="free" href="try/speak/">🎤 Try one conversation free ›</a><a class="card" href="https://www.etsy.com/listing/4600979558"><img src="shop/jlpt-n5-kanji.jpg" alt="" loading="lazy"><div><b>JLPT N5 Kanji with Audio</b><span>All 103 N5 kanji with example words you can hear, stroke order and a quiz.</span><i>See it on Etsy ›</i></div></a><a class="card" href="https://www.etsy.com/listing/4599560166"><img src="shop/daily-phrases.jpg" alt="" loading="lazy"><div><b>Everyday Japanese, Morning to Night</b><span>80 everyday phrases with audio, a listening quiz and printable flashcards.</span><i>See it on Etsy ›</i></div></a><a class="card" href="https://www.etsy.com/listing/4599143415"><img src="shop/kana.jpg" alt="" loading="lazy"><div><b>Hiragana &amp; Katakana with Audio</b><span>Every kana spoken, stroke order, tracing sheets and a listening quiz.</span><i>See it on Etsy ›</i></div></a>
@@ -38,14 +36,15 @@ Tap <b>⋯</b> at the top and choose <b>Open in browser</b> — or copy this pag
 <a class="try" href="say/" style="background:#fff;color:var(--navy);border:2px solid var(--navy);margin-top:12px">Free Japanese phrases with audio ›</a>
 <a class="try" href="free/celiac-card/" style="background:#fff;color:var(--navy);border:2px solid var(--navy);margin-top:12px">Free celiac card for Japan ›</a>
 <script>
-// Kumiko 2026-10-24: from the TikTok bio link, Etsy did not open (apps' own small browsers block it) — tell visitors how to get out
+// Kumiko 2026-10-24: from the TikTok bio link, Etsy did not open (apps' own small browsers block it), and "⋯ → Open in browser"
+// was too fiddly — so inside those browsers every link opens straight in the phone's own browser (Safari / Chrome)
 if (/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|Line\/|MicroMessenger/.test(navigator.userAgent)) {
-  const box = document.getElementById("inapp"); box.hidden = false;
-  document.getElementById("copy").onclick = e => {
-    const done = () => e.target.textContent = "Copied ✓ — paste it into Safari or Chrome";
-    navigator.clipboard ? navigator.clipboard.writeText(location.href).then(done, () => prompt("Copy this link:", location.href))
-                        : prompt("Copy this link:", location.href);
-  };
+  document.getElementById("inapp").hidden = false;
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  document.querySelectorAll("a[href]").forEach(a => {
+    const u = a.href;   // always the full https:// address
+    a.href = ios ? "x-safari-" + u : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;end";
+  });
 }
 </script>
 <footer>Ink and Kanji · digital downloads on Etsy</footer>
