@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F3A5F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Speak Japanese">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="apple-touch-icon" href="../../app-c194f65f3521a6032984/icon-180.png">
+<link rel="icon" href="../../app-c194f65f3521a6032984/icon-192.png">
+<title>Free sample — Speak Japanese: 20 Real-Life Conversations</title>
+<style>
+:root{--navy:#1F3A5F;--red:#C0392B;--green:#3C7A5A;--bg:#FBF8F2;--line:#e4dccd;
+  --jaf:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#222;padding-bottom:env(safe-area-inset-bottom)}
+header{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;display:flex;align-items:center;gap:10px;min-height:56px}
+header h1{font-size:18px;margin:0;flex:1;line-height:1.2}header h1 small{display:block;font:400 12px var(--jaf);opacity:.8}
+header button{background:none;border:0;color:#fff;font-size:16px;font-weight:600;padding:4px 0;cursor:pointer}
+main{max-width:520px;margin:0 auto;padding:16px}
+.ja{font-family:var(--jaf)}
+header[hidden]{display:none}
+main.home{padding:0 0 16px;max-width:none}
+.hero{position:relative;overflow:hidden;color:#fff;padding:calc(env(safe-area-inset-top) + 26px) 20px 22px;
+  background:radial-gradient(circle at 88% 14%,rgba(255,255,255,.12) 0 70px,transparent 71px),linear-gradient(160deg,#1F3A5F 0%,#2B4C7E 60%,#3A5F95 100%)}
+.hero>*{max-width:520px;margin-left:auto;margin-right:auto}
+.hero .sun{float:right;width:64px;height:64px;border-radius:50%;background:var(--red);color:#fff;font:700 34px/64px var(--jaf);text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.25);margin:0 0 6px 12px}
+.hero h2{margin:0;font-size:25px;line-height:1.15}.hero h2 small{display:block;font-size:16px;font-weight:500;opacity:.9;margin-top:4px}
+.hero .jt{font:14px var(--jaf);opacity:.8;margin-top:6px}
+.hero .bubbles{clear:both;display:flex;flex-direction:column;gap:6px;margin-top:16px;font:15px var(--jaf)}
+.hero .bubbles span{align-self:flex-start;background:#fff;color:#222;border-radius:14px 14px 14px 4px;padding:6px 12px}
+.hero .bubbles span.me{align-self:flex-end;background:#E6F0EA;border-radius:14px 14px 4px 14px}
+.inner{max-width:560px;margin:0 auto;padding:16px}
+.start{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:16px;padding:14px 16px;margin:0 0 14px;color:#fff;font-size:17px;font-weight:700;text-align:left;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.start .ic{font-size:30px}.start small{display:block;font-size:13px;font-weight:400;opacity:.9}.start .go{margin-left:auto;font-size:22px}
+.intro{color:#555;line-height:1.5;margin:0 0 14px;font-size:14px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:132px;border:0;border-radius:16px;padding:12px;cursor:pointer;color:#222;
+  background:var(--soft);box-shadow:inset 0 -4px 0 var(--col),0 1px 3px rgba(0,0,0,.06);transition:transform .1s}
+.tile:active{transform:scale(.96)}
+.tile .ic{font-size:34px;line-height:1;margin:2px 0 8px}
+.tile .num{position:absolute;right:10px;top:10px;min-width:24px;height:24px;border-radius:12px;background:var(--col);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.tile .en{font-size:15px;font-weight:700;line-height:1.25;padding-right:26px}
+.tile .ja{font-size:12px;color:#555;margin-top:3px;word-break:keep-all;line-height:1.35}
+.tile small{margin-top:auto;padding-top:6px;font-size:11px;color:var(--col);font-weight:700}
+.tip{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 36px 12px 14px;font-size:14px;line-height:1.5;margin-bottom:14px;position:relative}
+.tip button{position:absolute;right:6px;top:4px;font-size:20px;color:#999;padding:4px 8px;background:none;border:0}
+.warn{background:#FDECEA;border:1px solid #f1b9b2;color:#7a1f15;border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.note{font-size:13px;line-height:1.5;color:#666;margin:16px 4px 8px}
+details{margin:10px 4px;font-size:13px;color:#666;line-height:1.5}summary{cursor:pointer;font-weight:600}
+.chat{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+.b{max-width:85%;border-radius:16px;padding:10px 14px;line-height:1.4}
+.b .ja{font-size:19px;word-break:keep-all}.b .ro{font-size:13px;color:#666}.b .en{font-size:13px;color:#555;margin-top:2px}
+.them{background:#fff;border:1px solid var(--line);align-self:flex-start}.you{background:#E6F0EA;align-self:flex-end}
+.who{font-size:12px;color:#888;margin-bottom:2px}.b button{background:none;border:0;color:var(--navy);font-size:14px;padding:4px 0 0;cursor:pointer}
+.turn{background:#fff;border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:6px}
+.turn .say{font-size:13px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.turn .en{font-size:21px;font-weight:700;margin:4px 0 10px}
+.turn .ja{font-size:22px;word-break:keep-all}.turn .ro{color:#666;margin-top:2px}
+.turn .words{display:flex;gap:12px;align-items:center}
+.hear{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--navy);background:#fff;color:var(--navy);font-size:18px;cursor:pointer}
+.mic{display:block;width:100%;margin-top:16px;padding:20px 10px;border:0;border-radius:16px;background:var(--red);color:#fff;font-size:21px;font-weight:700;cursor:pointer}
+.mic.on{background:#7a1f15}.mic:disabled{opacity:.6}.mic.good{background:var(--green);opacity:1}
+.turn .next{display:block;width:100%;margin-top:10px;padding:14px;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:17px;cursor:pointer}
+.turn .next[hidden]{display:none}
+.ok{margin-top:12px;font-size:15px;color:#9C4A1A;line-height:1.4;text-align:center}.ok.live{color:#555;font-size:18px}.ok.good{font-size:24px;font-weight:800;color:var(--green)}
+.msg{color:var(--red);font-size:14px;margin-top:8px;line-height:1.4}
+.done{text-align:center;padding:20px 0}.done p{font-size:20px}
+.done button{display:block;width:100%;font-size:17px;padding:14px 18px;border-radius:12px;border:0;background:var(--navy);color:#fff;margin:8px 0;cursor:pointer}
+.done button.alt{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+</style>
+</head><body>
+<header><button id="back" hidden>◀ Back</button><h1 id="title"></h1></header>
+<main id="app"></main>
+<script>
+const S = [{"id": "konbini", "en": "At the convenience store", "ja": "コンビニで", "them": "Clerk", "icon": "🏪", "col": "#D9752B", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome! (You don't need to answer.)", "ok": "", "a": "../../speak/konbini-1.mp3"}, {"who": "them", "kana": "ふくろは いりますか？", "ro": "Fukuro wa irimasu ka?", "en": "Do you need a bag?", "ok": "", "a": "../../speak/konbini-2.mp3"}, {"who": "you", "kana": "いいえ、だいじょうぶ です。", "ro": "Iie, daijōbu desu.", "en": "No, I'm fine.", "ok": "いいえ(大丈夫|だいじょうぶ)です", "a": "../../speak/konbini-3.mp3"}, {"who": "them", "kana": "あたためますか？", "ro": "Atatamemasu ka?", "en": "Shall I heat it up?", "ok": "", "a": "../../speak/konbini-4.mp3"}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please.", "ok": "はい(お願い|おねがい)します", "a": "../../speak/konbini-5.mp3"}, {"who": "them", "kana": "おしはらいは どう されますか？", "ro": "Oshiharai wa dō saremasu ka?", "en": "How would you like to pay?", "ok": "", "a": "../../speak/konbini-6.mp3"}, {"who": "you", "kana": "カードで おねがい します。", "ro": "Kādo de onegai shimasu.", "en": "By card, please.", "ok": "かーどで(お願い|おねがい)します", "a": "../../speak/konbini-7.mp3"}]}, {"id": "restaurant", "en": "At a restaurant", "ja": "レストランで", "them": "Server", "icon": "🍽️", "col": "#D9752B", "lines": [{"who": "them", "kana": "いらっしゃいませ。なんめいさま ですか？", "ro": "Irasshaimase. Nanmei-sama desu ka?", "en": "Welcome! How many people?", "ok": "", "a": "../../speak/restaurant-1.mp3"}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two.", "ok": "(二人|2人|ふたり)です", "a": "../../speak/restaurant-2.mp3"}, {"who": "them", "kana": "ごちゅうもんは おきまり ですか？", "ro": "Gochūmon wa okimari desu ka?", "en": "Are you ready to order?", "ok": "", "a": "../../speak/restaurant-3.mp3"}, {"who": "you", "kana": "これを ください。", "ro": "Kore o kudasai.", "en": "This one, please.", "ok": "これを?(ください|下さい)", "a": "../../speak/restaurant-4.mp3"}, {"who": "them", "kana": "おのみものは いかが ですか？", "ro": "Onomimono wa ikaga desu ka?", "en": "Would you like something to drink?", "ok": "", "a": "../../speak/restaurant-5.mp3"}, {"who": "you", "kana": "おみずを ください。", "ro": "Omizu o kudasai.", "en": "Water, please.", "ok": "(お水|おみず)を?(ください|下さい)", "a": "../../speak/restaurant-6.mp3"}]}, {"id": "cafe", "en": "Ordering at a café", "ja": "カフェで ちゅうもん", "them": "Staff", "icon": "☕", "col": "#D9752B", "lines": [{"who": "them", "kana": "ごちゅうもんは おきまり でしょうか？", "ro": "Gochūmon wa okimari deshō ka?", "en": "Are you ready to order?", "ok": "", "a": "../../speak/cafe-1.mp3"}, {"who": "you", "kana": "コーヒーを ひとつ ください。", "ro": "Kōhī o hitotsu kudasai.", "en": "One coffee, please.", "ok": "こーひーを?(一つ|1つ|ひとつ)(ください|下さい)", "a": "../../speak/cafe-2.mp3"}, {"who": "them", "kana": "サイズは いかが なさいますか？", "ro": "Saizu wa ikaga nasaimasu ka?", "en": "What size would you like?", "ok": "", "a": "../../speak/cafe-3.mp3"}, {"who": "you", "kana": "Mサイズで おねがい します。", "ro": "Emu saizu de onegai shimasu.", "en": "Medium, please.", "ok": "(m|えむ)さいずで(お願い|おねがい)します", "a": "../../speak/cafe-4.mp3"}, {"who": "them", "kana": "てんないで おめしあがり ですか？", "ro": "Tennai de omeshiagari desu ka?", "en": "Is it for here?", "ok": "", "a": "../../speak/cafe-5.mp3"}, {"who": "you", "kana": "いいえ、もちかえりで おねがい します。", "ro": "Iie, mochikaeri de onegai shimasu.", "en": "No, to go, please.", "ok": "(持ち帰り|持帰り|もちかえり|ていくあうと)で(お願い|おねがい)します", "a": "../../speak/cafe-6.mp3"}]}, {"id": "michi", "en": "Asking the way", "ja": "みちを きく", "them": "Person on the street", "icon": "🗺️", "col": "#2B6CB0", "lines": [{"who": "you", "kana": "すみません、えきは どこ ですか？", "ro": "Sumimasen, eki wa doko desu ka?", "en": "Excuse me, where is the station?", "ok": "(すみません|すいません)(駅|えき)は(どこ|何処)ですか", "a": "../../speak/michi-1.mp3"}, {"who": "them", "kana": "この みちを まっすぐ いって、みぎ です。", "ro": "Kono michi o massugu itte, migi desu.", "en": "Go straight along this street, then it's on the right.", "ok": "", "a": "../../speak/michi-2.mp3"}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much.", "ok": "(ありがとう|有難う)(ございます|御座います)", "a": "../../speak/michi-3.mp3"}]}, {"id": "ticket", "en": "Buying a train ticket", "ja": "えきで きっぷを かう", "them": "Station staff", "icon": "🎫", "col": "#2B6CB0", "lines": [{"who": "you", "kana": "きょうとまで おとな にまい ください。", "ro": "Kyōto made otona nimai kudasai.", "en": "Two adult tickets to Kyoto, please.", "ok": "(京都|きょうと)まで(大人|おとな)(二枚|2枚|にまい)(ください|下さい)", "a": "../../speak/ticket-1.mp3"}, {"who": "them", "kana": "していせき ですか、じゆうせき ですか？", "ro": "Shiteiseki desu ka, jiyūseki desu ka?", "en": "Reserved seats or non-reserved?", "ok": "", "a": "../../speak/ticket-2.mp3"}, {"who": "you", "kana": "していせきで おねがい します。", "ro": "Shiteiseki de onegai shimasu.", "en": "Reserved, please.", "ok": "(指定席|していせき)で(お願い|おねがい)します", "a": "../../speak/ticket-3.mp3"}, {"who": "them", "kana": "はい、どうぞ。14ばんせんから でます。", "ro": "Hai, dōzo. Jūyon-bansen kara demasu.", "en": "Here you are. It leaves from track 14.", "ok": "", "a": "../../speak/ticket-4.mp3"}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much.", "ok": "(ありがとう|有難う)(ございます|御座います)", "a": "../../speak/ticket-5.mp3"}]}, {"id": "train", "en": "On the train", "ja": "でんしゃの なかで", "them": "Person on the train", "icon": "🚃", "col": "#2B6CB0", "lines": [{"who": "you", "kana": "すみません、この でんしゃは しぶやに とまりますか？", "ro": "Sumimasen, kono densha wa Shibuya ni tomarimasu ka?", "en": "Excuse me, does this train stop at Shibuya?", "ok": "(この|その)?(電車|でんしゃ)は(渋谷|しぶや)に(止まり|停まり|とまり)ますか", "a": "../../speak/train-1.mp3"}, {"who": "them", "kana": "いいえ。つぎの えきで のりかえて ください。", "ro": "Iie. Tsugi no eki de norikaete kudasai.", "en": "No. Please change trains at the next station.", "ok": "", "a": "../../speak/train-2.mp3"}, {"who": "you", "kana": "わかりました。ありがとう ございます。", "ro": "Wakarimashita. Arigatō gozaimasu.", "en": "I see. Thank you very much.", "ok": "(わかり|分かり)ました(ありがとう|有難う)(ございます|御座います)", "a": "../../speak/train-3.mp3"}]}, {"id": "taxi", "en": "Taking a taxi", "ja": "タクシー", "them": "Driver", "icon": "🚕", "col": "#2B6CB0", "lines": [{"who": "them", "kana": "どちらまで ですか？", "ro": "Dochira made desu ka?", "en": "Where to?", "ok": "", "a": "../../speak/taxi-1.mp3"}, {"who": "you", "kana": "この ホテルまで おねがい します。", "ro": "Kono hoteru made onegai shimasu.", "en": "To this hotel, please. (Show the address.)", "ok": "(この|その)ほてるまで(お願い|おねがい)します", "a": "../../speak/taxi-2.mp3"}, {"who": "them", "kana": "はい、わかりました。", "ro": "Hai, wakarimashita.", "en": "All right.", "ok": "", "a": "../../speak/taxi-3.mp3"}, {"who": "you", "kana": "ここで とめて ください。", "ro": "Koko de tomete kudasai.", "en": "Please stop here.", "ok": "ここで(止めて|停めて|とめて)(ください|下さい)", "a": "../../speak/taxi-4.mp3"}, {"who": "them", "kana": "せんはっぴゃく えん です。", "ro": "Sen-happyaku en desu.", "en": "That's 1,800 yen.", "ok": "", "a": "../../speak/taxi-5.mp3"}, {"who": "you", "kana": "カードで いいですか？", "ro": "Kādo de ii desu ka?", "en": "Can I pay by card?", "ok": "かーどで(いい|良い)ですか", "a": "../../speak/taxi-6.mp3"}, {"who": "them", "kana": "はい、だいじょうぶ です。", "ro": "Hai, daijōbu desu.", "en": "Yes, that's fine.", "ok": "", "a": "../../speak/taxi-7.mp3"}]}, {"id": "checkin", "en": "Hotel check-in", "ja": "ホテルの チェックイン", "them": "Front desk", "icon": "🏨", "col": "#2F8F83", "lines": [{"who": "them", "kana": "いらっしゃいませ。", "ro": "Irasshaimase.", "en": "Welcome!", "ok": "", "a": "../../speak/checkin-1.mp3"}, {"who": "you", "kana": "チェックイン おねがい します。", "ro": "Chekkuin onegai shimasu.", "en": "Check-in, please.", "ok": "ちぇっくいん(を)?(お願い|おねがい)します", "a": "../../speak/checkin-2.mp3"}, {"who": "them", "kana": "パスポートを おねがい します。", "ro": "Pasupōto o onegai shimasu.", "en": "Your passport, please.", "ok": "", "a": "../../speak/checkin-3.mp3"}, {"who": "you", "kana": "はい、どうぞ。", "ro": "Hai, dōzo.", "en": "Here you are.", "ok": "はい(どうぞ)", "a": "../../speak/checkin-4.mp3"}, {"who": "them", "kana": "おへやは 502ごうしつ です。", "ro": "Oheya wa gohyaku-ni gōshitsu desu.", "en": "Your room is number 502.", "ok": "", "a": "../../speak/checkin-5.mp3"}, {"who": "you", "kana": "チェックアウトは なんじ ですか？", "ro": "Chekkuauto wa nanji desu ka?", "en": "What time is check-out?", "ok": "ちぇっくあうとは(何時|なんじ)ですか", "a": "../../speak/checkin-6.mp3"}, {"who": "them", "kana": "11じ です。", "ro": "Jūichi-ji desu.", "en": "It's at 11.", "ok": "", "a": "../../speak/checkin-7.mp3"}]}, {"id": "hotel", "en": "Asking the hotel for help", "ja": "ホテルで おねがい する", "them": "Front desk", "icon": "🧳", "col": "#2F8F83", "lines": [{"who": "you", "kana": "すみません、にもつを あずかって もらえますか？", "ro": "Sumimasen, nimotsu o azukatte moraemasu ka?", "en": "Excuse me, could you keep my luggage?", "ok": "(荷物|にもつ)を(預かって|あずかって)(もらえ|貰え)ますか", "a": "../../speak/hotel-1.mp3"}, {"who": "them", "kana": "はい。なんじごろ おもどり ですか？", "ro": "Hai. Nanji-goro omodori desu ka?", "en": "Of course. Around what time will you be back?", "ok": "", "a": "../../speak/hotel-2.mp3"}, {"who": "you", "kana": "3じごろ です。", "ro": "San-ji goro desu.", "en": "Around 3 o'clock.", "ok": "(3時|三時|3じ|さんじ)(ごろ|頃)です", "a": "../../speak/hotel-3.mp3"}, {"who": "them", "kana": "かしこまりました。こちらが ばんごうふだ です。", "ro": "Kashikomarimashita. Kochira ga bangōfuda desu.", "en": "Certainly. Here is your number tag.", "ok": "", "a": "../../speak/hotel-4.mp3"}, {"who": "you", "kana": "ありがとう ございます。", "ro": "Arigatō gozaimasu.", "en": "Thank you very much.", "ok": "(ありがとう|有難う)(ございます|御座います)", "a": "../../speak/hotel-5.mp3"}]}, {"id": "clothes", "en": "Buying clothes", "ja": "ようふくを かう", "them": "Shop staff", "icon": "👕", "col": "#8A4A9E", "lines": [{"who": "you", "kana": "これ、しちゃく しても いいですか？", "ro": "Kore, shichaku shite mo ii desu ka?", "en": "Can I try this on?", "ok": "これ(試着|しちゃく)して(も)?(いい|良い)ですか", "a": "../../speak/clothes-1.mp3"}, {"who": "them", "kana": "はい、こちらへ どうぞ。", "ro": "Hai, kochira e dōzo.", "en": "Sure, this way please.", "ok": "", "a": "../../speak/clothes-2.mp3"}, {"who": "them", "kana": "いかが ですか？", "ro": "Ikaga desu ka?", "en": "How is it?", "ok": "", "a": "../../speak/clothes-3.mp3"}, {"who": "you", "kana": "ちょっと ちいさい です。", "ro": "Chotto chiisai desu.", "en": "It's a little small.", "ok": "(ちょっと|少し)?(小さい|ちいさい)です", "a": "../../speak/clothes-4.mp3"}, {"who": "them", "kana": "こちらは いかが ですか？ ひとつ おおきい サイズです。", "ro": "Kochira wa ikaga desu ka? Hitotsu ōkii saizu desu.", "en": "How about this one? It's one size bigger.", "ok": "", "a": "../../speak/clothes-5.mp3"}, {"who": "you", "kana": "これに します。", "ro": "Kore ni shimasu.", "en": "I'll take this one.", "ok": "これにします", "a": "../../speak/clothes-6.mp3"}]}, {"id": "souvenir", "en": "Buying souvenirs", "ja": "おみやげを かう", "them": "Shop staff", "icon": "🎁", "col": "#8A4A9E", "lines": [{"who": "you", "kana": "これは なん ですか？", "ro": "Kore wa nan desu ka?", "en": "What is this?", "ok": "これは(何|なん)ですか", "a": "../../speak/souvenir-1.mp3"}, {"who": "them", "kana": "まっちゃの おかし です。", "ro": "Matcha no okashi desu.", "en": "It's a matcha sweet.", "ok": "", "a": "../../speak/souvenir-2.mp3"}, {"who": "you", "kana": "これを みっつ ください。", "ro": "Kore o mittsu kudasai.", "en": "Three of these, please.", "ok": "これを?(三つ|3つ|みっつ)(ください|下さい)", "a": "../../speak/souvenir-3.mp3"}, {"who": "them", "kana": "プレゼント よう ですか？", "ro": "Purezento-yō desu ka?", "en": "Are they gifts?", "ok": "", "a": "../../speak/souvenir-4.mp3"}, {"who": "you", "kana": "はい、べつべつに つつんで ください。", "ro": "Hai, betsubetsu ni tsutsunde kudasai.", "en": "Yes, please wrap them separately.", "ok": "(別々|べつべつ)に(包んで|つつんで)(ください|下さい)", "a": "../../speak/souvenir-5.mp3"}]}, {"id": "photo", "en": "Asking for a photo", "ja": "しゃしんを たのむ", "them": "Person nearby", "icon": "📸", "col": "#C0392B", "lines": [{"who": "you", "kana": "すみません、しゃしんを とって もらえますか？", "ro": "Sumimasen, shashin o totte moraemasu ka?", "en": "Excuse me, could you take our photo?", "ok": "(写真|しゃしん)を(撮って|とって)(もらえ|貰え)ますか", "a": "../../speak/photo-1.mp3"}, {"who": "them", "kana": "いいですよ。はい、チーズ。", "ro": "Ii desu yo. Hai, chīzu.", "en": "Sure. OK, say cheese!", "ok": "", "a": "../../speak/photo-2.mp3"}, {"who": "them", "kana": "もう いちまい とりましょうか？", "ro": "Mō ichimai torimashō ka?", "en": "Shall I take one more?", "ok": "", "a": "../../speak/photo-3.mp3"}, {"who": "you", "kana": "はい、おねがい します。", "ro": "Hai, onegai shimasu.", "en": "Yes, please.", "ok": "はい(お願い|おねがい)します", "a": "../../speak/photo-4.mp3"}, {"who": "them", "kana": "はい、チーズ。", "ro": "Hai, chīzu.", "en": "Say cheese!", "ok": "", "a": "../../speak/photo-5.mp3"}, {"who": "you", "kana": "ありがとう ございます！", "ro": "Arigatō gozaimasu!", "en": "Thank you very much!", "ok": "(ありがとう|有難う)(ございます|御座います)", "a": "../../speak/photo-6.mp3"}]}, {"id": "sights", "en": "At a ticket office", "ja": "かんこうちの チケット うりば", "them": "Ticket staff", "icon": "🏯", "col": "#C0392B", "lines": [{"who": "you", "kana": "おとな ふたり おねがい します。", "ro": "Otona futari onegai shimasu.", "en": "Two adults, please.", "ok": "(大人|おとな)(二人|2人|ふたり)(お願い|おねがい)します", "a": "../../speak/sights-1.mp3"}, {"who": "them", "kana": "にせん えん です。", "ro": "Nisen en desu.", "en": "That's 2,000 yen.", "ok": "", "a": "../../speak/sights-2.mp3"}, {"who": "you", "kana": "えいごの パンフレットは ありますか？", "ro": "Eigo no panfuretto wa arimasu ka?", "en": "Do you have a pamphlet in English?", "ok": "(英語|えいご)のぱんふれっとは?ありますか", "a": "../../speak/sights-3.mp3"}, {"who": "them", "kana": "はい、どうぞ。", "ro": "Hai, dōzo.", "en": "Yes, here you are.", "ok": "", "a": "../../speak/sights-4.mp3"}, {"who": "you", "kana": "なかで しゃしんを とっても いいですか？", "ro": "Naka de shashin o totte mo ii desu ka?", "en": "May I take photos inside?", "ok": "(中|なか)で(写真|しゃしん)を(撮って|とって)(も)?(いい|良い)ですか", "a": "../../speak/sights-5.mp3"}, {"who": "them", "kana": "すみません、なかは ごえんりょ ください。", "ro": "Sumimasen, naka wa goenryo kudasai.", "en": "Sorry, no photos inside, please.", "ok": "", "a": "../../speak/sights-6.mp3"}]}, {"id": "lost", "en": "Lost and found", "ja": "わすれもの", "them": "Station staff", "icon": "☂️", "col": "#2B6CB0", "lines": [{"who": "you", "kana": "すみません、でんしゃに かさを わすれました。", "ro": "Sumimasen, densha ni kasa o wasuremashita.", "en": "Excuse me, I left my umbrella on the train.", "ok": "(電車|でんしゃ)に(傘|かさ)を(忘れ|わすれ)ました", "a": "../../speak/lost-1.mp3"}, {"who": "them", "kana": "どの でんしゃ ですか？", "ro": "Dono densha desu ka?", "en": "Which train?", "ok": "", "a": "../../speak/lost-2.mp3"}, {"who": "you", "kana": "10じごろの やまのてせん です。", "ro": "Jū-ji goro no Yamanote-sen desu.", "en": "The Yamanote Line, around 10 o'clock.", "ok": "(10時|十時|10じ|じゅうじ)(ごろ|頃)の(山手線|やまのてせん)です", "a": "../../speak/lost-3.mp3"}, {"who": "them", "kana": "どんな かさ ですか？", "ro": "Donna kasa desu ka?", "en": "What does it look like?", "ok": "", "a": "../../speak/lost-4.mp3"}, {"who": "you", "kana": "くろい かさ です。", "ro": "Kuroi kasa desu.", "en": "It's a black umbrella.", "ok": "(黒い|くろい)(傘|かさ)です", "a": "../../speak/lost-5.mp3"}, {"who": "them", "kana": "しょうしょう おまち ください。", "ro": "Shōshō omachi kudasai.", "en": "Please wait a moment.", "ok": "", "a": "../../speak/lost-6.mp3"}]}, {"id": "intro", "en": "Introducing yourself", "ja": "じこしょうかい", "them": "New friend", "icon": "👋", "col": "#3C7A5A", "lines": [{"who": "them", "kana": "はじめまして。たなか です。", "ro": "Hajimemashite. Tanaka desu.", "en": "Nice to meet you. I'm Tanaka.", "ok": "", "a": "../../speak/intro-1.mp3"}, {"who": "you", "kana": "はじめまして。アメリカから きました。", "ro": "Hajimemashite. Amerika kara kimashita.", "en": "Nice to meet you. I'm from America. (Say your own country if you like.)", "ok": "(.+)から(来|き)ました", "a": "../../speak/intro-2.mp3"}, {"who": "them", "kana": "にほんは はじめて ですか？", "ro": "Nihon wa hajimete desu ka?", "en": "Is this your first time in Japan?", "ok": "", "a": "../../speak/intro-3.mp3"}, {"who": "you", "kana": "はい、はじめて です。", "ro": "Hai, hajimete desu.", "en": "Yes, it's my first time.", "ok": "はい(初めて|はじめて)です", "a": "../../speak/intro-4.mp3"}, {"who": "them", "kana": "にほんごが じょうず ですね！", "ro": "Nihongo ga jōzu desu ne!", "en": "Your Japanese is very good!", "ok": "", "a": "../../speak/intro-5.mp3"}, {"who": "you", "kana": "いいえ、まだまだ です。", "ro": "Iie, madamada desu.", "en": "Oh no, I still have a long way to go.", "ok": "いいえ(まだまだ)です", "a": "../../speak/intro-6.mp3"}]}, {"id": "smalltalk", "en": "Small talk", "ja": "ざつだん", "them": "Neighbor", "icon": "☀️", "col": "#3C7A5A", "lines": [{"who": "them", "kana": "きょうは あつい ですね。", "ro": "Kyō wa atsui desu ne.", "en": "It's hot today, isn't it?", "ok": "", "a": "../../speak/smalltalk-1.mp3"}, {"who": "you", "kana": "そう ですね。", "ro": "Sō desu ne.", "en": "Yes, it is.", "ok": "そうですね", "a": "../../speak/smalltalk-2.mp3"}, {"who": "them", "kana": "どちらへ おでかけ ですか？", "ro": "Dochira e odekake desu ka?", "en": "Where are you off to?", "ok": "", "a": "../../speak/smalltalk-3.mp3"}, {"who": "you", "kana": "ちょっと そこまで。", "ro": "Chotto soko made.", "en": "Just over there. (A polite way to not say exactly where.)", "ok": "(ちょっと|一寸)(そこ|其処)まで", "a": "../../speak/smalltalk-4.mp3"}, {"who": "them", "kana": "いってらっしゃい。", "ro": "Itterasshai.", "en": "Have a good time!", "ok": "", "a": "../../speak/smalltalk-5.mp3"}, {"who": "you", "kana": "いってきます。", "ro": "Ittekimasu.", "en": "I'm off! (said when you leave)", "ok": "(行って|いって)(来|き)ます", "a": "../../speak/smalltalk-6.mp3"}]}, {"id": "izakaya", "en": "At an izakaya", "ja": "いざかや", "them": "Staff", "icon": "🍺", "col": "#D9752B", "lines": [{"who": "them", "kana": "いらっしゃいませ！ なんめいさま ですか？", "ro": "Irasshaimase! Nanmei-sama desu ka?", "en": "Welcome! How many people?", "ok": "", "a": "../../speak/izakaya-1.mp3"}, {"who": "you", "kana": "さんにん です。", "ro": "Sannin desu.", "en": "Three.", "ok": "(三人|3人|さんにん)です", "a": "../../speak/izakaya-2.mp3"}, {"who": "them", "kana": "おのみものは なにに されますか？", "ro": "Onomimono wa nani ni saremasu ka?", "en": "What would you like to drink?", "ok": "", "a": "../../speak/izakaya-3.mp3"}, {"who": "you", "kana": "なまビールを みっつ ください。", "ro": "Nama bīru o mittsu kudasai.", "en": "Three draft beers, please.", "ok": "(生|なま)びーるを?(三つ|3つ|みっつ)(ください|下さい)", "a": "../../speak/izakaya-4.mp3"}, {"who": "them", "kana": "かしこまりました。", "ro": "Kashikomarimashita.", "en": "Certainly.", "ok": "", "a": "../../speak/izakaya-5.mp3"}, {"who": "you", "kana": "すみません、おかいけい おねがい します。", "ro": "Sumimasen, okaikei onegai shimasu.", "en": "Excuse me, the check, please.", "ok": "(お会計|おかいけい)(を)?(お願い|おねがい)します", "a": "../../speak/izakaya-6.mp3"}]}, {"id": "reserve", "en": "Booking by phone", "ja": "でんわで よやく", "them": "Restaurant staff", "icon": "📞", "col": "#D9752B", "lines": [{"who": "them", "kana": "はい、さくら しょくどう です。", "ro": "Hai, Sakura Shokudō desu.", "en": "Hello, Sakura Restaurant.", "ok": "", "a": "../../speak/reserve-1.mp3"}, {"who": "you", "kana": "よやくを したいん ですが。", "ro": "Yoyaku o shitai n desu ga.", "en": "I'd like to make a reservation.", "ok": "(予約|よやく)を?したい(ん|の)ですが", "a": "../../speak/reserve-2.mp3"}, {"who": "them", "kana": "なんにちの なんじ ですか？", "ro": "Nannichi no nanji desu ka?", "en": "What day and what time?", "ok": "", "a": "../../speak/reserve-3.mp3"}, {"who": "you", "kana": "あしたの 7じ です。", "ro": "Ashita no shichi-ji desu.", "en": "Tomorrow at 7.", "ok": "(明日|あした|あす)の(7時|七時|7じ|しちじ|ななじ)です", "a": "../../speak/reserve-4.mp3"}, {"who": "them", "kana": "なんめいさま ですか？", "ro": "Nanmei-sama desu ka?", "en": "How many people?", "ok": "", "a": "../../speak/reserve-5.mp3"}, {"who": "you", "kana": "ふたり です。", "ro": "Futari desu.", "en": "Two.", "ok": "(二人|2人|ふたり)です", "a": "../../speak/reserve-6.mp3"}, {"who": "them", "kana": "はい、だいじょうぶ です。おなまえを おねがい します。", "ro": "Hai, daijōbu desu. Onamae o onegai shimasu.", "en": "That's fine. May I have your name?", "ok": "", "a": "../../speak/reserve-7.mp3"}]}, {"id": "pharmacy", "en": "At a pharmacy", "ja": "やっきょく", "them": "Pharmacist", "icon": "💊", "col": "#C2416B", "lines": [{"who": "you", "kana": "すみません、かぜぐすりは ありますか？", "ro": "Sumimasen, kazegusuri wa arimasu ka?", "en": "Excuse me, do you have cold medicine?", "ok": "(風邪薬|かぜ薬|風邪ぐすり|かぜぐすり)は?ありますか", "a": "../../speak/pharmacy-1.mp3"}, {"who": "them", "kana": "どんな しょうじょう ですか？", "ro": "Donna shōjō desu ka?", "en": "What are your symptoms?", "ok": "", "a": "../../speak/pharmacy-2.mp3"}, {"who": "you", "kana": "のどが いたい です。", "ro": "Nodo ga itai desu.", "en": "I have a sore throat.", "ok": "(喉|のど)が(痛い|いたい)です", "a": "../../speak/pharmacy-3.mp3"}, {"who": "them", "kana": "では、こちらが おすすめ です。いちにち 3かい のんで ください。", "ro": "Dewa, kochira ga osusume desu. Ichinichi sankai nonde kudasai.", "en": "Then I recommend this one. Take it 3 times a day.", "ok": "", "a": "../../speak/pharmacy-4.mp3"}, {"who": "you", "kana": "わかりました。これを ください。", "ro": "Wakarimashita. Kore o kudasai.", "en": "I see. I'll take this.", "ok": "(わかり|分かり)ました(これ)を?(ください|下さい)", "a": "../../speak/pharmacy-5.mp3"}]}, {"id": "sick", "en": "When you feel sick", "ja": "たいちょうが わるい とき", "them": "Hotel staff", "icon": "🤒", "col": "#C2416B", "lines": [{"who": "them", "kana": "だいじょうぶ ですか？", "ro": "Daijōbu desu ka?", "en": "Are you all right?", "ok": "", "a": "../../speak/sick-1.mp3"}, {"who": "you", "kana": "きぶんが わるい です。", "ro": "Kibun ga warui desu.", "en": "I feel sick.", "ok": "(気分|きぶん)が(悪い|わるい)です", "a": "../../speak/sick-2.mp3"}, {"who": "them", "kana": "どこが いたい ですか？", "ro": "Doko ga itai desu ka?", "en": "Where does it hurt?", "ok": "", "a": "../../speak/sick-3.mp3"}, {"who": "you", "kana": "おなかが いたい です。", "ro": "Onaka ga itai desu.", "en": "My stomach hurts.", "ok": "(お腹|おなか)が(痛い|いたい)です", "a": "../../speak/sick-4.mp3"}, {"who": "them", "kana": "びょういんに いきますか？", "ro": "Byōin ni ikimasu ka?", "en": "Do you want to go to a hospital?", "ok": "", "a": "../../speak/sick-5.mp3"}, {"who": "you", "kana": "はい。ちかくの びょういんを おしえて ください。", "ro": "Hai. Chikaku no byōin o oshiete kudasai.", "en": "Yes. Please tell me a hospital nearby.", "ok": "(近く|ちかく)の(病院|びょういん)を(教えて|おしえて)(ください|下さい)", "a": "../../speak/sick-6.mp3"}]}], TITLE = {"en": "Speak Japanese: 20 Real-Life Conversations", "ja": "話して覚える日本語会話"}, CREDITS = "Voices: AI voices (Google Cloud Text-to-Speech); every line checked by ear by a native Japanese speaker. The OK check uses your phone's own voice typing.";
+const app = document.getElementById("app"), back = document.getElementById("back"), title = document.getElementById("title");
+let heard = null;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const IN_APP = /Line\/|FBAN|FBAV|Instagram|MicroMessenger/.test(navigator.userAgent);   // LINE, Facebook… open links in their own small browser
+const kata = s => s.normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+const norm = s => kata(s).replace(/[\s、。,.!?！？「」『』]/g, "").toLowerCase();   // lower case: "Mサイズ" may come as "m"
+const okRe = p => new RegExp(kata(p).toLowerCase());   // not norm(): it would remove the "?" of the pattern
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } },
+               set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }};
+
+// Sound plays through Web Audio, not an <audio> player: on iPhone the <audio> player gets in the way of voice typing
+// (it works once, then hears nothing) and sounds quiet after the mic is used. Known WebKit problem
+// (github.com/WebAudio/web-speech-api/issues/96, bugs.webkit.org/show_bug.cgi?id=225298).
+let actx = null, cur = null, playId = 0;
+const bufs = {};
+function audioCtx() {
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state !== "running") actx.resume();
+  return actx;
+}
+function stopSound() { playId++; if (cur) { try { cur.onended = null; cur.stop(); } catch (e) {} cur = null; } }
+async function play(src) {
+  stopSound();
+  const id = playId;
+  try {
+    const c = audioCtx();   // first call is inside a tap, so the iPhone allows sound
+    if (!bufs[src]) bufs[src] = await c.decodeAudioData(await (await fetch(src)).arrayBuffer());
+    if (id !== playId) return;   // another sound was started meanwhile
+    await new Promise(r => {
+      const n = c.createBufferSource();
+      n.buffer = bufs[src]; n.connect(c.destination);
+      n.onended = () => { if (cur === n) cur = null; r(); };
+      cur = n; n.start();
+    });
+  } catch (e) {}
+}
+
+async function tone(good) {
+  // OK = two bright notes going up; try again = two soft low notes going down. Made in the browser, no sound files.
+  try {
+    const c = audioCtx();
+    if (c.state !== "running") await c.resume();   // iPhone pauses the sound while the mic is on
+    const t = c.currentTime + .05;
+    (good ? [[880, 0], [1320, .13]] : [[330, 0], [247, .2]]).forEach(([hz, at]) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = good ? "sine" : "triangle"; o.frequency.value = hz;
+      g.gain.setValueAtTime(0, t + at);
+      g.gain.linearRampToValueAtTime(good ? .5 : .45, t + at + .02);
+      g.gain.exponentialRampToValueAtTime(.001, t + at + (good ? .25 : .3));
+      o.connect(g); g.connect(c.destination); o.start(t + at); o.stop(t + at + .35);
+    });
+  } catch (e) {}
+}
+
+// One voice-typing object for the whole visit, started again for each answer (iPhone is steadier this way).
+let recog = null, recogBusy = false, hearId = 0;
+
+function hear(match, onText) {
+  // the phone's voice typing (Siri / Google): turns what you say into text, for the OK check. Needs the internet.
+  // Words come in while you speak; as soon as they match, it says OK (no waiting for the end).
+  if (!SR) return null;
+  if (!recog) {
+    recog = new SR();
+    recog.lang = "ja-JP"; recog.interimResults = true; recog.maxAlternatives = 5; recog.continuous = false;
+  }
+  const r = recog, texts = [], id = ++hearId;   // id: old timers must not stop a newer listening
+  let error = "", finish, closed;
+  const done = new Promise(res => finish = res), over = new Promise(res => closed = res);   // over = the mic is really off
+  r.onresult = e => {
+    const now = [];
+    for (const x of e.results) for (const a of x) now.push(a.transcript);
+    now.push([...e.results].map(x => x[0].transcript).join(""));   // everything so far, last = best guess
+    texts.push(...now);
+    if (onText) onText(now[now.length - 1]);
+    if (match && now.some(match)) { finish({texts, error: ""}); try { r.stop(); } catch (e2) {} }   // stop gently, not abort
+  };
+  r.onerror = e => { error = e.error; };
+  r.onend = () => { recogBusy = false; closed(); finish({texts, error}); };
+  const go = () => { recogBusy = true; try { r.start(); } catch (e) { recogBusy = false; error = e.name; closed(); finish({texts, error}); } };
+  if (!recogBusy) go();   // straight away, inside the tap
+  else {   // the last listening is still closing: wait for it (max 4 s)
+    const t0 = Date.now(), w = setInterval(() => {
+      if (!recogBusy || Date.now() - t0 > 4000) { clearInterval(w); if (recogBusy) { try { r.abort(); } catch (e) {} recogBusy = false; } go(); }
+    }, 100);
+  }
+  let timer;
+  const late = new Promise(res => timer = setTimeout(() => { if (id === hearId) try { r.stop(); } catch (e) {} res({texts, error: error || "timeout"}); }, 9000));
+  done.then(() => clearTimeout(timer));
+  return {stop() { if (id === hearId) try { r.stop(); } catch (e) {} }, done: Promise.race([done, late]),
+          closed: Promise.race([over, new Promise(res => setTimeout(res, 1500))])};
+}
+
+function okText(res, re) {
+  // [class, text] for the OK check result
+  if (res.texts.some(t => re.test(norm(t)))) return ["good", "✓ OK!"];
+  if (res.texts.length) return ["", `We heard: 「${res.texts[res.texts.length - 1]}」. Try again!`];
+  const off = "The OK check is off. On iPhone: Settings → General → Keyboard → turn on Dictation.";
+  const why = {"network": "The OK check needs the internet.", "not-allowed": off, "service-not-allowed": off,
+    "no-speech": "We didn't hear anything. Try again, a little louder.",
+    "audio-capture": "The OK check couldn't use the microphone."}[res.error || "no-speech"];
+  return ["", why || "The OK check didn't work this time. Try again."];
+}
+
+function header(t, ja, showBack, col) {
+  // the menu has its own big banner, so no bar there; each scene's bar has the scene's colour
+  const bar = document.querySelector("header");
+  title.innerHTML = esc(t) + (ja ? `<small>${esc(ja)}</small>` : ""); back.hidden = !showBack;
+  bar.style.background = col || ""; bar.hidden = !t;
+}
+
+function home() {
+  stopAll(); header("", "", false); app.className = "home";
+  let tip = "";
+  if (false)
+    tip = `<div class="tip" id="tip"><button onclick="closeTip()" aria-label="Close">×</button>
+      <b>Tip:</b> add this page to your home screen to open it like an app.<br>
+      iPhone: tap <b>Share</b> → <b>Add to Home Screen</b>.<br>Android: tap <b>⋮</b> → <b>Add to Home screen</b>.</div>`;
+  const warn = IN_APP || !SR ? `<div class="warn">${IN_APP
+    ? "You opened this page inside another app (like LINE or Instagram). For the OK check, please open it in <b>Safari</b> (iPhone) or <b>Chrome</b> (Android)."
+    : "This browser has no voice typing, so there is no OK check here. You can still practice: tap <b>Next</b> after each line. For the OK check, use <b>Safari</b> (iPhone) or <b>Chrome</b> (Android)."}</div>` : "";
+  const first = S[0];
+  const k = S[0].lines;   // two lines of the first scene, as a taste on the banner
+  app.innerHTML = `<div class="hero"><div class="sun">話</div><h2>Speak Japanese<small>20 Real-Life Conversations</small></h2>
+    <div class="jt">${esc(TITLE.ja)}</div>
+    <div class="bubbles"><span>${esc(k[1].kana)}</span><span class="me">${esc(k[2].kana)} 🎤</span></div></div>
+    <div class="inner">${warn}
+    <button class="start" style="background:${first.col}" data-id="${first.id}"><span class="ic">${first.icon}</span>
+      <span>Start here<small>1. ${esc(first.en)}</small></span><span class="go">▶</span></button>
+    <p class="intro">The app plays the other person. On your turn, tap the red button and say your line — your phone checks it and says <b>OK</b>.</p>${tip}
+    <div class="tiles">` +
+    S.map((s, i) => `<button class="tile" data-id="${s.id}" style="--col:${s.col};--soft:${s.col}1f">
+      <span class="num">${i + 1}</span><span class="ic">${s.icon}</span>
+      <span class="en">${esc(s.en)}</span><span class="ja">${esc(s.ja)}</span>
+      <small>${s.lines.filter(l => l.who === "you").length} lines to say</small></button>`).join("") +
+    `</div><p class="note">Voices work offline after your first visit (they are saved on your phone). The OK check uses your phone's voice typing, so it needs the internet.</p>
+    <details><summary>If the OK check doesn't work</summary>
+      • Use Safari (iPhone) or Chrome (Android), not the browser inside LINE, Instagram or Facebook.<br>
+      • Allow the microphone when your phone asks.<br>
+      • iPhone: Settings → General → Keyboard → turn on <b>Dictation</b>.<br>
+      • Your phone may beep when the mic turns on and off. That's normal.<br>
+      • Still no luck? After two tries a <b>Next</b> button appears, so you can keep going.</details>
+    <details><summary>Credits</summary>${esc(CREDITS)}</details></div>`;
+  app.querySelectorAll("[data-id]").forEach(b => b.onclick = () => go("#/" + b.dataset.id));
+}
+function closeTip() { store.set("tipClosed", 1); document.getElementById("tip")?.remove(); }
+
+function bubble(s, i) {
+  const l = s.lines[i];
+  const d = document.createElement("div");
+  d.className = "b " + l.who;
+  d.innerHTML = `<div class="who">${l.who === "you" ? "You" : esc(s.them)}</div><div class="ja">${esc(l.kana)}</div>
+    <div class="ro">${esc(l.ro)}</div><div class="en">${esc(l.en)}</div><button>▶ Play</button>`;
+  d.querySelector("button").onclick = () => play(l.a);
+  return d;
+}
+
+let run = 0;   // which scene is playing: going back or to another scene stops the old one
+async function scene(n) {
+  const s = S[n], me = ++run; header(s.icon + " " + s.en, `${n + 1} / ${S.length} · ${s.ja}`, true, s.col); app.className = "";
+  app.innerHTML = `<div class="chat"></div><div id="turn"></div>`;
+  const chat = app.querySelector(".chat");
+  for (let i = 0; i < s.lines.length; i++) {
+    if (me !== run) return;
+    if (s.lines[i].who === "them") {
+      chat.append(bubble(s, i)); chat.lastChild.scrollIntoView({behavior: "smooth", block: "end"});
+      await play(s.lines[i].a);
+      await new Promise(r => setTimeout(r, 400));
+    } else {
+      await yourTurn(s, i);
+      if (me !== run) return;
+      chat.append(bubble(s, i));
+    }
+  }
+  if (me !== run) return;
+  const next = S[n + 1];
+  document.getElementById("turn").innerHTML = `<div class="done"><p><b>Well done!</b> 🎉</p>
+    ${next ? `<button id="next">Next scene: ${esc(next.en)} ›</button>` : ""}
+    <button class="alt" id="again">Try this scene again</button><button class="alt" id="other">All scenes</button></div>`;
+  document.getElementById("turn").scrollIntoView({behavior: "smooth", block: "end"});
+  if (next) document.getElementById("next").onclick = () => go("#/" + next.id, true);
+  document.getElementById("again").onclick = () => scene(n);
+  document.getElementById("other").onclick = () => go("#/", true);
+}
+
+function yourTurn(s, i) {
+  // one big button: tap, say the line, the phone's voice typing checks it. OK → the conversation goes on by itself.
+  const l = s.lines[i];
+  const t = document.getElementById("turn");
+  t.innerHTML = `<div class="turn"><div class="say">Your turn — say:</div><div class="en">${esc(l.en)}</div>
+    <div class="words"><button class="hear" aria-label="Hear it">▶</button><div><div class="ja">${esc(l.kana)}</div><div class="ro">${esc(l.ro)}</div></div></div>
+    ${SR ? '<button class="mic">🎤 Tap and say it</button>' : ""}
+    <div class="ok"></div>
+    <button class="next" ${SR ? "hidden" : ""}>Next ›</button>
+    ${IN_APP ? '<div class="msg">For the OK check, open this page in Safari (iPhone) or Chrome (Android).</div>' : ""}
+    </div>`;
+  t.scrollIntoView({behavior: "smooth", block: "end"});
+  const q = c => t.querySelector(c), ok = q(".ok"), re = okRe(l.ok);
+  q(".hear").onclick = () => play(l.a);
+  let misses = 0;
+  return new Promise(r => {
+    const go = () => { if (heard) heard.stop(); t.innerHTML = ""; r(); };
+    q(".next").onclick = go;
+    if (!SR) return;
+    q(".mic").onclick = async () => {
+      const b = q(".mic");
+      if (heard) { heard.stop(); return; }
+      stopSound();
+      const h = heard = hear(t2 => re.test(norm(t2)), t2 => { ok.className = "ok live"; ok.textContent = "「" + t2 + "」"; });
+      b.classList.add("on"); b.textContent = "Listening… say it now"; ok.className = "ok"; ok.textContent = "";
+      const res = await h.done;
+      heard = null; b.classList.remove("on"); b.textContent = "🎤 Tap and say it";
+      if (!t.contains(b)) return;   // left the scene while listening
+      const [cls, txt] = okText(res, re);
+      ok.className = "ok " + cls; ok.textContent = txt;
+      b.disabled = true; if (cls === "good") b.classList.add("good");   // no new listening until the sound has played
+      await h.closed;                                   // on iPhone, sound made while the mic is still on is lost
+      await new Promise(z => setTimeout(z, 150));
+      await tone(cls === "good");
+      if (cls === "good") { await new Promise(z => setTimeout(z, 900)); go(); return; }
+      b.disabled = false;
+      misses++;
+      if (misses >= 2 || (res.error && res.error !== "no-speech")) q(".next").hidden = false;
+    };
+  });
+}
+
+function stopAll() { run++; if (heard) heard.stop(); heard = null; stopSound(); }
+function go(hash, replace) { replace ? location.replace(hash) : (location.hash = hash); }
+function render() {
+  stopAll();
+  const n = S.findIndex(s => "#/" + s.id === location.hash);
+  if (n >= 0) scene(n); else home();
+  window.scrollTo(0, 0);
+}
+back.onclick = () => { if (history.length > 1) history.back(); else go("#/", true); };
+addEventListener("hashchange", render);
+render();
+
+</script>
+<style>
+.free{background:#FFF3D6;border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:15px;line-height:1.45}
+.tile.lock{opacity:.55}.tile.lock .num{background:#888}
+.buy{display:block;text-align:center;text-decoration:none;background:var(--red);color:#fff;border-radius:16px;padding:16px 12px;
+  font-size:19px;font-weight:800;margin:16px 0 8px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.buy small{display:block;font-size:13px;font-weight:400;opacity:.9;margin-top:3px}
+.get{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+#tryfree{display:block;width:100%;border:2px solid var(--line);background:#fff;color:inherit;border-radius:14px;padding:13px;font-size:16px;font-weight:700;cursor:pointer}
+.get h3{margin:0 0 8px;font-size:19px}.get ul{margin:0;padding-left:20px;line-height:1.6}
+</style>
+<script>
+const FREE = "konbini", ETSY = "https://serendipity0615.etsy.com/listing/4601422203?ref=sample_speak", PRICE = "$12.99";
+const BUY = `<a class="buy" href="${ETSY}">Get all 20 conversations · ${PRICE}<small>Instant download on Etsy</small></a>`;
+const GET = `<div class="get"><h3>The full app has:</h3><ul>
+  <li>🗾 20 real situations from a trip to Japan</li><li>🎤 58 lines to say, each checked by your phone</li>
+  <li>▶ Audio for every line, working offline</li><li>📄 Phone PDF + printable scripts</li></ul></div>`;
+const _home = home, _scene = scene;
+home = function () {
+  _home();
+  app.querySelector(".inner").insertAdjacentHTML("afterbegin",
+    `<div class="free"><b>Free sample:</b> try scene 1, “${esc(S[0].en)}”, for free. The other 19 scenes are in the full app.</div>`);
+  app.querySelectorAll(".tile").forEach(b => {
+    if (b.dataset.id === FREE) return;
+    b.classList.add("lock"); b.querySelector(".num").textContent = "🔒";
+  });
+  app.querySelector(".tiles").insertAdjacentHTML("afterend", GET + BUY);
+};
+scene = async function (n) {
+  const s = S[n];
+  if (s.id !== FREE) {     // a locked scene: what you get, and the way to Etsy
+    stopAll(); ++run; header("🔒 " + s.en, `${n + 1} / ${S.length} · ${s.ja}`, true, s.col); app.className = "";
+    app.innerHTML = `<div class="inner"><div class="free">“${esc(s.en)}” is in the full app, with ${s.lines.filter(l => l.who === "you").length} lines for you to say.</div>
+      ${BUY}${GET}<button id="tryfree">Try the free scene again</button></div>`;
+    document.getElementById("tryfree").onclick = () => go("#/" + FREE, true);
+    return;
+  }
+  await _scene(n);
+  const d = document.querySelector("#turn .done");
+  if (d) d.insertAdjacentHTML("beforeend", `<p style="margin-top:16px">Ready for the other 19 scenes?</p>${BUY}`);
+};
+render();
+</script>
+</body></html>
