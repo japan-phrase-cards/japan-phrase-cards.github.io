@@ -3,8 +3,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1F3A5F">
-<title>Can you read Japan? — free 10-kanji quiz</title>
-<meta name="description" content="10 kanji you'll really see in Japan. Tap an answer, hear a native speaker, get your score. Free, no sign-up.">
+<title>Can you read Japan? — free kanji quiz</title>
+<meta name="description" content="3 kanji you'll really see in Japan. Tap an answer, hear a native speaker, get your score. Free, no sign-up.">
 <link rel="icon" href="../../app-c194f65f3521a6032984/icon-192.png">
 <style>
 /* Kumiko 2026-10-27: TikTok videos get views but nobody opens the bio link — this free quiz is the reason to tap it.
@@ -57,28 +57,21 @@ footer a{color:#888}
 <div class="hero">
   <span class="tag">FREE QUIZ</span>
   <h1>Can you read Japan?</h1>
-  <p>10 kanji you'll really see on a trip. Tap your answer and hear how a native speaker says it.</p>
+  <p>3 kanji you'll really see on a trip. Tap your answer and hear how a native speaker says it.</p>
 </div>
 <main id="app"></main>
 <footer>Ink and Kanji · <a href="../../">All our Japanese guides</a></footer>
 
 <script>
 const AUDIO = "../../n5/";
-const ETSY = "https://serendipity0615.etsy.com/listing/4600979558?ref=free_quiz", PRICE = "$12.99";
+const SHOP = "https://www.etsy.com/shop/Serendipity0615";
 // kanji, kana, romaji, meaning, where you see it, audio, wrong answers
 const QS = [
   ["駅", "えき", "eki", "station", "On every train sign", "n5-66-1", ["temple", "exit", "ticket"]],
   ["円", "えん", "en", "yen", "On every price tag", "n5-14-1", ["sale", "tax", "price"]],
   ["水", "みず", "mizu", "water", "On bottles and vending machines", "n5-18-2", ["tea", "milk", "ice"]],
-  ["山", "やま", "yama", "mountain", "In place names, like Mt. Fuji", "n5-69-2", ["river", "island", "forest"]],
-  ["電車", "でんしゃ", "densha", "train", "At every station", "n5-74-1", ["bus", "taxi", "subway map"]],
-  ["店", "みせ", "mise", "shop", "Above shop doors", "n5-67-2", ["house", "hotel", "school"]],
-  ["雨", "あめ", "ame", "rain", "In the weather forecast", "n5-73-1", ["snow", "sun", "wind"]],
-  ["魚", "さかな", "sakana", "fish", "On restaurant menus", "n5-78-2", ["meat", "rice", "egg"]],
-  ["右", "みぎ", "migi", "right", "On direction signs", "n5-58-2", ["left", "up", "back"]],
-  ["本", "ほん", "hon", "book", "At bookstores", "n5-76-1", ["paper", "letter", "map"]],
 ];
-const RANKS = [[10, "Kanji Master 🏆"], [8, "Ready for Japan ✈️"], [5, "Getting there 🚃"], [0, "Fresh off the plane 🛬"]];
+const RANKS = [[3, "Kanji Master 🏆"], [2, "Ready for Japan ✈️"], [1, "Getting there 🚃"], [0, "Fresh off the plane 🛬"]];
 const app = document.getElementById("app");
 let i = 0, score = 0, missed = [];
 const play = f => { try { new Audio(AUDIO + f + ".mp3").play(); } catch (e) {} };
@@ -118,8 +111,8 @@ function end() {
       <div>You read</div>
       <div class="score">${score}/${QS.length}</div>
       <div class="rank">${rank}</div>
-      <p>These 10 are all from the <b>JLPT N5</b> list, the 103 kanji every beginner learns first.</p>
-      <a class="buy" href="${ETSY}">Learn all 103 with native audio · ${PRICE}<small>Instant download on Etsy · works on your phone</small></a>
+      <p>You'll see these 3 everywhere in Japan. Learn the rest with our sets: native audio, made by a Japanese speaker.</p>
+      <a class="buy" href="${SHOP}">🛍️ See all our products on Etsy ›<small>Instant downloads · work on your phone</small></a>
       <a class="sub" href="../speak/">🎤 Next: try a real conversation free</a>
       <div class="row"><button id="share">📤 Share my score</button><button id="again">↻ Try again</button></div>
       ${missed.length ? `<ul class="missed">${missed.map(m => `<li><span class="k">${m[0]}</span><span><b>${m[2]}</b> = ${m[3]}</span><button data-a="${m[5]}">🔊</button></li>`).join("")}</ul>` : ""}
@@ -127,20 +120,9 @@ function end() {
   app.querySelectorAll(".missed button").forEach(b => b.onclick = () => play(b.dataset.a));
   app.querySelector("#again").onclick = () => { i = 0; score = 0; missed = []; ask(); };
   app.querySelector("#share").onclick = async () => {
-    const text = `I read ${score}/10 Japanese kanji! Can you beat me?`, url = location.href.split("?")[0];
+    const text = `I read ${score}/${QS.length} Japanese kanji! Can you beat me?`, url = location.href.split("?")[0];
     try { if (navigator.share) await navigator.share({ text, url }); else { await navigator.clipboard.writeText(text + " " + url); app.querySelector("#share").textContent = "✓ Copied"; } } catch (e) {}
   };
-  // inside TikTok / Instagram's own browser: try the phone's real browser once; TikTok often blocks that silently,
-  // so if nothing happened within 0.9 s, open Etsy as a normal link (same as the shop page, Kumiko 2026-10-27)
-  if (/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|Line\/|MicroMessenger/.test(navigator.userAgent)) {
-    const a = app.querySelector(".buy"), ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-    a.addEventListener("click", e => {
-      e.preventDefault();
-      const u = a.href;
-      try { location.href = ios ? "x-safari-" + u : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;S.browser_fallback_url=" + encodeURIComponent(u) + ";end"; } catch (err) {}
-      setTimeout(() => { if (!document.hidden) location.href = u; }, 900);
-    });
-  }
 }
 ask();
 </script>
