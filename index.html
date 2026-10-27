@@ -40,7 +40,7 @@ footer { text-align:center; color:#999; font-size:13px; margin-top:28px; }
 .tt .free a small { display:block; font-size:12px; font-weight:600; color:var(--muted); margin-top:2px; }
 .tt .then { display:block; text-align:center; font-size:13px; opacity:.85; margin:0 0 8px; }
 </style></head><body><div class="wrap">
-<div id="inapp" hidden>📱 Tap any product — it opens in Safari or Chrome, where Etsy works.
+<div id="inapp" hidden>📱 Tap any product to see it on Etsy.
 <small>Nothing happens? Tap <b>⋯</b> at the top, then <b>Open in browser</b>.</small></div>
 <section class="tt"><b>Seen us on TikTok? Start here</b>
 <div class="free"><a href="try/kanji/">📝 Free kanji quiz<small>Can you read Japan?</small></a><a href="try/speak/">🎤 Free conversation<small>Your phone checks you</small></a></div>
@@ -52,15 +52,18 @@ footer { text-align:center; color:#999; font-size:13px; margin-top:28px; }
 <a class="try" href="say/" style="background:#fff;color:var(--navy);border:2px solid var(--navy);margin-top:12px">Free Japanese phrases with audio ›</a>
 <a class="try" href="free/celiac-card/" style="background:#fff;color:var(--navy);border:2px solid var(--navy);margin-top:12px">Free celiac card for Japan ›</a>
 <script>
-// Kumiko 2026-10-24: from the TikTok bio link, Etsy did not open (apps' own small browsers block it), and "⋯ → Open in browser"
-// was too fiddly — so inside those browsers every link opens straight in the phone's own browser (Safari / Chrome)
+// Kumiko 2026-10-27: TikTok views but 0 Etsy visits — TikTok's browser silently blocks the "open in Safari / Chrome" trick
+// (x-safari- / intent://), so every tap did nothing. Now: our own pages stay normal links; for Etsy we try the trick once,
+// and if the phone did not switch apps within 0.9 s, we just open Etsy as a normal link.
 if (/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|Line\/|MicroMessenger/.test(navigator.userAgent)) {
   document.getElementById("inapp").hidden = false;
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  document.querySelectorAll("a[href]").forEach(a => {
-    const u = a.href;   // always the full https:// address
-    a.href = ios ? "x-safari-" + u : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;end";
-  });
+  document.querySelectorAll('a[href*="etsy.com"]').forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    const u = a.href;
+    try { location.href = ios ? "x-safari-" + u : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;S.browser_fallback_url=" + encodeURIComponent(u) + ";end"; } catch (err) {}
+    setTimeout(() => { if (!document.hidden) location.href = u; }, 900);
+  }));
 }
 </script>
 <footer>Ink and Kanji · digital downloads on Etsy</footer>

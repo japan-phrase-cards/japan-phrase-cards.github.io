@@ -130,10 +130,16 @@ function end() {
     const text = `I read ${score}/10 Japanese kanji! Can you beat me?`, url = location.href.split("?")[0];
     try { if (navigator.share) await navigator.share({ text, url }); else { await navigator.clipboard.writeText(text + " " + url); app.querySelector("#share").textContent = "✓ Copied"; } } catch (e) {}
   };
-  // inside TikTok / Instagram's own browser, Etsy doesn't open — send that link to the phone's real browser (same as the shop page)
+  // inside TikTok / Instagram's own browser: try the phone's real browser once; TikTok often blocks that silently,
+  // so if nothing happened within 0.9 s, open Etsy as a normal link (same as the shop page, Kumiko 2026-10-27)
   if (/musical_ly|BytedanceWebview|TikTok|Instagram|FBAN|FBAV|Line\/|MicroMessenger/.test(navigator.userAgent)) {
     const a = app.querySelector(".buy"), ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-    a.href = ios ? "x-safari-" + a.href : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;end";
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      const u = a.href;
+      try { location.href = ios ? "x-safari-" + u : "intent://" + a.host + a.pathname + a.search + "#Intent;scheme=https;S.browser_fallback_url=" + encodeURIComponent(u) + ";end"; } catch (err) {}
+      setTimeout(() => { if (!document.hidden) location.href = u; }, 900);
+    });
   }
 }
 ask();
